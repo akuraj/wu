@@ -61,7 +61,8 @@ def pattern_search(board, pattern, color):
     ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
 
     # TODO: Use numpy array instead of list for "found".
-    found = []
+    # found = []
+    found = 0
     for direction in range(ndirs):
         (row_inc, col_inc) = increments(direction)
         (row_min, row_max) = index_bounds(side, length, row_inc)
@@ -73,6 +74,7 @@ def pattern_search(board, pattern, color):
                     if pattern[k] != board[i + row_inc * k, j + col_inc * k]:
                         break
                 else:
-                    found.append(((i, j), direction))
+                    # found.append(((i, j), direction))
+                    found += 1
 
     return found
