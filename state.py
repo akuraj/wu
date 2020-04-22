@@ -1,5 +1,5 @@
-from consts import BOARD_SIZE, EMPTY, BLACK, WHITE
 import numpy as np
+from consts import BOARD_SIDE, EMPTY, BLACK, WHITE
 
 
 class State:
@@ -9,12 +9,13 @@ class State:
     # TODO: Implement Standard Gomoku.
 
     def __init__(self,
-                 board=np.full((BOARD_SIZE, BOARD_SIZE), 0, dtype=np.byte),
-                 turn=BLACK):
+                 board=np.full((BOARD_SIDE, BOARD_SIDE), 0, dtype=np.byte),
+                 turn=BLACK,
+                 strict_stone_count=True):
 
         # State Integrity Checks.
-        assert board.shape == (BOARD_SIZE, BOARD_SIZE)
-        assert turn == BLACK or turn == WHITE
+        assert board.shape == (BOARD_SIDE, BOARD_SIDE)
+        assert turn in (BLACK, WHITE)
 
         black_total = 0
         white_total = 0
@@ -28,18 +29,19 @@ class State:
             else:
                 raise Exception(f"Invalid item on board: {val}")
 
-        if black_total == white_total + 1:
-            assert turn == WHITE
-        elif black_total == white_total:
-            assert turn == BLACK
-        else:
-            raise Exception(f"""Invalid number of stones on the board:\
-                            Black: {black_total}, White: {white_total}""")
+        if strict_stone_count:
+            if black_total == white_total + 1:
+                assert turn == WHITE
+            elif black_total == white_total:
+                assert turn == BLACK
+            else:
+                raise Exception(f"""Invalid number of stones on the board:\
+                                Black: {black_total}, White: {white_total}""")
 
         # TODO: Calculate Game Status (ongoing, over etc.).
 
         # Copy input state onto self.
-        self.board = np.copy(board)
+        self.board = np.copy(board.astype(np.byte))
         self.turn = turn
 
         # TODO: Calculate and store rich state.
