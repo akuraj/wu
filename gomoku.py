@@ -18,11 +18,8 @@ for i in range(0, 6):
 
 @njit
 def test_fn(board, pattern, n):
-    tot = 0
     for _ in range(n):
-        tot += pattern_search(board, pattern, 1)
-
-    return tot
+        pattern_search(board, pattern, 1)
 
 
 n = 1000000

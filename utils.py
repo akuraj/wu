@@ -1,6 +1,8 @@
 from numba import njit
 from consts import NUM_DIRECTIONS
 
+# TODO: Is this the right place for these functions?
+
 
 @njit
 def is_symmetric(pattern):
@@ -61,8 +63,9 @@ def pattern_search(board, pattern, color):
     ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
 
     # TODO: Use numpy array instead of list for "found".
-    # found = []
-    found = 0
+    # TODO: Handling for color. Is this the right nomenclature?
+    # TODO: Handling for CLOSED.
+    found = []
     for direction in range(ndirs):
         (row_inc, col_inc) = increments(direction)
         (row_min, row_max) = index_bounds(side, length, row_inc)
@@ -74,7 +77,6 @@ def pattern_search(board, pattern, color):
                     if pattern[k] != board[i + row_inc * k, j + col_inc * k]:
                         break
                 else:
-                    # found.append(((i, j), direction))
-                    found += 1
+                    found.append(((i, j), direction))
 
     return found
