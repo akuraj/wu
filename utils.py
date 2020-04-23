@@ -2,9 +2,6 @@ from numba import njit
 from consts import NUM_DIRECTIONS, OWN, OPP, EMPTY
 import numpy as np
 
-# TODO: Is this the right place for these functions?
-# TODO: Too many unnecessary checks?
-
 
 @njit
 def get_side(board):
@@ -95,7 +92,6 @@ def pattern_search(board, gen_pattern, color, opp_end_is_closed):
     symmetric = is_symmetric(pattern)
     ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
 
-    # TODO: Use numpy array instead of list for "matches".
     matches = []
     for direction in range(ndirs):
         (row_inc, col_inc) = increments(direction)

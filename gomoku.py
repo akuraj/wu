@@ -27,7 +27,7 @@ n = 1000000
 test_fn(state.board, a1, n)
 
 start = time.monotonic()
-print(test_fn(state.board, a1, n))
+test_fn(state.board, a1, n)
 end = time.monotonic()
 
 print("Time taken: ", end - start, " seconds")
