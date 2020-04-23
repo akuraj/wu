@@ -45,8 +45,8 @@ def is_symmetric(pattern):
     for i in range(int(n / 2)):
         if pattern[i] != pattern[n - i - 1]:
             return False
-    else:
-        return True
+
+    return True
 
 
 @njit
