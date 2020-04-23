@@ -1,5 +1,4 @@
 # TODO: Can we make use of enums for some of the groups of constants defined in this file?
-# TODO: Appropriate types for below values? Speed impact?
 
 BOARD_SIDE = 15
 

@@ -18,10 +18,12 @@ state.board[0][14] = -1
 
 print(pattern_search(state.board, a1, 1, True))
 
+
 @njit
 def test_fn(board, pattern, n):
     for _ in range(n):
         pattern_search(board, pattern, 1, True)
+
 
 n = 1000000
 test_fn(state.board, a1, n)
