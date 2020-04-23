@@ -9,26 +9,25 @@ from numba import njit
 
 state = State()
 
-a1 = np.array([1, 2, 3, 4, 5, 6])
+a1 = np.array([0, 1, 1, 1, 1, -1], dtype=np.byte)
 
-for i in range(0, 6):
-    state.board[0][i] = i + 1
-    state.board[7][i + 6] = i + 1
+for i in range(0, 4):
+    state.board[0][10 + i] = 1
 
+state.board[0][14] = -1
+
+print(pattern_search(state.board, a1, 1, True))
 
 @njit
 def test_fn(board, pattern, n):
     for _ in range(n):
-        pattern_search(board, pattern, 1)
-
+        pattern_search(board, pattern, 1, True)
 
 n = 1000000
-
 test_fn(state.board, a1, n)
 
 start = time.monotonic()
-
 print(test_fn(state.board, a1, n))
-
 end = time.monotonic()
+
 print("Time taken: ", end - start, " seconds")

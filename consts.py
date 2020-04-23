@@ -3,15 +3,11 @@
 
 BOARD_SIDE = 15
 
+BLACK = -1
 EMPTY = 0
-BLACK = 1
-WHITE = 2
-CLOSED = 3  # Used to represent a wall or enemy stone in a pattern.
+WHITE = 1
+
+OPP = -1  # Used to represent a wall or an enemy stone in a generic pattern.
+OWN = 1  # Used to represent an own stone in a generic pattern.
 
 NUM_DIRECTIONS = 8
-
-# # Directions for patterns.
-# DIR_0 = 0  # W to E
-# DIR_1 = 1  # NW to SE
-# DIR_2 = 2  # N to S
-# DIR_3 = 3  # NE to SW

@@ -1,14 +1,49 @@
 from numba import njit
-from consts import NUM_DIRECTIONS
+from consts import NUM_DIRECTIONS, OWN, OPP, EMPTY
+import numpy as np
 
 # TODO: Is this the right place for these functions?
+# TODO: Too many unnecessary checks?
+
+
+@njit
+def get_side(board):
+    assert board.ndim == 2
+    assert board.shape[0] == board.shape[1]
+    return board.shape[0]
+
+
+@njit
+def get_pattern_info(gen_pattern, color, opp_end_is_closed):
+    assert gen_pattern.ndim == 1
+    gen_length = gen_pattern.size
+
+    is_closed_end = False
+    if opp_end_is_closed:
+        for i in range(gen_length):
+            if gen_pattern[i] in (OWN, EMPTY):
+                pass
+            elif gen_pattern[i] == OPP:
+                # Not allowed to be closed at the beginning of the pattern.
+                assert i != 0
+
+                # If closed at the end, we need to handle it.
+                is_closed_end = (i == gen_length - 1)
+            else:
+                raise Exception("Invalid element in gen_pattern!")
+
+    length = gen_length if not is_closed_end else gen_length - 1
+    pattern = np.full(length, EMPTY, dtype=np.byte)
+    for i in range(length):
+        pattern[i] = gen_pattern[i] * color
+
+    return (pattern, is_closed_end)
 
 
 @njit
 def is_symmetric(pattern):
     """Check symmetry of 1d pattern."""
 
-    assert pattern.ndim == 1
     n = pattern.size
     for i in range(int(n / 2)):
         if pattern[i] != pattern[n - i - 1]:
@@ -50,22 +85,18 @@ def index_bounds(side, length, increment):
 
 
 @njit
-def pattern_search(board, pattern, color):
+def pattern_search(board, gen_pattern, color, opp_end_is_closed):
     """Search for a 1d pattern on a 2d board."""
 
-    assert board.ndim == 2
-    assert pattern.ndim == 1
-    assert board.shape[0] == board.shape[1]
-    side = board.shape[0]
+    side = get_side(board)
+    (pattern, is_closed_end) = get_pattern_info(gen_pattern, color, opp_end_is_closed)
     length = pattern.size
 
     symmetric = is_symmetric(pattern)
     ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
 
-    # TODO: Use numpy array instead of list for "found".
-    # TODO: Handling for color. Is this the right nomenclature?
-    # TODO: Handling for CLOSED.
-    found = []
+    # TODO: Use numpy array instead of list for "matches".
+    matches = []
     for direction in range(ndirs):
         (row_inc, col_inc) = increments(direction)
         (row_min, row_max) = index_bounds(side, length, row_inc)
@@ -77,6 +108,15 @@ def pattern_search(board, pattern, color):
                     if pattern[k] != board[i + row_inc * k, j + col_inc * k]:
                         break
                 else:
-                    found.append(((i, j), direction))
+                    match = True
+                    if is_closed_end:
+                        row_end = i + row_inc * length
+                        col_end = j + col_inc * length
 
-    return found
+                        if 0 <= row_end < side and 0 <= col_end < side:
+                            match = (board[row_end, col_end] == -color)
+
+                    if match:
+                        matches.append(((i, j), direction))
+
+    return matches
