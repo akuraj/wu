@@ -1,5 +1,6 @@
 import numpy as np
-from consts import BOARD_SIDE, EMPTY, BLACK, WHITE
+from consts import SIDE_LEN, EMPTY, BLACK, WHITE, WALL
+from utils import new_board
 
 
 class State:
@@ -9,18 +10,21 @@ class State:
     # TODO: Implement Standard Gomoku.
 
     def __init__(self,
-                 board=np.full((BOARD_SIDE, BOARD_SIDE), 0, dtype=np.byte),
+                 board=new_board(),
                  turn=BLACK,
                  strict_stone_count=True):
 
         # State Integrity Checks.
-        assert board.shape == (BOARD_SIDE, BOARD_SIDE)
+        assert board.shape == (SIDE_LEN, SIDE_LEN)
         assert turn in (BLACK, WHITE)
 
         black_total = 0
         white_total = 0
-        for val in np.nditer(board):
-            if val == BLACK:
+
+        for (i, j), val in np.ndenumerate(board):
+            if i in (0, SIDE_LEN - 1) or j in (0, SIDE_LEN - 1):
+                assert val == WALL
+            elif val == BLACK:
                 black_total += 1
             elif val == WHITE:
                 white_total += 1

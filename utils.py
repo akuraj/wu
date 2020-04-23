@@ -1,6 +1,23 @@
-from numba import njit
-from consts import NUM_DIRECTIONS, OWN, OPP, EMPTY
 import numpy as np
+from numba import njit
+from consts import SIDE_LEN, NUM_DIRECTIONS, OWN, OPP, EMPTY, WALL, OPW, EOW
+
+# TODO: Remove unnecessary asserts.
+# TODO: Refactor low level code in pattern_search?
+# TODO: Fix the way we compute increments?
+
+
+@njit
+def new_board():
+    board = np.full((SIDE_LEN, SIDE_LEN), 0, dtype=np.byte)
+
+    # Set the walls.
+    for wall in (0, SIDE_LEN - 1):
+        for i in range(SIDE_LEN):
+            board[wall, i] = WALL
+            board[i, wall] = WALL
+
+    return board
 
 
 @njit
@@ -8,33 +25,6 @@ def get_side(board):
     assert board.ndim == 2
     assert board.shape[0] == board.shape[1]
     return board.shape[0]
-
-
-@njit
-def get_pattern_info(gen_pattern, color, opp_end_is_closed):
-    assert gen_pattern.ndim == 1
-    gen_length = gen_pattern.size
-
-    is_closed_end = False
-    if opp_end_is_closed:
-        for i in range(gen_length):
-            if gen_pattern[i] in (OWN, EMPTY):
-                pass
-            elif gen_pattern[i] == OPP:
-                # Not allowed to be closed at the beginning of the pattern.
-                assert i != 0
-
-                # If closed at the end, we need to handle it.
-                is_closed_end = (i == gen_length - 1)
-            else:
-                raise Exception("Invalid element in gen_pattern!")
-
-    length = gen_length if not is_closed_end else gen_length - 1
-    pattern = np.full(length, EMPTY, dtype=np.byte)
-    for i in range(length):
-        pattern[i] = gen_pattern[i] * color
-
-    return (pattern, is_closed_end)
 
 
 @njit
@@ -82,11 +72,11 @@ def index_bounds(side, length, increment):
 
 
 @njit
-def pattern_search(board, gen_pattern, color, opp_end_is_closed):
+def pattern_search(board, pattern, color):
     """Search for a 1d pattern on a 2d board."""
 
     side = get_side(board)
-    (pattern, is_closed_end) = get_pattern_info(gen_pattern, color, opp_end_is_closed)
+    assert pattern.ndim == 1
     length = pattern.size
 
     symmetric = is_symmetric(pattern)
@@ -101,18 +91,27 @@ def pattern_search(board, gen_pattern, color, opp_end_is_closed):
         for i in range(row_min, row_max):
             for j in range(col_min, col_max):
                 for k in range(length):
-                    if pattern[k] != board[i + row_inc * k, j + col_inc * k]:
+                    p_val = pattern[k]
+                    val = board[i + row_inc * k, j + col_inc * k]
+
+                    # TODO: Profile the below and make it faster?
+                    # TODO: Refactor the below code?
+                    if p_val == EMPTY and val != EMPTY:
                         break
+                    elif p_val == OWN and val != color:
+                        break
+                    elif p_val == OPP and val != -color:
+                        break
+                    elif p_val == WALL and val != WALL:
+                        break
+                    elif p_val == OPW and val not in (-color, WALL):
+                        break
+                    elif p_val == EOW and val not in (EMPTY, -color, WALL):
+                        break
+
+                    # if pattern[k] != board[i + row_inc * k, j + col_inc * k]:
+                    #     break
                 else:
-                    match = True
-                    if is_closed_end:
-                        row_end = i + row_inc * length
-                        col_end = j + col_inc * length
-
-                        if 0 <= row_end < side and 0 <= col_end < side:
-                            match = (board[row_end, col_end] == -color)
-
-                    if match:
-                        matches.append(((i, j), direction))
+                    matches.append(((i, j), direction))
 
     return matches

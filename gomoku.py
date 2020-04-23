@@ -1,8 +1,9 @@
 import numpy as np
+import time
 from state import State
 from utils import pattern_search
-import time
 from numba import njit
+from consts import OWN
 
 # TODO: Implement Pattern Class. And sub-class Threat? Direction as a property?
 # TODO: Implement code to identify and return said pattern?
@@ -19,31 +20,30 @@ from numba import njit
 # TODO: Rich state data structures?
 # TODO: Do we need to always get the side of the board? Can't we just assume it to be size?
 
+# TODO: Inline numba jitted functions?
+# TODO: Cleanup import statements.
+
 state = State()
 
-a1 = np.array([0, 1, 1, 1, 1, -1], dtype=np.byte)
+
+a1 = np.array([0, OWN, OWN, OWN, OWN, 0], dtype=np.byte)
 
 for i in range(0, 4):
-    state.board[0][10 + i] = 1
+    state.board[1][9 + i] = 1
 
-state.board[0][14] = -1
+print(pattern_search(state.board, a1, 1))
 
-print(pattern_search(state.board, a1, 1, True))
-
-
-
-
-# @njit
-# def test_fn(board, pattern, n):
-#     for _ in range(n):
-#         pattern_search(board, pattern, 1, True)
+@njit
+def test_fn(board, pattern, n):
+    for _ in range(n):
+        pattern_search(board, pattern, 1)
 
 
-# n = 1000000
-# test_fn(state.board, a1, n)
+n = 1000000
+test_fn(state.board, a1, n)
 
-# start = time.monotonic()
-# test_fn(state.board, a1, n)
-# end = time.monotonic()
+start = time.monotonic()
+test_fn(state.board, a1, n)
+end = time.monotonic()
 
-# print("Time taken: ", end - start, " seconds")
+print("Time taken: ", end - start, " seconds")
