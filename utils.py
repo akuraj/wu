@@ -3,7 +3,7 @@ from numba import njit
 from consts import SIDE_LEN, NUM_DIRECTIONS, WALL, BLACK, WHITE, EMPTY, STONE
 
 # TODO: Fix the way we compute increments?
-# TODO: Should we keep returning pattern matches as a set?
+# TODO: Should we keep returning pattern matches as a set? Iterating over a list is faster.
 
 
 @njit
