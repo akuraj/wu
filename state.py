@@ -6,9 +6,6 @@ from utils import new_board
 class State:
     """Game State."""
 
-    # TODO: Implement Swap2 (and update relevant checks and code).
-    # TODO: Implement Standard Gomoku.
-
     def __init__(self,
                  board=new_board(),
                  turn=BLACK,
