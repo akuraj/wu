@@ -17,7 +17,7 @@
 # TODO: Rich state data structures?
 
 # *** Standard Gomoku Implementation ***
-# TODO: To differentiate between standard and freestyle, can we just rely on the win patterns?
+# TODO: Can we just rely on the win patterns to differentiate Standard from Freestyle?
 # TODO: Control freestyle or standard via a global variable? Or better to do via state?
 # TODO: Implement Standard Gomoku.
 
