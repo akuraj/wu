@@ -3,7 +3,8 @@ import time
 from state import State
 from utils import pattern_search
 from numba import njit
-from consts import OWN, EMPTY, BLACK
+from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN
+
 
 # TODO: TEST THE PATTERN SEARCH!!
 
@@ -24,18 +25,25 @@ from consts import OWN, EMPTY, BLACK
 
 # TODO: Inline numba jitted functions?
 # TODO: Cleanup import statements.
+# TODO: Remove unnecessary asserts.
 
 state = State()
-pattern = np.array([EMPTY, OWN, OWN, OWN, OWN, EMPTY], dtype=np.byte)
-color = BLACK
+# pattern = np.array([EMPTY, OWN, OWN, OWN, OWN, NOT_OWN], dtype=np.byte)
+pattern = np.array([OWN, OWN, OWN, OWN], dtype=np.byte)
+color = WHITE
 
 for i in range(0, 4):
-    state.board[1][9 + i] = color
+    state.board[1][11 + i] = color
+    state.board[2][11 + i] = color
+    state.board[3][11 + i] = color
+    state.board[7][11 + i] = color
+    state.board[10][11 + i] = color
+    state.board[12][11 + i] = color
+    state.board[14][11 + i] = color
 
 print(state.board)
 print(pattern)
 print(pattern_search(state.board, pattern, color))
-
 
 @njit
 def test_fn(board, pattern, n):

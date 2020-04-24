@@ -2,8 +2,8 @@ import numpy as np
 from numba import njit
 from consts import SIDE_LEN, NUM_DIRECTIONS, WALL, BLACK, WHITE, EMPTY, STONE
 
-# TODO: Remove unnecessary asserts.
 # TODO: Fix the way we compute increments?
+# TODO: Should we keep returning pattern matches as a set?
 
 
 @njit
@@ -111,6 +111,9 @@ def pattern_search(board, gen_pattern, color):
                     if not pattern[k] & board[i + row_inc * k, j + col_inc * k]:
                         break
                 else:
-                    matches.append(((i, j), direction))
+                    # Store Ordered Line Segment where the pattern lies.
+                    a = (i, j)
+                    b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
+                    matches.append((a, b) if a < b else (b, a))
 
-    return matches
+    return set(matches)
