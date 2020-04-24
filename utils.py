@@ -1,15 +1,14 @@
 import numpy as np
 from numba import njit
-from consts import SIDE_LEN, NUM_DIRECTIONS, OWN, OPP, EMPTY, WALL, OPW, EOW
+from consts import SIDE_LEN, NUM_DIRECTIONS, WALL, BLACK, WHITE, EMPTY, STONE
 
 # TODO: Remove unnecessary asserts.
-# TODO: Refactor low level code in pattern_search?
 # TODO: Fix the way we compute increments?
 
 
 @njit
 def new_board():
-    board = np.full((SIDE_LEN, SIDE_LEN), 0, dtype=np.byte)
+    board = np.full((SIDE_LEN, SIDE_LEN), EMPTY, dtype=np.byte)
 
     # Set the walls.
     for wall in (0, SIDE_LEN - 1):
@@ -18,6 +17,24 @@ def new_board():
             board[i, wall] = WALL
 
     return board
+
+
+@njit
+def get_pattern(gen_pattern, color):
+    assert gen_pattern.ndim == 1
+
+    if color == BLACK:
+        return gen_pattern
+    elif color == WHITE:
+        pattern = np.full(gen_pattern.size, EMPTY, dtype=np.byte)
+
+        for i, val in enumerate(gen_pattern):
+            # Switch the BLACK and WHITE bits.
+            pattern[i] = val if val & STONE == STONE else val ^ STONE
+
+        return pattern
+    else:
+        raise Exception("Invalid color!")
 
 
 @njit
@@ -72,11 +89,11 @@ def index_bounds(side, length, increment):
 
 
 @njit
-def pattern_search(board, pattern, color):
+def pattern_search(board, gen_pattern, color):
     """Search for a 1d pattern on a 2d board."""
 
     side = get_side(board)
-    assert pattern.ndim == 1
+    pattern = get_pattern(gen_pattern, color)
     length = pattern.size
 
     symmetric = is_symmetric(pattern)
@@ -91,26 +108,8 @@ def pattern_search(board, pattern, color):
         for i in range(row_min, row_max):
             for j in range(col_min, col_max):
                 for k in range(length):
-                    p_val = pattern[k]
-                    val = board[i + row_inc * k, j + col_inc * k]
-
-                    # TODO: Profile the below and make it faster?
-                    # TODO: Refactor the below code?
-                    if p_val == EMPTY and val != EMPTY:
+                    if not pattern[k] & board[i + row_inc * k, j + col_inc * k]:
                         break
-                    elif p_val == OWN and val != color:
-                        break
-                    elif p_val == OPP and val != -color:
-                        break
-                    elif p_val == WALL and val != WALL:
-                        break
-                    elif p_val == OPW and val not in (-color, WALL):
-                        break
-                    elif p_val == EOW and val not in (EMPTY, -color, WALL):
-                        break
-
-                    # if pattern[k] != board[i + row_inc * k, j + col_inc * k]:
-                    #     break
                 else:
                     matches.append(((i, j), direction))
 

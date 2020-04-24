@@ -3,7 +3,9 @@ import time
 from state import State
 from utils import pattern_search
 from numba import njit
-from consts import OWN
+from consts import OWN, EMPTY, BLACK
+
+# TODO: TEST THE PATTERN SEARCH!!
 
 # TODO: Implement Pattern Class. And sub-class Threat? Direction as a property?
 # TODO: Implement code to identify and return said pattern?
@@ -24,26 +26,28 @@ from consts import OWN
 # TODO: Cleanup import statements.
 
 state = State()
-
-
-a1 = np.array([0, OWN, OWN, OWN, OWN, 0], dtype=np.byte)
+pattern = np.array([EMPTY, OWN, OWN, OWN, OWN, EMPTY], dtype=np.byte)
+color = BLACK
 
 for i in range(0, 4):
-    state.board[1][9 + i] = 1
+    state.board[1][9 + i] = color
 
-print(pattern_search(state.board, a1, 1))
+print(state.board)
+print(pattern)
+print(pattern_search(state.board, pattern, color))
+
 
 @njit
 def test_fn(board, pattern, n):
     for _ in range(n):
-        pattern_search(board, pattern, 1)
+        pattern_search(board, pattern, color)
 
 
 n = 1000000
-test_fn(state.board, a1, n)
+test_fn(state.board, pattern, n)
 
 start = time.monotonic()
-test_fn(state.board, a1, n)
+test_fn(state.board, pattern, n)
 end = time.monotonic()
 
 print("Time taken: ", end - start, " seconds")
