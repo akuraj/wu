@@ -16,14 +16,6 @@
 # TODO: Finish up state initialization procedures.
 # TODO: Rich state data structures?
 
-# *** Standard Gomoku Implementation ***
-# TODO: Can we just rely on the win patterns to differentiate Standard from Freestyle?
-# TODO: Control freestyle or standard via a global variable? Or better to do via state?
-# TODO: Implement Standard Gomoku.
-
-# *** Swap2 Implementation ***
-# TODO: Implement Swap2 (and update relevant checks and code).
-
 # *** Performance Concerns ***
 # TODO: Do we need to always get the side of the board? Can't we just assume it to be size?
 # TODO: Inline numba jitted functions?
@@ -31,3 +23,11 @@
 
 # *** Linting and Conventions ***
 # TODO: Cleanup import statements.
+
+# *** Standard Gomoku Implementation ***
+# TODO: Can we just rely on the win patterns to differentiate Standard from Freestyle?
+# TODO: Control freestyle or standard via a global variable? Or better to do via state?
+# TODO: Implement Standard Gomoku.
+
+# *** Swap2 Implementation ***
+# TODO: Implement Swap2 (and update relevant checks and code).
