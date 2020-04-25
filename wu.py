@@ -20,6 +20,7 @@ print(state.board)
 print(pattern)
 print(pattern_search(state.board, pattern, color))
 
+
 @njit
 def test_fn(board, pattern, n):
     for _ in range(n):
@@ -32,5 +33,4 @@ test_fn(state.board, pattern, n)
 start = time.monotonic()
 test_fn(state.board, pattern, n)
 end = time.monotonic()
-
 print("Time taken: ", end - start, " seconds")
