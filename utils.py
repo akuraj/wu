@@ -3,7 +3,6 @@ from numba import njit
 from consts import SIDE_LEN, NUM_DIRECTIONS, WALL, BLACK, WHITE, EMPTY, STONE
 
 # TODO: Fix the way we compute increments?
-# TODO: Should we keep returning pattern matches as a set? Iterating over a list is faster.
 
 
 @njit
@@ -67,8 +66,8 @@ def increment_fn(i):
 
 
 @njit
-def increments(direction):
-    return (increment_fn(direction), increment_fn(direction + 2))
+def increments(d):
+    return (increment_fn(d), increment_fn(d + 2))
 
 
 @njit
@@ -100,8 +99,8 @@ def pattern_search(board, gen_pattern, color):
     ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
 
     matches = []
-    for direction in range(ndirs):
-        (row_inc, col_inc) = increments(direction)
+    for d in range(ndirs):
+        (row_inc, col_inc) = increments(d)
         (row_min, row_max) = index_bounds(side, length, row_inc)
         (col_min, col_max) = index_bounds(side, length, col_inc)
 
@@ -111,9 +110,9 @@ def pattern_search(board, gen_pattern, color):
                     if not pattern[k] & board[i + row_inc * k, j + col_inc * k]:
                         break
                 else:
-                    # Store Ordered Line Segment where the pattern lies.
+                    # Store Ordered Line Segment, a -> b, where the pattern lies.
                     a = (i, j)
                     b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
-                    matches.append((a, b) if a < b else (b, a))
+                    matches.append((a, b))
 
-    return set(matches)
+    return matches
