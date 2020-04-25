@@ -88,6 +88,25 @@ def index_bounds(side, length, increment):
 
 
 @njit
+def dedupe(matches):
+    i = 0
+    n = len(matches)
+
+    while i < n - 1:
+        val = matches[i]
+        j = i + 1
+
+        while j < n:
+            if matches[j] == val or matches[j] == val[::-1]:
+                del matches[j]
+                n -= 1
+            else:
+                j += 1
+
+        i += 1
+
+
+@njit
 def pattern_search(board, gen_pattern, color):
     """Search for a 1d pattern on a 2d board."""
 
@@ -115,4 +134,5 @@ def pattern_search(board, gen_pattern, color):
                     b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
                     matches.append((a, b))
 
+    dedupe(matches)
     return matches

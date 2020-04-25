@@ -7,19 +7,18 @@ from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN
 
 
 state = State()
-# pattern = np.array([EMPTY, OWN, OWN, OWN, OWN, NOT_OWN], dtype=np.byte)
-pattern = np.array([NOT_OWN, OWN, OWN, OWN, OWN, NOT_OWN], dtype=np.byte)
+pattern = np.array([EMPTY, OWN, OWN, OWN, OWN, NOT_OWN], dtype=np.byte)
+# pattern = np.array([NOT_OWN, OWN, OWN, OWN, OWN, NOT_OWN], dtype=np.byte)
 color = WHITE
 
 for i in range(0, 4):
     state.board[1][11 + i] = color
-    state.board[15 - i][12 + i] = color
-    state.board[15 - i][15 - i] = color
+    # state.board[15 - i][12 + i] = color
+    # state.board[15 - i][15 - i] = color
 
 print(state.board)
 print(pattern)
 print(pattern_search(state.board, pattern, color))
-
 
 @njit
 def test_fn(board, pattern, n):
