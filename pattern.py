@@ -29,6 +29,7 @@ class Pattern:
 
         self.pattern = np.array(pattern, dtype=np.byte)
         self.critical_sqs = np.array(critical_sqs, dtype=np.byte)
+        self.own_sqs = np.array([i for i, v in enumerate(pattern) if v == OWN], dtype=np.byte)
         self.defcon = defcon
 
 
