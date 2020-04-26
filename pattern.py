@@ -3,7 +3,7 @@ from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY, NOT_OWN)
 
 
 class Pattern:
-    """Pattern: Used to represent a threat or a generic pattern."""
+    """Pattern: Used to represent generic patterns (including threat patterns)."""
 
     def __init__(self,
                  pattern,
