@@ -8,6 +8,9 @@
 # TODO: Implement function to calculate intersection of pattern matches.
 # TODO: Implement display/print for Pattern class (and any inheriting class).
 
+# *** Threat Space Search ***
+# TODO: What do we need here?
+
 # *** Profiling and Testing ***
 # TODO: Create tests and profiling fns for pattern_search.
 
