@@ -56,7 +56,6 @@ class State:
 
         if black_won and white_won:
             raise Exception("Both BLACK and WHITE cannot have won!")
-
         elif black_won:
             status = Status.BLACK_WON
             assert turn == WHITE

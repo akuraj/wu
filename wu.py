@@ -5,6 +5,8 @@ from utils import pattern_search
 from numba import njit
 from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN
 
+a = 1
+b = dict(a,)
 
 state = State()
 
