@@ -1,6 +1,7 @@
 """A place for general TODOs."""
 
 # *** Patterns and Threats; Pattern Matching ***
+# TODO: jitclass Pattern!
 # TODO: Implement a list, as well, as a dict (keyed by defcon)
 #       to access/enumerate all patterns.
 # TODO: Looking into what other pattern_search functions we need.
