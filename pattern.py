@@ -1,5 +1,5 @@
 import numpy as np
-from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY, NOT_OWN)
+from consts import GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY, NOT_OWN
 
 
 class Pattern:
