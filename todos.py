@@ -25,10 +25,11 @@
 # TODO: Calculate and store Rich State?
 
 # *** Performance Concerns ***
+# TODO: Check out numba features other than njit to speed up code!
+# TODO: JIT Compile relevant classes using numba's jitclass.
 # TODO: Do we need to always get the side of the board? Can't we just assume it to be size?
 # TODO: Inline numba jitted functions?
 # TODO: Remove unnecessary asserts.
-# TODO: Can we have njit fns that take generic Python objects as input?
 
 # *** Linting and Conventions ***
 # TODO: Cleanup import statements.
