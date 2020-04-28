@@ -88,6 +88,43 @@ def index_bounds(side, length, increment):
 
 
 @njit
+def index_bounds_incl(side, length, x, y, row_inc, col_inc):
+    assert length > 0
+    assert row_inc != 0 or col_inc != 0
+
+    row_b = side
+    row_f = side
+    if row_inc == -1:
+        row_f = x + 1
+        row_b = side - row_f
+    elif row_inc == 0:
+        pass
+    elif row_inc == 1:
+        row_b = x
+        row_f = side - row_b
+    else:
+        raise Exception("Invalid row_inc!")
+
+    col_b = side
+    col_f = side
+    if col_inc == -1:
+        col_f = y + 1
+        col_b = side - col_f
+    elif col_inc == 0:
+        pass
+    elif col_inc == 1:
+        col_b = y
+        col_f = side - col_b
+    else:
+        raise Exception("Invalid col_inc!")
+
+    back = min(row_b, col_b)
+    front = min(row_f, col_f)
+
+    return(-min(back, length - 1), min(front, length) - (length - 1))
+
+
+@njit
 def dedupe(matches):
     i = 0
     n = len(matches)
@@ -125,6 +162,43 @@ def pattern_search(board, gen_pattern, color):
 
         for i in range(row_min, row_max):
             for j in range(col_min, col_max):
+                for k in range(length):
+                    if not pattern[k] & board[i + row_inc * k, j + col_inc * k]:
+                        break
+                else:
+                    # Store Ordered Line Segment, a -> b, where the pattern lies.
+                    a = (i, j)
+                    b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
+                    matches.append((a, b))
+
+    dedupe(matches)
+    return matches
+
+
+@njit
+def pattern_search_incl(board, gen_pattern, color, point, own_sqs):
+    """Search for a 1d pattern on a 2d board including the given point."""
+
+    # We are searching for patterns including the given point as an "own_sq".
+    assert board[point] == color
+    (x, y) = point
+
+    side = get_side(board)
+    pattern = get_pattern(gen_pattern, color)
+    length = pattern.size
+
+    symmetric = is_symmetric(pattern)
+    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
+
+    matches = []
+    for d in range(ndirs):
+        (row_inc, col_inc) = increments(d)
+        (s_min, s_max) = index_bounds_incl(side, length, x, y, row_inc, col_inc)
+
+        for own_sq in own_sqs:
+            if s_min <= -own_sq < s_max:
+                (i, j) = (x - row_inc * own_sq, y - col_inc * own_sq)
+
                 for k in range(length):
                     if not pattern[k] & board[i + row_inc * k, j + col_inc * k]:
                         break

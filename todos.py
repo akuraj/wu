@@ -28,11 +28,11 @@
 # TODO: Calculate and store Rich State?
 
 # *** Performance Concerns ***
+# TODO: Remove unnecessary asserts/checks/if. [IMPORTANT].
 # TODO: Check out numba features other than njit to speed up code!
 # TODO: JIT Compile relevant classes using numba's jitclass.
 #       Can speed up relevant loops (over patterns) by 30%.
 # TODO: Inline numba jitted functions?
-# TODO: Remove unnecessary asserts.
 
 # *** Linting and Conventions ***
 # TODO: Cleanup import statements.
