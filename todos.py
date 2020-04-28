@@ -1,7 +1,6 @@
 """A place for general TODOs."""
 
 # *** Patterns and Threats; Pattern Matching ***
-# TODO: jitclass Pattern!
 # TODO: Implement a list, as well, as a dict (keyed by defcon)
 #       to access/enumerate all patterns.
 # TODO: Looking into what other pattern_search functions we need.
@@ -31,7 +30,7 @@
 # *** Performance Concerns ***
 # TODO: Check out numba features other than njit to speed up code!
 # TODO: JIT Compile relevant classes using numba's jitclass.
-# TODO: Do we need to always get the side of the board? Can't we just assume it to be size?
+#       Can speed up relevant loops (over patterns) by 40%.
 # TODO: Inline numba jitted functions?
 # TODO: Remove unnecessary asserts.
 
