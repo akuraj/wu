@@ -130,7 +130,7 @@ def dedupe_matches(matches):
 
 
 @njit
-def pattern_search(board, gen_pattern, color):
+def search_board(board, gen_pattern, color):
     """Search for a 1d pattern on a 2d board."""
 
     side = board.shape[0]
@@ -162,7 +162,41 @@ def pattern_search(board, gen_pattern, color):
 
 
 @njit
-def pattern_search_incl(board, gen_pattern, color, point, own_sqs):
+def search_point(board, gen_pattern, color, point):
+    """Search for a 1d pattern on a 2d board including the given point."""
+
+    (x, y) = point
+
+    side = board.shape[0]
+    pattern = get_pattern(gen_pattern, color)
+    length = pattern.size
+
+    symmetric = is_symmetric(pattern)
+    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
+
+    matches = []
+    for d in range(ndirs):
+        (row_inc, col_inc) = increments(d)
+        (s_min, s_max) = index_bounds_incl(side, length, x, y, row_inc, col_inc)
+
+        for h in range(s_min, s_max):
+            (i, j) = (x + row_inc * h, y + col_inc * h)
+
+            for k in range(length):
+                if not pattern[k] & board[i + row_inc * k, j + col_inc * k]:
+                    break
+            else:
+                # Store Ordered Line Segment, a -> b, where the pattern lies.
+                a = (i, j)
+                b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
+                matches.append((a, b))
+
+    dedupe_matches(matches)
+    return matches
+
+
+@njit
+def search_point_own(board, gen_pattern, color, point, own_sqs):
     """Search for a 1d pattern on a 2d board including the given point as an own_sq."""
 
     (x, y) = point
@@ -194,40 +228,6 @@ def pattern_search_incl(board, gen_pattern, color, point, own_sqs):
                         a = (i, j)
                         b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
                         matches.append((a, b))
-
-    dedupe_matches(matches)
-    return matches
-
-
-@njit
-def pattern_search_incl_2(board, gen_pattern, color, point):
-    """Search for a 1d pattern on a 2d board including the given point."""
-
-    (x, y) = point
-
-    side = board.shape[0]
-    pattern = get_pattern(gen_pattern, color)
-    length = pattern.size
-
-    symmetric = is_symmetric(pattern)
-    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
-
-    matches = []
-    for d in range(ndirs):
-        (row_inc, col_inc) = increments(d)
-        (s_min, s_max) = index_bounds_incl(side, length, x, y, row_inc, col_inc)
-
-        for h in range(s_min, s_max):
-            (i, j) = (x + row_inc * h, y + col_inc * h)
-
-            for k in range(length):
-                if not pattern[k] & board[i + row_inc * k, j + col_inc * k]:
-                    break
-            else:
-                # Store Ordered Line Segment, a -> b, where the pattern lies.
-                a = (i, j)
-                b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
-                matches.append((a, b))
 
     dedupe_matches(matches)
     return matches

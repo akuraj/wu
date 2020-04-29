@@ -1,6 +1,6 @@
 import numpy as np
 from consts import SIDE_LEN, EMPTY, BLACK, WHITE, WALL
-from utils import new_board, pattern_search
+from utils import new_board, search_board
 from pattern import P_WIN
 from enum import IntEnum, auto, unique
 
@@ -51,8 +51,8 @@ class State:
         # Calculate game status.
         status = Status.ONGOING
 
-        black_won = len(pattern_search(board, P_WIN.pattern, BLACK)) > 0
-        white_won = len(pattern_search(board, P_WIN.pattern, WHITE)) > 0
+        black_won = len(search_board(board, P_WIN.pattern, BLACK)) > 0
+        white_won = len(search_board(board, P_WIN.pattern, WHITE)) > 0
 
         if black_won and white_won:
             raise Exception("Both BLACK and WHITE cannot have won!")
