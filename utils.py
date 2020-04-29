@@ -163,10 +163,8 @@ def pattern_search(board, gen_pattern, color):
 
 @njit
 def pattern_search_incl(board, gen_pattern, color, point, own_sqs):
-    """Search for a 1d pattern on a 2d board including the given point."""
+    """Search for a 1d pattern on a 2d board including the given point as an own_sq."""
 
-    # We are searching for patterns including the given point as an "own_sq".
-    # assert board[point] == color
     (x, y) = point
 
     side = board.shape[0]
@@ -177,22 +175,25 @@ def pattern_search_incl(board, gen_pattern, color, point, own_sqs):
     ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
 
     matches = []
-    for d in range(ndirs):
-        (row_inc, col_inc) = increments(d)
-        (s_min, s_max) = index_bounds_incl(side, length, x, y, row_inc, col_inc)
 
-        for own_sq in own_sqs:
-            if s_min <= -own_sq < s_max:
-                (i, j) = (x - row_inc * own_sq, y - col_inc * own_sq)
+    # We are searching for patterns including the given point as an "own_sq".
+    if board[point] == color:
+        for d in range(ndirs):
+            (row_inc, col_inc) = increments(d)
+            (s_min, s_max) = index_bounds_incl(side, length, x, y, row_inc, col_inc)
 
-                for k in range(length):
-                    if not pattern[k] & board[i + row_inc * k, j + col_inc * k]:
-                        break
-                else:
-                    # Store Ordered Line Segment, a -> b, where the pattern lies.
-                    a = (i, j)
-                    b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
-                    matches.append((a, b))
+            for own_sq in own_sqs:
+                if s_min <= -own_sq < s_max:
+                    (i, j) = (x - row_inc * own_sq, y - col_inc * own_sq)
+
+                    for k in range(length):
+                        if not pattern[k] & board[i + row_inc * k, j + col_inc * k]:
+                            break
+                    else:
+                        # Store Ordered Line Segment, a -> b, where the pattern lies.
+                        a = (i, j)
+                        b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
+                        matches.append((a, b))
 
     dedupe_matches(matches)
     return matches

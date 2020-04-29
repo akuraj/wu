@@ -24,24 +24,24 @@ print(board)
 print(pattern)
 
 
-n = 1000000
+n = 10000000
 
-print("\n")
-print(pattern_search(board, pattern, color))
-
-
-@njit
-def test_fn(n):
-    for _ in range(n):
-        pattern_search(board, pattern, color)
+# print("\n")
+# print(pattern_search(board, pattern, color))
 
 
-test_fn(n)
+# @njit
+# def test_fn(n):
+#     for _ in range(n):
+#         pattern_search(board, pattern, color)
 
-start = time.monotonic()
-test_fn(n)
-end = time.monotonic()
-print("Time taken: ", end - start, " seconds")
+
+# test_fn(n)
+
+# start = time.monotonic()
+# test_fn(n)
+# end = time.monotonic()
+# print("Time taken: ", end - start, " seconds")
 
 
 print("\n")
