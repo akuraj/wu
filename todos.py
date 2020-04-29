@@ -4,9 +4,8 @@
 # TODO: Implement a list, as well, as a dict (keyed by defcon)
 #       to access/enumerate all patterns.
 # TODO: Test the search functions.
-# TODO: Given a move, figure out what other threats/moves are possible
-#       using that move as a "rest square".
 # TODO: Looking into what other pattern_search functions we need.
+# TODO: Add check on patterns containing only EMPTY, OWN squares in the middle?
 # TODO: If two threats have the same exact critical squares,
 #       then they can be handled by the same move(s). No need to dedupe them.
 # TODO: Implement function to calculate intersection of pattern matches.

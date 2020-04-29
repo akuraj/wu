@@ -12,6 +12,7 @@ class Pattern:
         # Make sure pattern has valid elements.
         for elem in pattern:
             assert elem in GEN_ELEMS
+            assert elem == OWN or elem & OWN == 0
 
         # Checks on critical_sqs
         critical_sqs.sort()
