@@ -3,6 +3,7 @@
 # *** Patterns and Threats; Pattern Matching ***
 # TODO: Implement a list, as well, as a dict (keyed by defcon)
 #       to access/enumerate all patterns.
+# TODO: Test the search functions.
 # TODO: Given a move, figure out what other threats/moves are possible
 #       using that move as a "rest square".
 # TODO: Looking into what other pattern_search functions we need.
@@ -17,6 +18,7 @@
 
 # *** Profiling and Testing ***
 # TODO: Create unit tests for relevant fns.
+# TODO: Add Travis CI to project.
 # TODO: Create profiling code for pattern search fns.
 
 # *** Consts ***
