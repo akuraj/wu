@@ -20,8 +20,6 @@ def new_board():
 
 @njit
 def get_pattern(gen_pattern, color):
-    assert gen_pattern.ndim == 1
-
     if color == BLACK:
         return gen_pattern
     elif color == WHITE:
@@ -29,18 +27,11 @@ def get_pattern(gen_pattern, color):
 
         for i, val in enumerate(gen_pattern):
             # Switch the BLACK and WHITE bits.
-            pattern[i] = val if val & STONE == STONE else val ^ STONE
+            pattern[i] = val if val & STONE in (STONE, 0) else val ^ STONE
 
         return pattern
     else:
         raise Exception("Invalid color!")
-
-
-@njit
-def get_side(board):
-    assert board.ndim == 2
-    assert board.shape[0] == board.shape[1]
-    return board.shape[0]
 
 
 @njit
@@ -72,8 +63,6 @@ def increments(d):
 
 @njit
 def index_bounds(side, length, increment):
-    assert length > 0
-
     if length <= side:
         if increment == 0:
             return (0, side)
@@ -89,9 +78,6 @@ def index_bounds(side, length, increment):
 
 @njit
 def index_bounds_incl(side, length, x, y, row_inc, col_inc):
-    assert length > 0
-    assert row_inc != 0 or col_inc != 0
-
     row_b = side
     row_f = side
     if row_inc == -1:
@@ -125,7 +111,7 @@ def index_bounds_incl(side, length, x, y, row_inc, col_inc):
 
 
 @njit
-def dedupe(matches):
+def dedupe_matches(matches):
     i = 0
     n = len(matches)
 
@@ -147,7 +133,7 @@ def dedupe(matches):
 def pattern_search(board, gen_pattern, color):
     """Search for a 1d pattern on a 2d board."""
 
-    side = get_side(board)
+    side = board.shape[0]
     pattern = get_pattern(gen_pattern, color)
     length = pattern.size
 
@@ -171,7 +157,7 @@ def pattern_search(board, gen_pattern, color):
                     b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
                     matches.append((a, b))
 
-    dedupe(matches)
+    dedupe_matches(matches)
     return matches
 
 
@@ -180,10 +166,10 @@ def pattern_search_incl(board, gen_pattern, color, point, own_sqs):
     """Search for a 1d pattern on a 2d board including the given point."""
 
     # We are searching for patterns including the given point as an "own_sq".
-    assert board[point] == color
+    # assert board[point] == color
     (x, y) = point
 
-    side = get_side(board)
+    side = board.shape[0]
     pattern = get_pattern(gen_pattern, color)
     length = pattern.size
 
@@ -208,5 +194,39 @@ def pattern_search_incl(board, gen_pattern, color, point, own_sqs):
                     b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
                     matches.append((a, b))
 
-    dedupe(matches)
+    dedupe_matches(matches)
+    return matches
+
+
+@njit
+def pattern_search_incl_2(board, gen_pattern, color, point):
+    """Search for a 1d pattern on a 2d board including the given point."""
+
+    (x, y) = point
+
+    side = board.shape[0]
+    pattern = get_pattern(gen_pattern, color)
+    length = pattern.size
+
+    symmetric = is_symmetric(pattern)
+    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
+
+    matches = []
+    for d in range(ndirs):
+        (row_inc, col_inc) = increments(d)
+        (s_min, s_max) = index_bounds_incl(side, length, x, y, row_inc, col_inc)
+
+        for h in range(s_min, s_max):
+            (i, j) = (x + row_inc * h, y + col_inc * h)
+
+            for k in range(length):
+                if not pattern[k] & board[i + row_inc * k, j + col_inc * k]:
+                    break
+            else:
+                # Store Ordered Line Segment, a -> b, where the pattern lies.
+                a = (i, j)
+                b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
+                matches.append((a, b))
+
+    dedupe_matches(matches)
     return matches

@@ -17,7 +17,8 @@
 # TODO: What do we need here?
 
 # *** Profiling and Testing ***
-# TODO: Create tests and profiling fns for pattern_search.
+# TODO: Create unit tests for relevant fns.
+# TODO: Create profiling code for pattern search fns.
 
 # *** Consts ***
 # TODO: Remove unnecessary constants.

@@ -9,7 +9,6 @@ class Pattern:
                  pattern,
                  critical_sqs,
                  defcon):
-
         # Make sure pattern has valid elements.
         for elem in pattern:
             assert elem in GEN_ELEMS
@@ -31,6 +30,12 @@ class Pattern:
         self.critical_sqs = np.array(critical_sqs, dtype=np.byte)
         self.own_sqs = np.array([i for i, v in enumerate(pattern) if v == OWN], dtype=np.byte)
         self.defcon = defcon
+
+        # Checks on data fields.
+        assert self.pattern.ndim == 1
+        assert self.pattern.size > 0
+        assert self.critical_sqs.ndim == 1
+        assert self.own_sqs.ndim == 1
 
 
 # Win pattern.
