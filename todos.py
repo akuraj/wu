@@ -1,8 +1,6 @@
 """A place for general TODOs."""
 
 # *** Patterns and Threats; Pattern Matching ***
-# TODO: Implement a list, as well, as a dict (keyed by defcon)
-#       to access/enumerate all patterns.
 # TODO: Test the search functions.
 # TODO: Looking into what other pattern_search functions we need.
 # TODO: Add check on patterns containing only EMPTY, OWN squares in the middle?
@@ -30,6 +28,7 @@
 
 # *** Performance Concerns ***
 # TODO: Remove unnecessary asserts/checks/if. [IMPORTANT].
+# TODO: Deduping the results of the point->next search is actually necessary?
 # TODO: Check out numba features other than njit to speed up code!
 # TODO: JIT Compile relevant classes using numba's jitclass.
 #       Can speed up relevant loops (over patterns) by 30%.

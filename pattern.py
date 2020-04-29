@@ -50,3 +50,13 @@ P_4_C = Pattern([NOT_OWN, OWN, OWN, EMPTY, OWN, OWN, NOT_OWN], [3], 1)
 P_3_ST = Pattern([EMPTY, EMPTY, OWN, OWN, OWN, EMPTY, EMPTY], [1, 5], 2)
 P_3_A = Pattern([WALL_ENEMY, EMPTY, OWN, OWN, OWN, EMPTY, EMPTY], [1, 5, 6], 2)
 P_3_B = Pattern([EMPTY, OWN, OWN, EMPTY, OWN, EMPTY], [0, 3, 5], 2)
+
+# NOTE: Put all the patterns defined above in this list.
+PATTERNS = [P_WIN, P_4_ST, P_4_A, P_4_B, P_4_C, P_3_ST, P_3_A, P_3_B]
+
+PATTERNS_BY_DEFCON = dict()
+for pattern in PATTERNS:
+    if pattern.defcon in PATTERNS_BY_DEFCON:
+        PATTERNS_BY_DEFCON[pattern.defcon].append(pattern)
+    else:
+        PATTERNS_BY_DEFCON[pattern.defcon] = [pattern]
