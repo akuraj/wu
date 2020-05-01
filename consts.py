@@ -8,7 +8,8 @@ WALL = 1 << 3
 
 # NOTE: Generic Patterns are specified from BLACK's POV.
 # NOTE: Allowed values include the below plus EMPTY and WALL (see GEN_ELEMS).
-# NOTE: If you define a new generic element, please add it to GEN_ELEMS as well.
+# NOTE: If you define a new generic element, please add it to GEN_ELEMS
+#       as well as GEN_ELEMS_TO_NAMES.
 OWN = BLACK
 ENEMY = WHITE
 STONE = OWN | ENEMY
@@ -21,6 +22,23 @@ WALL_ENEMY = WALL | ENEMY
 
 GEN_ELEMS = [EMPTY, WALL, OWN, ENEMY, STONE, ANY, NOT_EMPTY, NOT_WALL,
              NOT_STONE, NOT_OWN, WALL_ENEMY]
+
+GEN_ELEMS_TO_NAMES = dict()
+GEN_ELEMS_TO_NAMES[EMPTY] = "EMPTY"
+GEN_ELEMS_TO_NAMES[WALL] = "WALL"
+GEN_ELEMS_TO_NAMES[OWN] = "OWN"
+GEN_ELEMS_TO_NAMES[ENEMY] = "ENEMY"
+GEN_ELEMS_TO_NAMES[STONE] = "STONE"
+GEN_ELEMS_TO_NAMES[ANY] = "ANY"
+GEN_ELEMS_TO_NAMES[NOT_EMPTY] = "NOT_EMPTY"
+GEN_ELEMS_TO_NAMES[NOT_WALL] = "NOT_WALL"
+GEN_ELEMS_TO_NAMES[NOT_STONE] = "NOT_STONE"
+GEN_ELEMS_TO_NAMES[NOT_OWN] = "NOT_OWN"
+GEN_ELEMS_TO_NAMES[WALL_ENEMY] = "WALL_ENEMY"
+
+# Checks on GEN_ELEMS_TO_NAMES.
+assert set(GEN_ELEMS_TO_NAMES.keys()) == set(GEN_ELEMS)
+assert len(set(GEN_ELEMS_TO_NAMES.values())) == len(GEN_ELEMS)
 
 NUM_DIRECTIONS = 8
 

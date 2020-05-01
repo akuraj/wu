@@ -1,5 +1,6 @@
 import numpy as np
-from consts import GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY, NOT_OWN
+from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
+                    NOT_OWN, GEN_ELEMS_TO_NAMES)
 
 
 class Pattern:
@@ -42,6 +43,21 @@ class Pattern:
         assert self.pattern.size > 0
         assert self.critical_sqs.ndim == 1
         assert self.own_sqs.ndim == 1
+
+    def __repr__(self):
+        desc_list = [GEN_ELEMS_TO_NAMES[x] for x in self.pattern]
+        return ("pattern: {0}\n"
+                "defcon: {1}\n"
+                "critical_sqs: {2}\n"
+                "own_sqs: {3}\n"
+                "name: {4}").format(str(desc_list),
+                                    str(self.defcon),
+                                    str(self.critical_sqs),
+                                    str(self.own_sqs),
+                                    str(self.name))
+
+    def __str__(self):
+        return repr(self)
 
 
 # Win pattern.
