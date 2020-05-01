@@ -1,5 +1,6 @@
 import numpy as np
-from consts import SIDE_LEN, EMPTY, BLACK, WHITE, WALL
+from consts import (SIDE_LEN, EMPTY, BLACK, WHITE, WALL,
+                    ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES)
 from utils import new_board, search_board
 from pattern import P_WIN
 from enum import IntEnum, auto, unique
@@ -67,3 +68,22 @@ class State:
         self.board = np.copy(board.astype(np.byte))
         self.turn = turn
         self.status = status
+
+    def __repr__(self):
+        board_repr = ""
+        for i in range(self.board.shape[0]):
+            for j in range(self.board.shape[1]):
+                board_repr += ACT_ELEMS_TO_CHRS[self.board[i][j]]
+                board_repr += " "
+
+            board_repr += "\n"
+
+        return ("\nboard:\n{0}"
+                "turn: {1}\n"
+                "status: {2}\n").format(board_repr,
+                                        ACT_ELEMS_TO_NAMES[self.turn],
+                                        str(self.status))
+        return board_repr
+
+    def __str__(self):
+        return repr(self)

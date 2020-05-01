@@ -7,7 +7,6 @@
 # TODO: If two threats have the same exact critical squares,
 #       then they can be handled by the same move(s). No need to dedupe them.
 # TODO: Implement function to calculate intersection of pattern matches.
-# TODO: Implement display/print for Pattern class (and any inheriting class).
 # TODO: Refactor common code in the "search*" functions.
 
 # *** Threat Space Search ***
@@ -23,7 +22,6 @@
 
 # *** State Represenation ***
 # TODO: Stricter check on win status to make sure no multiple wins for a given player?
-# TODO: Implement display/print for State.
 # TODO: Calculate and store Rich State?
 
 # *** Performance Concerns ***

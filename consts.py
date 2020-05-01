@@ -1,10 +1,30 @@
 SIDE_LEN_ACT = 15
 SIDE_LEN = SIDE_LEN_ACT + 2  # Including the walls.
 
+# NOTE: All the actual elements defined below must be part of ACT_ELEMS,
+#       as well as ACT_ELEMS_TO_CHRS and ACT_ELEMS_TO_NAMES.
 EMPTY = 1 << 0
 BLACK = 1 << 1
 WHITE = 1 << 2
 WALL = 1 << 3
+
+ACT_ELEMS = [EMPTY, BLACK, WHITE, WALL]
+
+ACT_ELEMS_TO_CHRS = dict()
+ACT_ELEMS_TO_CHRS[EMPTY] = "+"
+ACT_ELEMS_TO_CHRS[BLACK] = chr(9679)
+ACT_ELEMS_TO_CHRS[WHITE] = chr(9675)
+ACT_ELEMS_TO_CHRS[WALL] = " "
+assert set(ACT_ELEMS_TO_CHRS.keys()) == set(ACT_ELEMS)
+assert len(set(ACT_ELEMS_TO_CHRS.values())) == len(ACT_ELEMS)
+
+ACT_ELEMS_TO_NAMES = dict()
+ACT_ELEMS_TO_NAMES[EMPTY] = "EMPTY"
+ACT_ELEMS_TO_NAMES[BLACK] = "BLACK"
+ACT_ELEMS_TO_NAMES[WHITE] = "WHITE"
+ACT_ELEMS_TO_NAMES[WALL] = "WALL"
+assert set(ACT_ELEMS_TO_NAMES.keys()) == set(ACT_ELEMS)
+assert len(set(ACT_ELEMS_TO_NAMES.values())) == len(ACT_ELEMS)
 
 # NOTE: Generic Patterns are specified from BLACK's POV.
 # NOTE: Allowed values include the below plus EMPTY and WALL (see GEN_ELEMS).
@@ -35,8 +55,6 @@ GEN_ELEMS_TO_NAMES[NOT_WALL] = "NOT_WALL"
 GEN_ELEMS_TO_NAMES[NOT_STONE] = "NOT_STONE"
 GEN_ELEMS_TO_NAMES[NOT_OWN] = "NOT_OWN"
 GEN_ELEMS_TO_NAMES[WALL_ENEMY] = "WALL_ENEMY"
-
-# Checks on GEN_ELEMS_TO_NAMES.
 assert set(GEN_ELEMS_TO_NAMES.keys()) == set(GEN_ELEMS)
 assert len(set(GEN_ELEMS_TO_NAMES.values())) == len(GEN_ELEMS)
 

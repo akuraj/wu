@@ -50,11 +50,11 @@ class Pattern:
                 "defcon: {1}\n"
                 "critical_sqs: {2}\n"
                 "own_sqs: {3}\n"
-                "name: {4}").format(str(desc_list),
-                                    str(self.defcon),
-                                    str(self.critical_sqs),
-                                    str(self.own_sqs),
-                                    str(self.name))
+                "name: {4}\n").format(str(desc_list),
+                                      str(self.defcon),
+                                      str(self.critical_sqs),
+                                      str(self.own_sqs),
+                                      str(self.name))
 
     def __str__(self):
         return repr(self)
