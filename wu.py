@@ -9,44 +9,41 @@ from pattern import P_3_B
 
 
 state = State()
-print(state)
+
+board = state.board
+
+pattern = P_3_B.pattern
+color = WHITE
+point = (8, 8)
+own_sqs = P_3_B.own_sqs
+
+for i in P_3_B.own_sqs:
+    board[point[0] - 2 + i][point[1] - 2 + i] = color
+    board[point[0]][point[1] - 2 + i] = color
+    board[point[0] - 2 + i][point[1]] = color
+
 print(state)
 print(P_3_B)
-print(P_3_B)
-# board = state.board
 
-# pattern = P_3_B.pattern
-# color = WHITE
-# point = (8, 8)
-# own_sqs = P_3_B.own_sqs
+n = 10000000
 
-# for i in P_3_B.own_sqs:
-#     board[point[0] - 2 + i][point[1] - 2 + i] = color
-#     board[point[0]][point[1] - 2 + i] = color
-#     board[point[0] - 2 + i][point[1]] = color
-
-# print(state)
-# print(P_3_B)
-
-# n = 10000000
-
-# print("\n")
-# # print(search_board(board, pattern, color))
-# # print(search_point(board, pattern, color, point))
-# print(search_point_own_next_sq(board, pattern, color, point, own_sqs))
+print("\n")
+# print(search_board(board, pattern, color))
+# print(search_point(board, pattern, color, point))
+print(search_point_own_next_sq(board, pattern, color, point, own_sqs))
 
 
-# @njit
-# def test_fn(n):
-#     for _ in range(n):
-#         # search_board(board, pattern, color)
-#         # search_point(board, pattern, color, point)
-#         search_point_own_next_sq(board, pattern, color, point, own_sqs)
+@njit
+def test_fn(n):
+    for _ in range(n):
+        # search_board(board, pattern, color)
+        # search_point(board, pattern, color, point)
+        search_point_own_next_sq(board, pattern, color, point, own_sqs)
 
 
-# test_fn(n)
+test_fn(n)
 
-# start = time.monotonic()
-# test_fn(n)
-# end = time.monotonic()
-# print("Time taken: ", end - start, " seconds")
+start = time.monotonic()
+test_fn(n)
+end = time.monotonic()
+print("Time taken: ", end - start, " seconds")
