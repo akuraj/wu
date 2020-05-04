@@ -2,8 +2,6 @@ import numpy as np
 from numba import njit
 from consts import SIDE_LEN, NUM_DIRECTIONS, WALL, BLACK, WHITE, EMPTY, STONE
 
-# TODO: Fix the way we compute increments?
-
 
 @njit
 def new_board():
