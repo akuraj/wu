@@ -14,7 +14,6 @@
 
 # *** Profiling and Testing ***
 # TODO: Create unit tests for relevant fns.
-# TODO: Add Travis CI to project.
 # TODO: Create profiling code for pattern search fns.
 
 # *** Consts ***
