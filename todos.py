@@ -43,3 +43,6 @@
 
 # *** Swap2 Implementation ***
 # TODO: Implement Swap2 (and update state initialization, relevant checks, and code).
+
+# *** Release! ***
+# TODO: Implement setup.py or pyproject.toml!
