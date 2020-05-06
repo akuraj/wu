@@ -2,15 +2,26 @@
 
 # *** Patterns and Threats; Pattern Matching ***
 # TODO: Test the search functions.
-# TODO: Looking into what other pattern_search functions we need.
+# TODO: What other pattern search functions do we need?
 # TODO: Add check on patterns containing only EMPTY, OWN squares in the middle?
 # TODO: If two threats have the same exact critical squares,
 #       then they can be handled by the same move(s). No need to dedupe them.
 # TODO: Implement function to calculate intersection of pattern matches.
 # TODO: Refactor common code in the "search*" functions.
 
-# *** Threat Space Search ***
+# *** Threat Space Search (TSS) ***
 # TODO: What do we need here?
+
+# *** Negamax Search ***
+# TODO: Search Threat Space fully (FTSS) in an accurate manner,
+#       instead of being too conservative like TSS?
+# TODO: Implement an evaluation scale.
+# TODO: Use Positional Evaluation for quiet/positions not determined by FTSS.
+
+# *** Position Evaluation (Static/Semi-Static) ***
+# TODO: Extend patterns to allow for non-threat patterns (2 in a row for example)?
+# TODO: Use all patterns to assign a value to the position.
+# TODO: null-move heuristic to see any short-term attacks?
 
 # *** Profiling and Testing ***
 # TODO: Create unit tests for relevant fns.
