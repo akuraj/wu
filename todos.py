@@ -1,8 +1,6 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
-# TODO: Add functions to convert between 2d array indices and algebraic notation.
-# TODO: Add row and line identifiers in the State display/string repr.
 # TODO: Test the search functions.
 
 # *** Patterns and Threats; Pattern Matching ***
