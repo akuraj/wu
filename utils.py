@@ -1,6 +1,7 @@
 import numpy as np
 from numba import njit
-from consts import SIDE_LEN, NUM_DIRECTIONS, WALL, BLACK, WHITE, EMPTY, STONE
+from consts import (SIDE_LEN, SIDE_LEN_ACT, NUM_DIRECTIONS, WALL, BLACK, WHITE,
+                    EMPTY, STONE)
 
 
 @njit
@@ -306,3 +307,35 @@ def search_point_own_next_sq(board, gen_pattern, color, point, own_sqs):
 
     dedupe_next_sq_match_pairs(next_sq_match_pairs)
     return next_sq_match_pairs
+
+
+def row_idx_to_num(x):
+    assert 1 <= x <= SIDE_LEN_ACT
+    return(SIDE_LEN_ACT + 1 - x)
+
+
+row_num_to_idx = row_idx_to_num
+
+
+def col_idx_to_chr(x):
+    assert 1 <= x <= SIDE_LEN_ACT
+    return(chr(ord("a") + x - 1))
+
+
+def col_chr_to_idx(x):
+    idx = ord(x) - ord("a") + 1
+    assert 1 <= idx <= SIDE_LEN_ACT
+    return idx
+
+
+def point_to_algebraic(x):
+    assert len(x) == 2
+    row_num = row_idx_to_num(x[0])
+    col_chr = col_idx_to_chr(x[1])
+    return f"{col_chr}{row_num}"
+
+
+def algebraic_to_point(x):
+    col_idx = col_chr_to_idx(x[0])
+    row_idx = row_num_to_idx(int(x[1:]))
+    return(row_idx, col_idx)
