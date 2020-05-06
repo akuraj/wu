@@ -1,7 +1,11 @@
 """A place for general TODOs."""
 
-# *** Patterns and Threats; Pattern Matching ***
+# *** TODO SOON ***
+# TODO: Add functions to convert between 2d array indices and algebraic notation.
+# TODO: Add row and line identifiers in the State display/string repr.
 # TODO: Test the search functions.
+
+# *** Patterns and Threats; Pattern Matching ***
 # TODO: What other pattern search functions do we need?
 # TODO: Add check on patterns containing only EMPTY, OWN squares in the middle?
 # TODO: If two threats have the same exact critical squares,
