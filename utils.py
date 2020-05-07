@@ -253,6 +253,110 @@ def dedupe_next_sq_match_pairs(pairs):
 
 
 @njit
+def search_board_next_sq(board, gen_pattern, color):
+    """Search for a 1d pattern on a 2d board.
+
+    Returns "next_sq"s and the corresponding pattern matches (as in above functions)
+    as a list of (next_sq, match) pairs.
+
+    In existing terminology, "point" is a "rest" square,
+    and "next_sq" is the "gain" square.
+    """
+
+    side = board.shape[0]
+    pattern = get_pattern(gen_pattern, color)
+    length = pattern.size
+
+    symmetric = is_symmetric(pattern)
+    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
+
+    next_sq_match_pairs = []
+    for d in range(ndirs):
+        (row_inc, col_inc) = increments(d)
+        (row_min, row_max) = index_bounds(side, length, row_inc)
+        (col_min, col_max) = index_bounds(side, length, col_inc)
+
+        for i in range(row_min, row_max):
+            for j in range(col_min, col_max):
+                found_next_sq = False
+                k_next_sq = -1
+
+                for k in range(length):
+                    p_val = pattern[k]
+                    b_val = board[i + row_inc * k, j + col_inc * k]
+
+                    if not p_val & b_val:
+                        if not found_next_sq and p_val == color and b_val == EMPTY:
+                            found_next_sq = True
+                            k_next_sq = k
+                        else:
+                            break
+                else:
+                    if found_next_sq:
+                        # Store Ordered Line Segment, a -> b, where the pattern lies.
+                        a = (i, j)
+                        b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
+                        next_sq = (i + row_inc * k_next_sq, j + col_inc * k_next_sq)
+                        next_sq_match_pairs.append((next_sq, (a, b)))
+
+    dedupe_next_sq_match_pairs(next_sq_match_pairs)
+    return next_sq_match_pairs
+
+
+@njit
+def search_point_next_sq(board, gen_pattern, color, point):
+    """Search for a 1d pattern on a 2d board including the given point.
+
+    Returns "next_sq"s and the corresponding pattern matches (as in above functions)
+    as a list of (next_sq, match) pairs.
+
+    In existing terminology, "point" is a "rest" square,
+    and "next_sq" is the "gain" square.
+    """
+
+    (x, y) = point
+
+    side = board.shape[0]
+    pattern = get_pattern(gen_pattern, color)
+    length = pattern.size
+
+    symmetric = is_symmetric(pattern)
+    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
+
+    next_sq_match_pairs = []
+    for d in range(ndirs):
+        (row_inc, col_inc) = increments(d)
+        (s_min, s_max) = index_bounds_incl(side, length, x, y, row_inc, col_inc)
+
+        for h in range(s_min, s_max):
+            (i, j) = (x + row_inc * h, y + col_inc * h)
+
+            found_next_sq = False
+            k_next_sq = -1
+
+            for k in range(length):
+                p_val = pattern[k]
+                b_val = board[i + row_inc * k, j + col_inc * k]
+
+                if not p_val & b_val:
+                    if not found_next_sq and p_val == color and b_val == EMPTY:
+                        found_next_sq = True
+                        k_next_sq = k
+                    else:
+                        break
+            else:
+                if found_next_sq:
+                    # Store Ordered Line Segment, a -> b, where the pattern lies.
+                    a = (i, j)
+                    b = (i + row_inc * (length - 1), j + col_inc * (length - 1))
+                    next_sq = (i + row_inc * k_next_sq, j + col_inc * k_next_sq)
+                    next_sq_match_pairs.append((next_sq, (a, b)))
+
+    dedupe_next_sq_match_pairs(next_sq_match_pairs)
+    return next_sq_match_pairs
+
+
+@njit
 def search_point_own_next_sq(board, gen_pattern, color, point, own_sqs):
     """Search for a 1d pattern on a 2d board including the given point as an own_sq.
 

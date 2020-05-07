@@ -9,7 +9,6 @@
 # TODO: If two threats have the same exact critical squares,
 #       then they can be handled by the same move(s). No need to dedupe them.
 # TODO: Implement function to calculate intersection of pattern matches.
-# TODO: Refactor common code in the "search*" functions.
 
 # *** Threat Space Search (TSS) ***
 # TODO: What do we need here?
@@ -55,6 +54,9 @@
 
 # *** Swap2 Implementation ***
 # TODO: Implement Swap2 (and update state initialization, relevant checks, and code).
+
+# *** Cleanup ***
+# TODO: Remove unused functions (search related etc.).
 
 # *** Release! ***
 # TODO: Implement setup.py or pyproject.toml!
