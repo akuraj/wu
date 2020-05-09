@@ -482,10 +482,10 @@ def point_is_on_line(point, start, end, segment_only):
 
 @njit
 def matches_are_subset(x, y):
-    for x_elem in x:
+    for a in x:
         found = False
-        for y_elem in y:
-            if x_elem == y_elem or x_elem == y_elem[::-1]:
+        for b in y:
+            if a == b or a == b[::-1]:
                 found = True
                 break
 
@@ -498,3 +498,23 @@ def matches_are_subset(x, y):
 @njit
 def matches_are_equal(x, y):
     return matches_are_subset(x, y) and matches_are_subset(y, x)
+
+
+@njit
+def next_sq_matches_are_subset(x, y):
+    for a in x:
+        found = False
+        for b in y:
+            if a[0] == b[0] and (a[1] == b[1] or a[1] == b[1][::-1]):
+                found = True
+                break
+
+        if not found:
+            return False
+
+    return True
+
+
+@njit
+def next_sq_matches_are_equal(x, y):
+    return next_sq_matches_are_subset(x, y) and next_sq_matches_are_subset(y, x)

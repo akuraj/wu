@@ -1,7 +1,6 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
-# TODO: Test the search functions.
 
 # *** Patterns and Threats; Pattern Matching ***
 # TODO: What other pattern search functions do we need?
