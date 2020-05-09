@@ -6,7 +6,6 @@ from utils import (new_board, get_pattern, apply_pattern, increments,
 from numba import njit
 
 
-@njit
 def test_truth():
     truth = True
     beauty = True
