@@ -11,6 +11,10 @@ def test_truth():
     assert truth == beauty, "How can this be?!"
 
 
+def subtest_search_board():
+    assert False
+
+
 def test_search_fns():
     for color in COLORS:
         for pattern_obj in PATTERNS:
@@ -30,6 +34,8 @@ def test_search_fns():
                             start = (i, j)
                             end = (i + row_inc * (length - 1), j + col_inc * (length - 1))
                             expected_matches = [(start, end)]
+
+                            subtest_search_board()
 
                             # search_board
                             matches = search_board(board, gen_pattern, color)
@@ -54,7 +60,3 @@ def test_search_fns():
                                     assert expected_matches == matches
                                 else:
                                     expected_matches == []
-
-
-def subtest_example():
-    assert False
