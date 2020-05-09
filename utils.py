@@ -471,3 +471,23 @@ def point_is_on_line(point, start, end, on_segment):
     dx2 = point[0] - end[0]
     dy2 = point[1] - end[1]
     return dx1 * dy2 == dx2 * dy1 and (not on_segment or (dx1 * dx2 <= 0 and dy1 * dy2 <= 0))
+
+
+@njit
+def matches_are_subset(x, y):
+    for x_elem in x:
+        found = False
+        for y_elem in y:
+            if x_elem == y_elem or x_elem == y_elem[::-1]:
+                found = True
+                break
+
+        if not found:
+            return False
+
+    return True
+
+
+@njit
+def matches_are_equal(x, y):
+    return matches_are_subset(x, y) and matches_are_subset(y, x)
