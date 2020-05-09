@@ -41,18 +41,6 @@ def get_pattern(gen_pattern, color):
 
 
 @njit
-def is_symmetric(pattern):
-    """Check symmetry of 1d pattern."""
-
-    n = pattern.size
-    for i in range(int(n / 2)):
-        if pattern[i] != pattern[n - i - 1]:
-            return False
-
-    return True
-
-
-@njit
 def increment_fn(i):
     if i % 4 == 0:
         return 0
