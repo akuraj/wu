@@ -30,7 +30,5 @@ def test_search_board():
                             start = (i, j)
                             end = (i + row_inc * (length - 1), j + col_inc * (length - 1))
                             expected_matches = [(start, end)]
-
                             matches = search_board(board, gen_pattern, color)
-
                             assert expected_matches == matches
