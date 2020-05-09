@@ -1,9 +1,9 @@
+from enum import IntEnum, auto, unique
 import numpy as np
 from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL,
                     ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR)
 from utils import new_board, search_board, row_idx_to_num, col_idx_to_chr
 from pattern import P_WIN
-from enum import IntEnum, auto, unique
 
 
 @unique
@@ -108,7 +108,6 @@ class State:
                 "status: {2}\n").format(board_repr,
                                         ACT_ELEMS_TO_NAMES[self.turn],
                                         str(self.status))
-        return board_repr
 
     def __str__(self):
         return repr(self)
