@@ -43,6 +43,7 @@
 # TODO: Inline numba jitted functions?
 
 # *** Linting and Conventions ***
+# TODO: Add more documentation; consult pylint code conventions.
 # TODO: Cleanup import statements.
 
 # *** Standard Gomoku Implementation ***
