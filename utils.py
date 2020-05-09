@@ -136,11 +136,8 @@ def search_board(board, gen_pattern, color):
     pattern = get_pattern(gen_pattern, color)
     length = pattern.size
 
-    symmetric = is_symmetric(pattern)
-    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
-
     matches = []
-    for d in range(ndirs):
+    for d in range(NUM_DIRECTIONS):
         (row_inc, col_inc) = increments(d)
         (row_min, row_max) = index_bounds(side, length, row_inc)
         (col_min, col_max) = index_bounds(side, length, col_inc)
@@ -170,11 +167,8 @@ def search_point(board, gen_pattern, color, point):
     pattern = get_pattern(gen_pattern, color)
     length = pattern.size
 
-    symmetric = is_symmetric(pattern)
-    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
-
     matches = []
-    for d in range(ndirs):
+    for d in range(NUM_DIRECTIONS):
         (row_inc, col_inc) = increments(d)
         (s_min, s_max) = index_bounds_incl(side, length, x, y, row_inc, col_inc)
 
@@ -204,14 +198,11 @@ def search_point_own(board, gen_pattern, color, point, own_sqs):
     pattern = get_pattern(gen_pattern, color)
     length = pattern.size
 
-    symmetric = is_symmetric(pattern)
-    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
-
     matches = []
 
     # We are searching for patterns including the given point as an "own_sq".
     if board[point] == color:
-        for d in range(ndirs):
+        for d in range(NUM_DIRECTIONS):
             (row_inc, col_inc) = increments(d)
             (s_min, s_max) = index_bounds_incl(side, length, x, y, row_inc, col_inc)
 
@@ -267,11 +258,8 @@ def search_board_next_sq(board, gen_pattern, color):
     pattern = get_pattern(gen_pattern, color)
     length = pattern.size
 
-    symmetric = is_symmetric(pattern)
-    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
-
     next_sq_match_pairs = []
-    for d in range(ndirs):
+    for d in range(NUM_DIRECTIONS):
         (row_inc, col_inc) = increments(d)
         (row_min, row_max) = index_bounds(side, length, row_inc)
         (col_min, col_max) = index_bounds(side, length, col_inc)
@@ -320,11 +308,8 @@ def search_point_next_sq(board, gen_pattern, color, point):
     pattern = get_pattern(gen_pattern, color)
     length = pattern.size
 
-    symmetric = is_symmetric(pattern)
-    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
-
     next_sq_match_pairs = []
-    for d in range(ndirs):
+    for d in range(NUM_DIRECTIONS):
         (row_inc, col_inc) = increments(d)
         (s_min, s_max) = index_bounds_incl(side, length, x, y, row_inc, col_inc)
 
@@ -373,14 +358,11 @@ def search_point_own_next_sq(board, gen_pattern, color, point, own_sqs):
     pattern = get_pattern(gen_pattern, color)
     length = pattern.size
 
-    symmetric = is_symmetric(pattern)
-    ndirs = int(NUM_DIRECTIONS / 2) if symmetric else NUM_DIRECTIONS
-
     next_sq_match_pairs = []
 
     # We are searching for patterns including the given point as an "own_sq".
     if board[point] == color:
-        for d in range(ndirs):
+        for d in range(NUM_DIRECTIONS):
             (row_inc, col_inc) = increments(d)
             (s_min, s_max) = index_bounds_incl(side, length, x, y, row_inc, col_inc)
 
@@ -480,3 +462,12 @@ def apply_pattern(board, pattern, point, d):
             board[x + row_inc * k, y + col_inc * k] = pattern[k]
 
     return can_apply
+
+
+@njit
+def point_is_on_line(point, start, end, on_segment):
+    dx1 = point[0] - start[0]
+    dy1 = point[1] - start[1]
+    dx2 = point[0] - end[0]
+    dy2 = point[1] - end[1]
+    return dx1 * dy2 == dx2 * dy1 and (not on_segment or (dx1 * dx2 <= 0 and dy1 * dy2 <= 0))
