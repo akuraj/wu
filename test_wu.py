@@ -1,8 +1,9 @@
 from consts import SIDE_LEN, COLORS, NUM_DIRECTIONS
 from pattern import PATTERNS
 from utils import (new_board, get_pattern, apply_pattern, increments,
+                   point_is_on_line, matches_are_equal,
                    search_board, search_point, search_point_own,
-                   point_is_on_line, matches_are_equal)
+                   search_board_next_sq, search_point_next_sq, search_point_own_next_sq)
 from numba import njit
 
 
@@ -10,6 +11,7 @@ def test_truth():
     truth = True
     beauty = True
 
+    raise Exception
     assert truth == beauty, "How can this be?!"
 
 
