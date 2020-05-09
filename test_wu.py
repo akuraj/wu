@@ -16,8 +16,10 @@ def test_truth():
 @njit
 def subtest_search_board(board, gen_pattern, color, expected_matches):
     matches = search_board(board, gen_pattern, color)
-    checks_out = matches_are_equal(matches, expected_matches)
-    assert checks_out
+    if not matches_are_equal(matches, expected_matches):
+        return False
+
+    return True
 
 
 @njit
@@ -29,10 +31,13 @@ def subtest_search_point(board, gen_pattern, color,
             matches = search_point(board, gen_pattern, color, point)
 
             if point_is_on_line(point, start, end, True):
-                checks_out = matches_are_equal(matches, expected_matches)
-                assert checks_out
+                if not matches_are_equal(matches, expected_matches):
+                    return False
             else:
-                assert len(matches) == 0
+                if len(matches) != 0:
+                    return False
+
+    return True
 
 
 @njit
@@ -45,12 +50,16 @@ def subtest_search_point_own(board, gen_pattern, color, own_sqs,
 
             if point_is_on_line(point, start, end, True):
                 if board[point] == color:
-                    checks_out = matches_are_equal(matches, expected_matches)
-                    assert checks_out
+                    if not matches_are_equal(matches, expected_matches):
+                        return False
                 else:
-                    assert len(matches) == 0
+                    if len(matches) != 0:
+                        return False
             else:
-                assert len(matches) == 0
+                if len(matches) != 0:
+                    return False
+
+    return True
 
 
 @njit
@@ -68,14 +77,21 @@ def subtest_search_fns(gen_pattern, color, own_sqs):
                     end = (i + row_inc * (length - 1), j + col_inc * (length - 1))
                     expected_matches = [(start, end)]
 
-                    subtest_search_board(board, gen_pattern, color, expected_matches)
-                    subtest_search_point(board, gen_pattern, color,
-                                         start, end, expected_matches)
-                    subtest_search_point_own(board, gen_pattern, color, own_sqs,
-                                             start, end, expected_matches)
+                    if not subtest_search_board(board, gen_pattern, color, expected_matches):
+                        return False
+
+                    if not subtest_search_point(board, gen_pattern, color,
+                                                start, end, expected_matches):
+                        return False
+
+                    if not subtest_search_point_own(board, gen_pattern, color, own_sqs,
+                                                    start, end, expected_matches):
+                        return False
+
+    return True
 
 
 def test_search_fns():
     for color in COLORS:
         for pattern in PATTERNS:
-            subtest_search_fns(pattern.pattern, color, pattern.own_sqs)
+            assert subtest_search_fns(pattern.pattern, color, pattern.own_sqs)
