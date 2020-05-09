@@ -76,13 +76,13 @@ P_3_B = Pattern([EMPTY, OWN, OWN, EMPTY, OWN, EMPTY], [0, 3, 5], 2, "P_3_B")
 PATTERNS = [P_WIN, P_4_ST, P_4_A, P_4_B, P_4_C, P_3_ST, P_3_A, P_3_B]
 
 PATTERNS_BY_DEFCON = dict()
-for pattern in PATTERNS:
-    if pattern.defcon in PATTERNS_BY_DEFCON:
-        PATTERNS_BY_DEFCON[pattern.defcon].append(pattern)
+for p in PATTERNS:
+    if p.defcon in PATTERNS_BY_DEFCON:
+        PATTERNS_BY_DEFCON[p.defcon].append(p)
     else:
-        PATTERNS_BY_DEFCON[pattern.defcon] = [pattern]
+        PATTERNS_BY_DEFCON[p.defcon] = [p]
 
 PATTERNS_BY_NAME = dict()
-for pattern in PATTERNS:
-    assert pattern.name not in PATTERNS_BY_NAME
-    PATTERNS_BY_NAME[pattern.name] = pattern
+for p in PATTERNS:
+    assert p.name not in PATTERNS_BY_NAME
+    PATTERNS_BY_NAME[p.name] = p
