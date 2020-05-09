@@ -7,7 +7,7 @@ from utils import (search_board, search_point, search_point_own,
 from numba import njit
 from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN, WALL
 from pattern import P_3_B, P_4_ST, P_4_A
-from test_wu import test_search_fns
+from test_wu import test_search_fns, test_truth
 
 
 start = time.monotonic()
