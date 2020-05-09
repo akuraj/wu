@@ -443,3 +443,40 @@ def algebraic_to_point(x):
     col_idx = col_chr_to_idx(x[0])
     row_idx = row_num_to_idx(int(x[1:]))
     return(row_idx, col_idx)
+
+
+@njit
+def apply_pattern(board, pattern, point, d):
+    """Apply given pattern at given point in given direction.
+
+    Returns True if application was succesful.
+    Else, returns False.
+    If application fails then board is unchanged.
+
+    We only check that the length fits at that point.
+    We will apply a non-standard element as it is,
+    including overwriting a wall with any element whatsoever.
+
+    Useful for testing purposes.
+    """
+
+    (x, y) = point
+
+    side = board.shape[0]
+    length = pattern.size
+
+    (row_inc, col_inc) = increments(d)
+
+    can_apply = True
+    for k in range(length):
+        (i, j) = (x + row_inc * k, y + col_inc * k)
+        if i not in range(side) or j not in range(side):
+            can_apply = False
+            break
+
+    if can_apply:
+        for k in range(length):
+            # NOTE: If it's a non-standard element, we just apply it as is.
+            board[x + row_inc * k, y + col_inc * k] = pattern[k]
+
+    return can_apply

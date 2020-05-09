@@ -1,6 +1,6 @@
 import numpy as np
 from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL,
-                    ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES)
+                    ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR)
 from utils import new_board, search_board, row_idx_to_num, col_idx_to_chr
 from pattern import P_WIN
 from enum import IntEnum, auto, unique
@@ -86,7 +86,11 @@ class State:
             board_repr += num_str + " "
 
             for j in range(self.board.shape[1]):
-                board_repr += ACT_ELEMS_TO_CHRS[self.board[i][j]]
+                if self.board[i][j] in ACT_ELEMS_TO_CHRS:
+                    board_repr += ACT_ELEMS_TO_CHRS[self.board[i][j]]
+                else:
+                    board_repr += SPL_ELEM_CHR
+
                 board_repr += " "
 
             board_repr += "\n"

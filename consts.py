@@ -9,6 +9,7 @@ WHITE = 1 << 2
 WALL = 1 << 3
 
 ACT_ELEMS = [EMPTY, BLACK, WHITE, WALL]
+COLORS = [BLACK, WHITE]
 
 BLACK_CIRCLE = chr(9679)
 WHITE_CIRCLE = chr(9675)
@@ -23,6 +24,8 @@ ACT_ELEMS_TO_CHRS[WHITE] = BLACK_CIRCLE if SWITCH_DISPLAY_COLORS else WHITE_CIRC
 ACT_ELEMS_TO_CHRS[WALL] = " "
 assert set(ACT_ELEMS_TO_CHRS.keys()) == set(ACT_ELEMS)
 assert len(set(ACT_ELEMS_TO_CHRS.values())) == len(ACT_ELEMS)
+SPL_ELEM_CHR = "!"  # For printing non-standard elements. Useful for debugging.
+
 
 ACT_ELEMS_TO_NAMES = dict()
 ACT_ELEMS_TO_NAMES[EMPTY] = "EMPTY"
