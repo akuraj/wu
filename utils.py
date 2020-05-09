@@ -465,12 +465,12 @@ def apply_pattern(board, pattern, point, d):
 
 
 @njit
-def point_is_on_line(point, start, end, on_segment):
+def point_is_on_line(point, start, end, segment_only):
     dx1 = point[0] - start[0]
     dy1 = point[1] - start[1]
     dx2 = point[0] - end[0]
     dy2 = point[1] - end[1]
-    return dx1 * dy2 == dx2 * dy1 and (not on_segment or (dx1 * dx2 <= 0 and dy1 * dy2 <= 0))
+    return dx1 * dy2 == dx2 * dy1 and (not segment_only or (dx1 * dx2 <= 0 and dy1 * dy2 <= 0))
 
 
 @njit
