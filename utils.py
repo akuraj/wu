@@ -5,6 +5,13 @@ from consts import (SIDE_LEN, SIDE_LEN_ACT, NUM_DIRECTIONS, WALL, BLACK, WHITE,
 
 
 @njit
+def assert_nb(truth_value, assert_err_msg=""):
+    if not truth_value:
+        print(assert_err_msg)
+        raise Exception
+
+
+@njit
 def new_board():
     board = np.full((SIDE_LEN, SIDE_LEN), EMPTY, dtype=np.byte)
 
