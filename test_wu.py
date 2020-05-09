@@ -56,5 +56,5 @@ def test_search_fns():
                                     expected_matches == []
 
 
-def test_example():
+def subtest_example():
     assert False
