@@ -1,6 +1,6 @@
 from enum import IntEnum, auto, unique
 import numpy as np
-from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL,
+from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL, COLORS,
                     ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR)
 from utils import new_board, search_board, row_idx_to_num, col_idx_to_chr, get_board
 from pattern import P_WIN
@@ -23,7 +23,7 @@ class State:
 
         # State Integrity Checks.
         assert board.shape == (SIDE_LEN, SIDE_LEN)
-        assert turn in (BLACK, WHITE)
+        assert turn in COLORS
 
         black_total = 0
         white_total = 0

@@ -27,8 +27,10 @@
 # TODO: Create tests for algebraic related fns, state construction etc.
 # TODO: Create profiling code for pattern search fns.
 
-# *** Consts ***
+# *** Cleanup ***
+# TODO: Remove unused functions (search related etc.).
 # TODO: Remove unnecessary constants.
+# TODO: Code organization: refactor utils to separate libs?
 
 # *** State Represenation ***
 # TODO: Stricter check on win status to make sure no multiple wins for a given player?
@@ -54,9 +56,6 @@
 
 # *** Swap2 Implementation ***
 # TODO: Implement Swap2 (and update state initialization, relevant checks, and code).
-
-# *** Cleanup ***
-# TODO: Remove unused functions (search related etc.).
 
 # *** Release! ***
 # TODO: Implement setup.py or pyproject.toml!
