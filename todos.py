@@ -1,6 +1,7 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Remove unnecessary asserts/checks/if. [IMPORTANT].
 
 # *** Patterns and Threats; Pattern Matching ***
 # TODO: What other pattern search functions do we need?

@@ -16,7 +16,9 @@ class Pattern:
             assert elem in GEN_ELEMS
             assert elem == OWN or elem & OWN == 0
 
-        # Checks on critical_sqs
+        # Critical Squares are the places where if the oppenent plays,
+        # then the threat is mitigated.
+        # Checks on critical_sqs.
         critical_sqs.sort()
         critical_sqs_uniq = list(set(critical_sqs))
         critical_sqs_uniq.sort()
@@ -64,7 +66,7 @@ class Pattern:
 P_WIN = Pattern([OWN, OWN, OWN, OWN, OWN], [], 0, "P_WIN")
 
 # Threat patterns.
-P_4_ST = Pattern([EMPTY, OWN, OWN, OWN, OWN, EMPTY], [0, 5], 1, "P_4_ST")
+P_4_ST = Pattern([EMPTY, OWN, OWN, OWN, OWN, EMPTY], [], 1, "P_4_ST")
 P_4_A = Pattern([WALL_ENEMY, OWN, OWN, OWN, OWN, EMPTY], [5], 1, "P_4_A")
 P_4_B = Pattern([NOT_OWN, OWN, OWN, OWN, EMPTY, OWN], [4], 1, "P_4_B")
 P_4_C = Pattern([NOT_OWN, OWN, OWN, EMPTY, OWN, OWN, NOT_OWN], [3], 1, "P_4_C")
