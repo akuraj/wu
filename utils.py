@@ -523,14 +523,14 @@ def next_sq_matches_are_equal(x, y):
 
 
 @njit
-def set_sq(board, point, color):
+def set_sq(board, color, point):
     assert color in COLORS
     assert board[point] == EMPTY
     board[point] = color
 
 
 @njit
-def clear_sq(board, point, color):
+def clear_sq(board, color, point):
     assert color in COLORS
     assert board[point] == color
     board[point] = EMPTY

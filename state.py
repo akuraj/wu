@@ -114,12 +114,12 @@ class State:
         return repr(self)
 
     def make(self, point):
-        set_sq(self.board, point, self.turn)
+        set_sq(self.board, self.turn, point)
         self.turn ^= STONE
 
     def unmake(self, point):
         self.turn ^= STONE
-        clear_sq(self.board, point, self.turn)
+        clear_sq(self.board, self.turn, point)
 
 
 def get_state(blacks, whites, turn, strict_stone_count):

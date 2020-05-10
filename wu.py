@@ -3,7 +3,7 @@ import time
 from state import get_state
 from utils import (search_board, search_point, search_point_own,
                    search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
-                   get_pattern, apply_pattern, assert_nb)
+                   get_pattern, apply_pattern, assert_nb, set_sq)
 from numba import njit
 from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN, WALL
 from pattern import P_3_B, P_4_ST, P_4_A, PATTERNS
@@ -20,6 +20,10 @@ print(state)
 
 state.make((1, 4))
 print(state)
+
+# # def is_win(board, color, point):
+# #     set_sq(board)
+
 
 
 # black_threats = [search_board(state.board, p.pattern, BLACK) for p in PATTERNS]
