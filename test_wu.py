@@ -5,7 +5,7 @@ from utils import (new_board, get_pattern, apply_pattern, increments,
                    point_is_on_line, matches_are_equal,
                    search_board, search_point, search_point_own,
                    search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
-                   assert_nb, next_sq_matches_are_subset)
+                   assert_nb, next_sq_matches_are_subset, get_point_on_line)
 
 
 @njit
@@ -54,12 +54,11 @@ def subtest_search_point_own(board, gen_pattern, color, own_sqs,
 
 @njit
 def subtest_search_board_next_sq(board, gen_pattern, color, own_sqs,
-                                 start, end, d):
+                                 start, end):
     (i, j) = start
-    (row_inc, col_inc) = increments(d)
 
     for own_sq in own_sqs:
-        test_sq = (i + row_inc * own_sq, j + col_inc * own_sq)
+        test_sq = get_point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]
 
         stored_val = board[test_sq]
@@ -77,12 +76,11 @@ def subtest_search_board_next_sq(board, gen_pattern, color, own_sqs,
 
 @njit
 def subtest_search_point_next_sq(board, gen_pattern, color, own_sqs,
-                                 start, end, d):
+                                 start, end):
     (i, j) = start
-    (row_inc, col_inc) = increments(d)
 
     for own_sq in own_sqs:
-        test_sq = (i + row_inc * own_sq, j + col_inc * own_sq)
+        test_sq = get_point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]
 
         for x in range(SIDE_LEN):
@@ -110,12 +108,11 @@ def subtest_search_point_next_sq(board, gen_pattern, color, own_sqs,
 
 @njit
 def subtest_search_point_own_next_sq(board, gen_pattern, color, own_sqs,
-                                     start, end, d):
+                                     start, end):
     (i, j) = start
-    (row_inc, col_inc) = increments(d)
 
     for own_sq in own_sqs:
-        test_sq = (i + row_inc * own_sq, j + col_inc * own_sq)
+        test_sq = get_point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]
 
         for x in range(SIDE_LEN):
@@ -163,11 +160,11 @@ def subtest_search_fns(gen_pattern, color, own_sqs):
                                              start, end)
 
                     subtest_search_board_next_sq(board, gen_pattern, color, own_sqs,
-                                                 start, end, d)
+                                                 start, end)
                     subtest_search_point_next_sq(board, gen_pattern, color, own_sqs,
-                                                 start, end, d)
+                                                 start, end)
                     subtest_search_point_own_next_sq(board, gen_pattern, color, own_sqs,
-                                                     start, end, d)
+                                                     start, end)
 
 
 def test_search_fns():

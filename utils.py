@@ -534,3 +534,21 @@ def clear_sq(board, color, point):
     assert color in COLORS
     assert board[point] == color
     board[point] = EMPTY
+
+
+@njit
+def signum(x):
+    if x > 0:
+        return 1
+    elif x < 0:
+        return -1
+    else:
+        return 0
+
+
+@njit
+def get_point_on_line(start, end, i):
+    dx = end[0] - start[0]
+    dy = end[1] - start[1]
+    assert dx * dy == 0 or abs(dx) == abs(dy)
+    return (start[0] + signum(dx) * i, start[1] + signum(dy) * i)
