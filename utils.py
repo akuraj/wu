@@ -1,7 +1,7 @@
 import numpy as np
 from numba import njit
 from consts import (SIDE_LEN, SIDE_LEN_ACT, NUM_DIRECTIONS, WALL, BLACK, WHITE,
-                    EMPTY, STONE)
+                    EMPTY, STONE, COLORS)
 
 
 @njit
@@ -520,3 +520,17 @@ def next_sq_matches_are_subset(x, y):
 def next_sq_matches_are_equal(x, y):
     # pylint: disable=W1114
     return next_sq_matches_are_subset(x, y) and next_sq_matches_are_subset(y, x)
+
+
+@njit
+def set_sq(board, point, color):
+    assert color in COLORS
+    assert board[point] == EMPTY
+    board[point] = color
+
+
+@njit
+def clear_sq(board, point, color):
+    assert color in COLORS
+    assert board[point] == color
+    board[point] = EMPTY

@@ -1,8 +1,9 @@
 from enum import IntEnum, auto, unique
 import numpy as np
 from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL, COLORS,
-                    ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR)
-from utils import new_board, search_board, row_idx_to_num, col_idx_to_chr, get_board
+                    ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR, STONE)
+from utils import (new_board, search_board, row_idx_to_num, col_idx_to_chr, get_board,
+                   set_sq, clear_sq)
 from pattern import P_WIN
 
 
@@ -111,6 +112,14 @@ class State:
 
     def __str__(self):
         return repr(self)
+
+    def make(self, point):
+        set_sq(self.board, point, self.turn)
+        self.turn ^= STONE
+
+    def unmake(self, point):
+        self.turn ^= STONE
+        clear_sq(self.board, point, self.turn)
 
 
 def get_state(blacks, whites, turn, strict_stone_count):

@@ -6,7 +6,7 @@ from utils import (search_board, search_point, search_point_own,
                    get_pattern, apply_pattern, assert_nb)
 from numba import njit
 from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN, WALL
-# from pattern import P_3_B, P_4_ST, P_4_A, PATTERNS_BY_DEFCON
+from pattern import P_3_B, P_4_ST, P_4_A, PATTERNS
 
 
 state = get_state(["a1", "a2", "a3", "a13", "a14", "a15", "b1", "b15", "c1", "c15",
@@ -17,6 +17,14 @@ state = get_state(["a1", "a2", "a3", "a13", "a14", "a15", "b1", "b15", "c1", "c1
                   False)
 
 print(state)
+
+state.make((1, 4))
+print(state)
+
+
+# black_threats = [search_board(state.board, p.pattern, BLACK) for p in PATTERNS]
+# black_threats_next_sq = [search_board_next_sq(state.board, p.pattern, BLACK) for p in PATTERNS]
+# print(black_threats_next_sq)
 
 # start = time.monotonic()
 
