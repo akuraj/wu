@@ -24,7 +24,7 @@
 # TODO: null-move heuristic to see any short-term attacks?
 
 # *** Profiling and Testing ***
-# TODO: Create unit tests for relevant fns.
+# TODO: Create tests for algebraic related fns, state construction etc.
 # TODO: Create profiling code for pattern search fns.
 
 # *** Consts ***

@@ -2,7 +2,7 @@ from enum import IntEnum, auto, unique
 import numpy as np
 from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL,
                     ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR)
-from utils import new_board, search_board, row_idx_to_num, col_idx_to_chr
+from utils import new_board, search_board, row_idx_to_num, col_idx_to_chr, get_board
 from pattern import P_WIN
 
 
@@ -111,3 +111,7 @@ class State:
 
     def __str__(self):
         return repr(self)
+
+
+def get_state(blacks, whites, turn, strict_stone_count):
+    return State(get_board(blacks, whites), turn, strict_stone_count)

@@ -24,6 +24,18 @@ def new_board():
     return board
 
 
+def get_board(blacks, whites):
+    board = new_board()
+
+    for elem in blacks:
+        board[algebraic_to_point(elem)] = BLACK
+
+    for elem in whites:
+        board[algebraic_to_point(elem)] = WHITE
+
+    return board
+
+
 @njit
 def get_pattern(gen_pattern, color):
     if color == BLACK:
