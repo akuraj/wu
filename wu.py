@@ -74,13 +74,11 @@ for _ in range(n):
 end = time.monotonic()
 print("Time taken: ", end - start, " seconds")
 
-
 # threats_next_sq = search_all_board_next_sq(state.board, state.turn)
 # next_sqs = list(set([x["next_sq"] for x in threats_next_sq]))
 
 # for next_sq in next_sqs:
 #     print(next_sq, threat_space_search(state.board, state.turn, next_sq))
-
 
 # # n = 100000
 # # print("\n")
