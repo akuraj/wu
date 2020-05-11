@@ -1,6 +1,7 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Add defcon to threat dict!
 # TODO: Implement current threats data structure on State with incremental updates.
 #       The data structures should include threats and threats_next_sq.
 #       What happens when we set multiple squares of opponent during TSS?
