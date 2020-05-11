@@ -2,7 +2,8 @@ import numpy as np
 from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
                     NOT_OWN, GEN_ELEMS_TO_NAMES)
 from utils import (search_board, search_point, search_point_own,
-                   search_board_next_sq, search_point_next_sq, search_point_own_next_sq)
+                   search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
+                   point_set_on_line)
 
 
 class Pattern:
@@ -110,7 +111,9 @@ def search_all_board(board, color):
     for p in PATTERNS:
         matches_p = search_board(board, p.pattern, color)
         for elem in matches_p:
-            matches.append((elem, p.index))
+            matches.append((elem,
+                            p.index,
+                            point_set_on_line(elem[0], elem[1], p.critical_sqs)))
 
     return matches
 
@@ -120,7 +123,9 @@ def search_all_point(board, color, point):
     for p in PATTERNS:
         matches_p = search_point(board, p.pattern, color, point)
         for elem in matches_p:
-            matches.append((elem, p.index))
+            matches.append((elem,
+                            p.index,
+                            point_set_on_line(elem[0], elem[1], p.critical_sqs)))
 
     return matches
 
@@ -130,7 +135,9 @@ def search_all_point_own(board, color, point):
     for p in PATTERNS:
         matches_p = search_point_own(board, p.pattern, color, point, p.own_sqs)
         for elem in matches_p:
-            matches.append((elem, p.index))
+            matches.append((elem,
+                            p.index,
+                            point_set_on_line(elem[0], elem[1], p.critical_sqs)))
 
     return matches
 
@@ -140,7 +147,9 @@ def search_all_board_next_sq(board, color):
     for p in PATTERNS:
         matches_p = search_board_next_sq(board, p.pattern, color)
         for elem in matches_p:
-            matches.append((elem, p.index))
+            matches.append((elem,
+                            p.index,
+                            point_set_on_line(elem[1][0], elem[1][1], p.critical_sqs)))
 
     return matches
 
@@ -150,7 +159,9 @@ def search_all_point_next_sq(board, color, point):
     for p in PATTERNS:
         matches_p = search_point_next_sq(board, p.pattern, color, point)
         for elem in matches_p:
-            matches.append((elem, p.index))
+            matches.append((elem,
+                            p.index,
+                            point_set_on_line(elem[1][0], elem[1][1], p.critical_sqs)))
 
     return matches
 
@@ -160,6 +171,8 @@ def search_all_point_own_next_sq(board, color, point):
     for p in PATTERNS:
         matches_p = search_point_own_next_sq(board, p.pattern, color, point, p.own_sqs)
         for elem in matches_p:
-            matches.append((elem, p.index))
+            matches.append((elem,
+                            p.index,
+                            point_set_on_line(elem[1][0], elem[1][1], p.critical_sqs)))
 
     return matches

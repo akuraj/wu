@@ -552,3 +552,8 @@ def point_on_line(start, end, i):
     dy = end[1] - start[1]
     assert dx * dy == 0 or abs(dx) == abs(dy)
     return (start[0] + signum(dx) * i, start[1] + signum(dy) * i)
+
+
+@njit
+def point_set_on_line(start, end, idxs):
+    return set([point_on_line(start, end, i) for i in idxs])
