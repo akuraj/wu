@@ -1,7 +1,8 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
-# TODO: Remove unnecessary asserts/checks/if. [IMPORTANT].
+# TODO: Have a unified return format for all search fns?
+# TODO: What's the most useful search result format at TSS or equivalent level?
 
 # *** Patterns and Threats; Pattern Matching ***
 # TODO: What other pattern search functions do we need?
