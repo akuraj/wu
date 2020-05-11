@@ -33,7 +33,7 @@ print(state)
 def threat_space_search(board, color, point):
     set_sq(board, color, point)
     threats = search_all_point_own(board, color, point)
-    csqs = reduce(set.intersection, [x[2] for x in threats])
+    csqs = reduce(set.intersection, [x["critical_sqs"] for x in threats])
 
     potential_win = len(threats) > 0 and len(csqs) == 0
     variation = deque()  # We will add current point at the end if potential_win.
@@ -43,7 +43,7 @@ def threat_space_search(board, color, point):
             set_sq(board, color ^ STONE, csq)
 
         threats_next_sq = search_all_point_own_next_sq(board, color, point)
-        next_sqs = [x[0][0] for x in threats_next_sq]
+        next_sqs = [x["next_sq"] for x in threats_next_sq]
 
         # FIXME: Handle duplicate next_sqs?
 
@@ -63,23 +63,23 @@ def threat_space_search(board, color, point):
     return (potential_win, variation)
 
 
-n = 50000
+# n = 50000
 
-for _ in range(n):
-    threat_space_search(state.board, BLACK, (5, 9))
+# for _ in range(n):
+#     threat_space_search(state.board, BLACK, (5, 9))
 
-start = time.monotonic()
-for _ in range(n):
-    threat_space_search(state.board, BLACK, (5, 9))
-end = time.monotonic()
-print("Time taken: ", end - start, " seconds")
+# start = time.monotonic()
+# for _ in range(n):
+#     threat_space_search(state.board, BLACK, (5, 9))
+# end = time.monotonic()
+# print("Time taken: ", end - start, " seconds")
 
 
-# threats_next_sq = search_all_board_next_sq(state.board, state.turn)
-# next_sqs = list(set([x[0][0] for x in threats_next_sq]))
+threats_next_sq = search_all_board_next_sq(state.board, state.turn)
+next_sqs = list(set([x["next_sq"] for x in threats_next_sq]))
 
-# for next_sq in next_sqs:
-#     print(next_sq, threat_space_search(state.board, state.turn, next_sq))
+for next_sq in next_sqs:
+    print(next_sq, threat_space_search(state.board, state.turn, next_sq))
 
 
 # # n = 100000

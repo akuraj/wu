@@ -111,9 +111,11 @@ def search_all_board(board, color):
     for p in PATTERNS:
         matches_p = search_board(board, p.pattern, color)
         for elem in matches_p:
-            matches.append((elem,
-                            p.index,
-                            point_set_on_line(elem[0], elem[1], p.critical_sqs)))
+            matches.append({"match": elem,
+                            "pidx": p.index,
+                            "critical_sqs": point_set_on_line(elem[0],
+                                                              elem[1],
+                                                              p.critical_sqs)})
 
     return matches
 
@@ -123,9 +125,11 @@ def search_all_point(board, color, point):
     for p in PATTERNS:
         matches_p = search_point(board, p.pattern, color, point)
         for elem in matches_p:
-            matches.append((elem,
-                            p.index,
-                            point_set_on_line(elem[0], elem[1], p.critical_sqs)))
+            matches.append({"match": elem,
+                            "pidx": p.index,
+                            "critical_sqs": point_set_on_line(elem[0],
+                                                              elem[1],
+                                                              p.critical_sqs)})
 
     return matches
 
@@ -135,9 +139,11 @@ def search_all_point_own(board, color, point):
     for p in PATTERNS:
         matches_p = search_point_own(board, p.pattern, color, point, p.own_sqs)
         for elem in matches_p:
-            matches.append((elem,
-                            p.index,
-                            point_set_on_line(elem[0], elem[1], p.critical_sqs)))
+            matches.append({"match": elem,
+                            "pidx": p.index,
+                            "critical_sqs": point_set_on_line(elem[0],
+                                                              elem[1],
+                                                              p.critical_sqs)})
 
     return matches
 
@@ -147,9 +153,12 @@ def search_all_board_next_sq(board, color):
     for p in PATTERNS:
         matches_p = search_board_next_sq(board, p.pattern, color)
         for elem in matches_p:
-            matches.append((elem,
-                            p.index,
-                            point_set_on_line(elem[1][0], elem[1][1], p.critical_sqs)))
+            matches.append({"next_sq": elem[0],
+                            "match": elem[1],
+                            "pidx": p.index,
+                            "critical_sqs": point_set_on_line(elem[1][0],
+                                                              elem[1][1],
+                                                              p.critical_sqs)})
 
     return matches
 
@@ -159,9 +168,12 @@ def search_all_point_next_sq(board, color, point):
     for p in PATTERNS:
         matches_p = search_point_next_sq(board, p.pattern, color, point)
         for elem in matches_p:
-            matches.append((elem,
-                            p.index,
-                            point_set_on_line(elem[1][0], elem[1][1], p.critical_sqs)))
+            matches.append({"next_sq": elem[0],
+                            "match": elem[1],
+                            "pidx": p.index,
+                            "critical_sqs": point_set_on_line(elem[1][0],
+                                                              elem[1][1],
+                                                              p.critical_sqs)})
 
     return matches
 
@@ -171,8 +183,11 @@ def search_all_point_own_next_sq(board, color, point):
     for p in PATTERNS:
         matches_p = search_point_own_next_sq(board, p.pattern, color, point, p.own_sqs)
         for elem in matches_p:
-            matches.append((elem,
-                            p.index,
-                            point_set_on_line(elem[1][0], elem[1][1], p.critical_sqs)))
+            matches.append({"next_sq": elem[0],
+                            "match": elem[1],
+                            "pidx": p.index,
+                            "critical_sqs": point_set_on_line(elem[1][0],
+                                                              elem[1][1],
+                                                              p.critical_sqs)})
 
     return matches
