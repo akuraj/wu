@@ -1,6 +1,8 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Implement current threats data structure on State with incremental updates.
+# TODO: Search All: return list of dicts instead of list of nested tuples?
 # TODO: What's the most useful search result format at TSS or equivalent level?
 
 # *** Patterns and Threats; Pattern Matching ***
