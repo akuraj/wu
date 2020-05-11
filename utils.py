@@ -557,3 +557,34 @@ def point_on_line(start, end, i):
 @njit
 def point_set_on_line(start, end, idxs):
     return set([point_on_line(start, end, i) for i in idxs])
+
+
+def status_str(status):
+    if status == EMPTY:
+        return "ONGOING"
+    elif status == BLACK:
+        return "BLACK WON"
+    elif status == WHITE:
+        return "WHITE WON"
+    else:
+        raise Exception(f"Unknown status: {status}!")
+
+
+def del_threats_at_point(threats, point):
+    i = 0
+    n = len(threats)
+    while i < n:
+        match = threats[i]["match"]
+        if point_is_on_line(point, match[0], match[1], True):
+            del threats[i]
+            n -= 1
+        else:
+            i += 1
+
+
+def has_won(threats):
+    for threat in threats:
+        if threat["defcon"] == 0:
+            return True
+
+    return False

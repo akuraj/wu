@@ -1,10 +1,10 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
-# TODO: Implement current threats data structure on State with incremental updates.
-#       The data structures should include threats and threats_next_sq.
-#       What happens when we set multiple squares of opponent during TSS?
+# TODO: Test rich state and incremental update.
+# TODO: What happens to rich state when we set multiple squares of opponent during TSS?
 # TODO: Transposition Table?
+# TODO: Find all potential wins instead of just breaking at the first one we find?
 
 # *** Patterns and Threats; Pattern Matching ***
 # TODO: What other pattern search functions do we need?
