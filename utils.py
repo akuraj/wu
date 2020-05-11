@@ -1,6 +1,5 @@
 import numpy as np
 from numba import njit
-from numba.typed import List
 from consts import (SIDE_LEN, SIDE_LEN_ACT, NUM_DIRECTIONS, WALL, BLACK, WHITE,
                     EMPTY, STONE, COLORS)
 
@@ -553,11 +552,3 @@ def get_point_on_line(start, end, i):
     dy = end[1] - start[1]
     assert dx * dy == 0 or abs(dx) == abs(dy)
     return (start[0] + signum(dx) * i, start[1] + signum(dy) * i)
-
-
-def typed_list(lst):
-    t_lst = List()
-    for x in lst:
-        t_lst.append(x)
-
-    return t_lst

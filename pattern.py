@@ -1,7 +1,8 @@
 import numpy as np
 from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
                     NOT_OWN, GEN_ELEMS_TO_NAMES)
-from utils import typed_list
+from utils import (search_board, search_point, search_point_own,
+                   search_board_next_sq, search_point_next_sq, search_point_own_next_sq)
 
 
 class Pattern:
@@ -66,6 +67,8 @@ class Pattern:
         return repr(self)
 
 
+# *** PATTERN CONSTS ***
+
 # Win pattern.
 P_WIN = Pattern([OWN, OWN, OWN, OWN, OWN], [], 0, "P_WIN")
 
@@ -87,18 +90,6 @@ for i, p in enumerate(PATTERNS):
 
 NUM_PTNS = len(PATTERNS)
 
-# Create typed lists of members of PATTERNS for usage in njit functions.
-PTNS_PATTERN = typed_list([p.pattern for p in PATTERNS])
-PTNS_DEFCON = typed_list([p.defcon for p in PATTERNS])
-PTNS_CSQS = typed_list([p.critical_sqs for p in PATTERNS])
-PTNS_OSQS = typed_list([p.own_sqs for p in PATTERNS])
-PTNS_NAME = typed_list([p.name for p in PATTERNS])
-PTNS_IDX = typed_list([p.index for p in PATTERNS])
-
-# Check on indices.
-for i, v in enumerate(PTNS_IDX):
-    assert i == v
-
 PATTERNS_BY_DEFCON = dict()
 for p in PATTERNS:
     if p.defcon in PATTERNS_BY_DEFCON:
@@ -110,3 +101,65 @@ PATTERNS_BY_NAME = dict()
 for p in PATTERNS:
     assert p.name not in PATTERNS_BY_NAME
     PATTERNS_BY_NAME[p.name] = p
+
+
+# *** PATTERN SEARCH FUNCTIONS ***
+
+def search_all_board(board, color):
+    matches = []
+    for p in PATTERNS:
+        matches_p = search_board(board, p.pattern, color)
+        for elem in matches_p:
+            matches.append((elem, p.index))
+
+    return matches
+
+
+def search_all_point(board, color, point):
+    matches = []
+    for p in PATTERNS:
+        matches_p = search_point(board, p.pattern, color, point)
+        for elem in matches_p:
+            matches.append((elem, p.index))
+
+    return matches
+
+
+def search_all_point_own(board, color, point):
+    matches = []
+    for p in PATTERNS:
+        matches_p = search_point_own(board, p.pattern, color, point, p.own_sqs)
+        for elem in matches_p:
+            matches.append((elem, p.index))
+
+    return matches
+
+
+def search_all_board_next_sq(board, color):
+    matches = []
+    for p in PATTERNS:
+        matches_p = search_board_next_sq(board, p.pattern, color)
+        for elem in matches_p:
+            matches.append((elem, p.index))
+
+    return matches
+
+
+def search_all_point_next_sq(board, color, point):
+    matches = []
+    for p in PATTERNS:
+        matches_p = search_point_next_sq(board, p.pattern, color, point)
+        for elem in matches_p:
+            matches.append((elem, p.index))
+
+    return matches
+
+
+def search_all_point_own_next_sq(board, color, point):
+    matches = []
+    for p in PATTERNS:
+        matches_p = search_point_own_next_sq(board, p.pattern, color, point, p.own_sqs)
+        for elem in matches_p:
+            matches.append((elem, p.index))
+
+    return matches
