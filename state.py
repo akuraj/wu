@@ -1,9 +1,9 @@
 import numpy as np
 from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL, COLORS,
                     ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR, STONE)
-from utils import (new_board, search_board, row_idx_to_num, col_idx_to_chr, get_board,
+from utils import (new_board, row_idx_to_num, col_idx_to_chr, get_board,
                    set_sq, clear_sq, del_threats_at_point, status_str, has_won)
-from pattern import (P_WIN, search_all_board, search_all_board_next_sq,
+from pattern import (search_all_board, search_all_board_next_sq,
                      search_all_point, search_all_point_next_sq)
 
 
