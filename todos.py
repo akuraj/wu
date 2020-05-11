@@ -43,10 +43,7 @@
 
 # *** Performance Concerns ***
 # TODO: Remove unnecessary asserts/checks/if. [IMPORTANT].
-# TODO: Deduping the results of the point->next search is actually necessary?
 # TODO: Check out numba features other than njit to speed up code!
-# TODO: JIT Compile relevant classes using numba's jitclass.
-#       Can speed up relevant loops (over patterns) by 30%.
 # TODO: Inline numba jitted functions?
 
 # *** Linting and Conventions ***
