@@ -547,7 +547,7 @@ def signum(x):
 
 
 @njit
-def get_point_on_line(start, end, i):
+def point_on_line(start, end, i):
     dx = end[0] - start[0]
     dy = end[1] - start[1]
     assert dx * dy == 0 or abs(dx) == abs(dy)

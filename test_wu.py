@@ -5,7 +5,7 @@ from utils import (new_board, get_pattern, apply_pattern, increments,
                    point_is_on_line, matches_are_equal,
                    search_board, search_point, search_point_own,
                    search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
-                   assert_nb, next_sq_matches_are_subset, get_point_on_line)
+                   assert_nb, next_sq_matches_are_subset, point_on_line)
 
 
 @njit
@@ -58,7 +58,7 @@ def subtest_search_board_next_sq(board, gen_pattern, color, own_sqs,
     (i, j) = start
 
     for own_sq in own_sqs:
-        test_sq = get_point_on_line(start, end, own_sq)
+        test_sq = point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]
 
         stored_val = board[test_sq]
@@ -80,7 +80,7 @@ def subtest_search_point_next_sq(board, gen_pattern, color, own_sqs,
     (i, j) = start
 
     for own_sq in own_sqs:
-        test_sq = get_point_on_line(start, end, own_sq)
+        test_sq = point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]
 
         for x in range(SIDE_LEN):
@@ -112,7 +112,7 @@ def subtest_search_point_own_next_sq(board, gen_pattern, color, own_sqs,
     (i, j) = start
 
     for own_sq in own_sqs:
-        test_sq = get_point_on_line(start, end, own_sq)
+        test_sq = point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]
 
         for x in range(SIDE_LEN):
