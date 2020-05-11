@@ -39,6 +39,7 @@ class Pattern:
         self.own_sqs = np.array([i for i, v in enumerate(pattern) if v == OWN], dtype=np.byte)
         self.defcon = defcon
         self.name = name
+        self.index = -1  # Initialize index to -1.
 
         # Checks on data fields.
         assert self.pattern.ndim == 1
@@ -52,11 +53,13 @@ class Pattern:
                 "defcon: {1}\n"
                 "critical_sqs: {2}\n"
                 "own_sqs: {3}\n"
-                "name: {4}\n").format(str(desc_list),
-                                      str(self.defcon),
-                                      str(self.critical_sqs),
-                                      str(self.own_sqs),
-                                      str(self.name))
+                "name: {4}\n"
+                "index: {5}\n").format(str(desc_list),
+                                       str(self.defcon),
+                                       str(self.critical_sqs),
+                                       str(self.own_sqs),
+                                       str(self.name),
+                                       str(self.index))
 
     def __str__(self):
         return repr(self)
@@ -76,6 +79,10 @@ P_3_B = Pattern([EMPTY, OWN, OWN, EMPTY, OWN, EMPTY], [0, 3, 5], 2, "P_3_B")
 
 # NOTE: Put all the patterns defined above in this list.
 PATTERNS = [P_WIN, P_4_ST, P_4_A, P_4_B, P_4_C, P_3_ST, P_3_A, P_3_B]
+
+# NOTE: Setting indices of PATTERNS.
+for i, p in enumerate(PATTERNS):
+    p.index = i
 
 PATTERNS_BY_DEFCON = dict()
 for p in PATTERNS:
