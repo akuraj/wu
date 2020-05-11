@@ -87,13 +87,17 @@ for i, p in enumerate(PATTERNS):
 
 NUM_PTNS = len(PATTERNS)
 
-# Create typed lists for usage in njit functions.
+# Create typed lists of members of PATTERNS for usage in njit functions.
 PTNS_PATTERN = typed_list([p.pattern for p in PATTERNS])
 PTNS_DEFCON = typed_list([p.defcon for p in PATTERNS])
 PTNS_CSQS = typed_list([p.critical_sqs for p in PATTERNS])
 PTNS_OSQS = typed_list([p.own_sqs for p in PATTERNS])
 PTNS_NAME = typed_list([p.name for p in PATTERNS])
 PTNS_IDX = typed_list([p.index for p in PATTERNS])
+
+# Check on indices.
+for i, v in enumerate(PTNS_IDX):
+    assert i == v
 
 PATTERNS_BY_DEFCON = dict()
 for p in PATTERNS:
