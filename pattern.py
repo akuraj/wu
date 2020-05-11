@@ -1,6 +1,7 @@
 import numpy as np
 from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
                     NOT_OWN, GEN_ELEMS_TO_NAMES)
+from utils import typed_list
 
 
 class Pattern:
@@ -80,9 +81,19 @@ P_3_B = Pattern([EMPTY, OWN, OWN, EMPTY, OWN, EMPTY], [0, 3, 5], 2, "P_3_B")
 # NOTE: Put all the patterns defined above in this list.
 PATTERNS = [P_WIN, P_4_ST, P_4_A, P_4_B, P_4_C, P_3_ST, P_3_A, P_3_B]
 
-# NOTE: Setting indices of PATTERNS.
+# Setting indices of PATTERNS.
 for i, p in enumerate(PATTERNS):
     p.index = i
+
+NUM_PTNS = len(PATTERNS)
+
+# Create typed lists for usage in njit functions.
+PTNS_PATTERN = typed_list([p.pattern for p in PATTERNS])
+PTNS_DEFCON = typed_list([p.defcon for p in PATTERNS])
+PTNS_CSQS = typed_list([p.critical_sqs for p in PATTERNS])
+PTNS_OSQS = typed_list([p.own_sqs for p in PATTERNS])
+PTNS_NAME = typed_list([p.name for p in PATTERNS])
+PTNS_IDX = typed_list([p.index for p in PATTERNS])
 
 PATTERNS_BY_DEFCON = dict()
 for p in PATTERNS:
