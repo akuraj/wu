@@ -28,68 +28,68 @@ state = get_state(["a1", "a2", "a3", "a13", "a14", "a15", "b1", "b15", "c1", "c1
 #                   True)
 
 print(state)
-# print(state.threats_next_sq)
 
 
-# def threat_space_search(board, color, point):
-#     set_sq(board, color, point)
-#     threats = search_all_point_own(board, color, point)
-#     csqs = reduce(set.intersection, [x["critical_sqs"] for x in threats])
+def threat_space_search(board, color, point):
+    set_sq(board, color, point)
+    threats = search_all_point_own(board, color, point)
+    csqs = reduce(set.intersection, [x["critical_sqs"] for x in threats])
 
-#     potential_win = len(threats) > 0 and len(csqs) == 0
-#     variation = deque()  # We will add current point at the end if potential_win.
+    potential_win = len(threats) > 0 and len(csqs) == 0
+    variation = deque()  # We will add current point at the end if potential_win.
 
-#     if not potential_win:
-#         for csq in csqs:
-#             set_sq(board, color ^ STONE, csq)
+    if not potential_win:
+        for csq in csqs:
+            set_sq(board, color ^ STONE, csq)
 
-#         threats_next_sq = search_all_point_own_next_sq(board, color, point)
-#         next_sqs = set([x["next_sq"] for x in threats_next_sq])
+        threats_next_sq = search_all_point_own_next_sq(board, color, point)
+        next_sqs = set([x["next_sq"] for x in threats_next_sq])
 
-#         for next_sq in next_sqs:
-#             (potential_win, variation) = threat_space_search(board, color, next_sq)
-#             if potential_win:
-#                 break
+        for next_sq in next_sqs:
+            (potential_win, variation) = threat_space_search(board, color, next_sq)
+            if potential_win:
+                break
 
-#         for csq in csqs:
-#             clear_sq(board, color ^ STONE, csq)
+        for csq in csqs:
+            clear_sq(board, color ^ STONE, csq)
 
-#     clear_sq(board, color, point)
+    clear_sq(board, color, point)
 
-#     if potential_win:
-#         variation.appendleft(point)
+    if potential_win:
+        variation.appendleft(point)
 
-#     return (potential_win, variation)
+    return (potential_win, variation)
 
 
-# # n = 50000
+# n = 50000
 
-# # for _ in range(n):
-# #     threat_space_search(state.board, BLACK, (5, 9))
+# for _ in range(n):
+#     threat_space_search(state.board, BLACK, (5, 9))
+
+# start = time.monotonic()
+# for _ in range(n):
+#     threat_space_search(state.board, BLACK, (5, 9))
+# end = time.monotonic()
+# print("Time taken: ", end - start, " seconds")
+
+threats_next_sq = search_all_board_next_sq(state.board, state.turn)
+# print(state.threats_next_sq[state.turn] == threats_next_sq)
+next_sqs = list(set([x["next_sq"] for x in threats_next_sq]))
+
+for next_sq in next_sqs:
+    print(next_sq, threat_space_search(state.board, state.turn, next_sq))
+
+# # n = 100000
+# # print("\n")
+# # print(search_all_board_next_sq(board, color))
+
+# # def test_fn(n):
+# #     for _ in range(n):
+# #         x = search_all_board_next_sq(board, color)
+
+# # test_fn(n)
 
 # # start = time.monotonic()
-# # for _ in range(n):
-# #     threat_space_search(state.board, BLACK, (5, 9))
+# # test_fn(n)
 # # end = time.monotonic()
 # # print("Time taken: ", end - start, " seconds")
-
-# threats_next_sq = search_all_board_next_sq(state.board, state.turn)
-# next_sqs = list(set([x["next_sq"] for x in threats_next_sq]))
-
-# for next_sq in next_sqs:
-#     print(next_sq, threat_space_search(state.board, state.turn, next_sq))
-
-# # # n = 100000
-# # # print("\n")
-# # # print(search_all_board_next_sq(board, color))
-
-# # # def test_fn(n):
-# # #     for _ in range(n):
-# # #         x = search_all_board_next_sq(board, color)
-
-# # # test_fn(n)
-
-# # # start = time.monotonic()
-# # # test_fn(n)
-# # # end = time.monotonic()
-# # # print("Time taken: ", end - start, " seconds")

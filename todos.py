@@ -1,6 +1,7 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Implement full threat search!
 # TODO: Test rich state and incremental update.
 # TODO: What happens to rich state when we set multiple squares of opponent during TSS?
 # TODO: Transposition Table?
