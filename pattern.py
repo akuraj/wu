@@ -106,9 +106,9 @@ for p in PATTERNS:
 
 # *** PATTERN SEARCH FUNCTIONS ***
 
-def search_all_board(board, color):
+def search_all_board(board, color, patterns=PATTERNS):
     matches = []
-    for p in PATTERNS:
+    for p in patterns:
         matches_p = search_board(board, p.pattern, color)
         for elem in matches_p:
             matches.append({"match": elem,
@@ -120,9 +120,9 @@ def search_all_board(board, color):
     return matches
 
 
-def search_all_point(board, color, point):
+def search_all_point(board, color, point, patterns=PATTERNS):
     matches = []
-    for p in PATTERNS:
+    for p in patterns:
         matches_p = search_point(board, p.pattern, color, point)
         for elem in matches_p:
             matches.append({"match": elem,
@@ -134,9 +134,9 @@ def search_all_point(board, color, point):
     return matches
 
 
-def search_all_point_own(board, color, point):
+def search_all_point_own(board, color, point, patterns=PATTERNS):
     matches = []
-    for p in PATTERNS:
+    for p in patterns:
         matches_p = search_point_own(board, p.pattern, color, point, p.own_sqs)
         for elem in matches_p:
             matches.append({"match": elem,
@@ -148,9 +148,9 @@ def search_all_point_own(board, color, point):
     return matches
 
 
-def search_all_board_next_sq(board, color):
+def search_all_board_next_sq(board, color, patterns=PATTERNS):
     matches = []
-    for p in PATTERNS:
+    for p in patterns:
         matches_p = search_board_next_sq(board, p.pattern, color)
         for elem in matches_p:
             matches.append({"next_sq": elem[0],
@@ -163,9 +163,9 @@ def search_all_board_next_sq(board, color):
     return matches
 
 
-def search_all_point_next_sq(board, color, point):
+def search_all_point_next_sq(board, color, point, patterns=PATTERNS):
     matches = []
-    for p in PATTERNS:
+    for p in patterns:
         matches_p = search_point_next_sq(board, p.pattern, color, point)
         for elem in matches_p:
             matches.append({"next_sq": elem[0],
@@ -178,9 +178,9 @@ def search_all_point_next_sq(board, color, point):
     return matches
 
 
-def search_all_point_own_next_sq(board, color, point):
+def search_all_point_own_next_sq(board, color, point, patterns=PATTERNS):
     matches = []
-    for p in PATTERNS:
+    for p in patterns:
         matches_p = search_point_own_next_sq(board, p.pattern, color, point, p.own_sqs)
         for elem in matches_p:
             matches.append({"next_sq": elem[0],

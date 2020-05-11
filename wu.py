@@ -63,23 +63,23 @@ def threat_space_search(board, color, point):
     return (potential_win, variation)
 
 
-# n = 50000
+n = 50000
 
-# for _ in range(n):
-#     threat_space_search(state.board, BLACK, (5, 9))
+for _ in range(n):
+    threat_space_search(state.board, BLACK, (5, 9))
 
-# start = time.monotonic()
-# for _ in range(n):
-#     threat_space_search(state.board, BLACK, (5, 9))
-# end = time.monotonic()
-# print("Time taken: ", end - start, " seconds")
+start = time.monotonic()
+for _ in range(n):
+    threat_space_search(state.board, BLACK, (5, 9))
+end = time.monotonic()
+print("Time taken: ", end - start, " seconds")
 
 
-threats_next_sq = search_all_board_next_sq(state.board, state.turn)
-next_sqs = list(set([x["next_sq"] for x in threats_next_sq]))
+# threats_next_sq = search_all_board_next_sq(state.board, state.turn)
+# next_sqs = list(set([x["next_sq"] for x in threats_next_sq]))
 
-for next_sq in next_sqs:
-    print(next_sq, threat_space_search(state.board, state.turn, next_sq))
+# for next_sq in next_sqs:
+#     print(next_sq, threat_space_search(state.board, state.turn, next_sq))
 
 
 # # n = 100000
