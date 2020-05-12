@@ -1,7 +1,10 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Assert that all empty squares in the pattern will increase degree if played there.
 # TODO: Implement full threat search!
+# TODO: Remove empty squares from threat data, and also any other unnecessary data!
+# TODO: Take point as a tuple and not two separate arguments!
 # TODO: Test rich state and incremental update.
 # TODO: Dedupe stored threats?
 # TODO: What happens to rich state when we set multiple squares of opponent during TSS?

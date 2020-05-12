@@ -3,7 +3,7 @@ from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
                     NOT_OWN, GEN_ELEMS_TO_NAMES)
 from utils import (search_board, search_point, search_point_own,
                    search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
-                   point_set_on_line)
+                   point_set_on_line, degree, defcon_from_degree)
 
 
 class Pattern:
@@ -12,7 +12,6 @@ class Pattern:
     def __init__(self,
                  pattern,
                  critical_sqs,
-                 defcon,
                  name):
         # Make sure pattern has valid elements.
         for elem in pattern:
@@ -30,9 +29,6 @@ class Pattern:
         for sq in critical_sqs:
             # sq must be EMPTY for it to be critical.
             assert sq in allowed and pattern[sq] == EMPTY
-
-        # Check on defcon.
-        assert defcon in DEFCON_RANGE
 
         # Check size of name.
         assert len(name) > 0
@@ -56,7 +52,6 @@ class Pattern:
         self.pattern = np.array(pattern, dtype=np.byte)
         self.critical_sqs = np.array(critical_sqs, dtype=np.byte)
         self.own_sqs = np.array([i for i, v in enumerate(pattern) if v == OWN], dtype=np.byte)
-        self.defcon = defcon
         self.name = name
         self.index = -1  # Initialize index to -1.
 
@@ -64,12 +59,16 @@ class Pattern:
         other_empty_sqs = [i for i, v in enumerate(pattern) if v == EMPTY and i not in critical_sqs]
         self.empty_sqs = np.array(critical_sqs + other_empty_sqs, dtype=np.byte)
 
+        # Add defcon.
+        self.defcon = defcon_from_degree(degree(self.pattern))
+
         # Checks on data fields.
         assert self.pattern.ndim == 1
         assert self.pattern.size > 0
         assert self.critical_sqs.ndim == 1
         assert self.own_sqs.ndim == 1
         assert self.empty_sqs.ndim == 1
+        assert self.defcon in DEFCON_RANGE
 
     def __repr__(self):
         desc_list = [GEN_ELEMS_TO_NAMES[x] for x in self.pattern]
@@ -94,16 +93,16 @@ class Pattern:
 # *** PATTERN CONSTS ***
 
 # Win pattern.
-P_WIN = Pattern([OWN, OWN, OWN, OWN, OWN], [], 0, "P_WIN")
+P_WIN = Pattern([OWN, OWN, OWN, OWN, OWN], [], "P_WIN")
 
 # Threat patterns.
-P_4_ST = Pattern([EMPTY, OWN, OWN, OWN, OWN, EMPTY], [], 1, "P_4_ST")
-P_4_A = Pattern([WALL_ENEMY, OWN, OWN, OWN, OWN, EMPTY], [5], 1, "P_4_A")
-P_4_B = Pattern([NOT_OWN, OWN, OWN, OWN, EMPTY, OWN], [4], 1, "P_4_B")
-P_4_C = Pattern([NOT_OWN, OWN, OWN, EMPTY, OWN, OWN, NOT_OWN], [3], 1, "P_4_C")
-P_3_ST = Pattern([EMPTY, EMPTY, OWN, OWN, OWN, EMPTY, EMPTY], [1, 5], 2, "P_3_ST")
-P_3_A = Pattern([WALL_ENEMY, EMPTY, OWN, OWN, OWN, EMPTY, EMPTY], [1, 5, 6], 2, "P_3_A")
-P_3_B = Pattern([EMPTY, OWN, OWN, EMPTY, OWN, EMPTY], [0, 3, 5], 2, "P_3_B")
+P_4_ST = Pattern([EMPTY, OWN, OWN, OWN, OWN, EMPTY], [], "P_4_ST")
+P_4_A = Pattern([WALL_ENEMY, OWN, OWN, OWN, OWN, EMPTY], [5], "P_4_A")
+P_4_B = Pattern([NOT_OWN, OWN, OWN, OWN, EMPTY, OWN], [4], "P_4_B")
+P_4_C = Pattern([NOT_OWN, OWN, OWN, EMPTY, OWN, OWN, NOT_OWN], [3], "P_4_C")
+P_3_ST = Pattern([EMPTY, EMPTY, OWN, OWN, OWN, EMPTY, EMPTY], [1, 5], "P_3_ST")
+P_3_A = Pattern([WALL_ENEMY, EMPTY, OWN, OWN, OWN, EMPTY, EMPTY], [1, 5, 6], "P_3_A")
+P_3_B = Pattern([EMPTY, OWN, OWN, EMPTY, OWN, EMPTY], [0, 3, 5], "P_3_B")
 
 # NOTE: Put all the patterns defined above in this list.
 PATTERNS = [P_WIN, P_4_ST, P_4_A, P_4_B, P_4_C, P_3_ST, P_3_A, P_3_B]
@@ -139,7 +138,10 @@ def search_all_board(board, color, patterns=PATTERNS):
                             "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[0],
                                                               elem[1],
-                                                              p.critical_sqs)})
+                                                              p.critical_sqs),
+                            "empty_sqs": point_set_on_line(elem[0],
+                                                           elem[1],
+                                                           p.empty_sqs)})
 
     return matches
 
@@ -154,7 +156,10 @@ def search_all_point(board, color, point, patterns=PATTERNS):
                             "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[0],
                                                               elem[1],
-                                                              p.critical_sqs)})
+                                                              p.critical_sqs),
+                            "empty_sqs": point_set_on_line(elem[0],
+                                                           elem[1],
+                                                           p.empty_sqs)})
 
     return matches
 
@@ -169,7 +174,10 @@ def search_all_point_own(board, color, point, patterns=PATTERNS):
                             "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[0],
                                                               elem[1],
-                                                              p.critical_sqs)})
+                                                              p.critical_sqs),
+                            "empty_sqs": point_set_on_line(elem[0],
+                                                           elem[1],
+                                                           p.empty_sqs)})
 
     return matches
 

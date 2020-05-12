@@ -70,5 +70,6 @@ assert len(set(GEN_ELEMS_TO_NAMES.values())) == len(GEN_ELEMS)
 NUM_DIRECTIONS = 8
 
 # If defcon is x, then game will be over in x moves if no action is taken. 0 is game over.
-MAX_DEFCON = 5
+WIN_LENGTH = 5  # Length of a winning sequence.
+MAX_DEFCON = WIN_LENGTH  # Effectively, the maximum distance away from winning.
 DEFCON_RANGE = range(MAX_DEFCON + 1)

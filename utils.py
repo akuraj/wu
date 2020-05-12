@@ -1,7 +1,7 @@
 import numpy as np
 from numba import njit
 from consts import (SIDE_LEN, SIDE_LEN_ACT, NUM_DIRECTIONS, WALL, BLACK, WHITE,
-                    EMPTY, STONE, COLORS)
+                    EMPTY, STONE, COLORS, WIN_LENGTH, OWN, MAX_DEFCON)
 
 
 @njit
@@ -588,3 +588,29 @@ def has_won(threats):
             return True
 
     return False
+
+
+@njit
+def degree(gen_pattern):
+    """Maximum number of 'OWN's in a sub-sequence of length = WIN_LENGTH,
+    full of OWN/EMPTY sqs."""
+
+    n = len(gen_pattern)
+    max_owns = 0
+    for i in range(n - WIN_LENGTH + 1):
+        owns = 0
+        for j in range(WIN_LENGTH):
+            if gen_pattern[i + j] not in (OWN, EMPTY):
+                break
+
+            if gen_pattern[i + j] == OWN:
+                owns += 1
+        else:
+            max_owns = max(max_owns, owns)
+
+    return max_owns
+
+
+@njit
+def defcon_from_degree(degree):
+    return MAX_DEFCON - degree
