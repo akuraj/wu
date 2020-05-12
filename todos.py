@@ -3,13 +3,13 @@
 # *** TODO SOON ***
 # TODO: Implement full threat search!
 # TODO: Test rich state and incremental update.
+# TODO: Dedupe stored threats?
 # TODO: What happens to rich state when we set multiple squares of opponent during TSS?
 # TODO: Transposition Table?
 # TODO: Find all potential wins instead of just breaking at the first one we find?
 
 # *** Patterns and Threats; Pattern Matching ***
 # TODO: What other pattern search functions do we need?
-# TODO: Add check on patterns containing only EMPTY, OWN squares in the middle?
 # TODO: If two threats have the same exact critical squares,
 #       then they can be handled by the same move(s). No need to dedupe them.
 # TODO: Implement function to calculate intersection of pattern matches.

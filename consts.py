@@ -70,4 +70,5 @@ assert len(set(GEN_ELEMS_TO_NAMES.values())) == len(GEN_ELEMS)
 NUM_DIRECTIONS = 8
 
 # If defcon is x, then game will be over in x moves if no action is taken. 0 is game over.
-DEFCON_RANGE = range(6)
+MAX_DEFCON = 5
+DEFCON_RANGE = range(MAX_DEFCON + 1)

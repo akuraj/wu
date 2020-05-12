@@ -37,6 +37,22 @@ class Pattern:
         # Check size of name.
         assert len(name) > 0
 
+        # Check that any OWN or EMPTY squares in the pattern are contiguous,
+        # i.e., OWN/EMPTY is not interrupted by any other kind of square.
+        # This is what a normal/useful pattern would like.
+        oe_start = False
+        oe_end = False
+        for v in pattern:
+            if v in (OWN, EMPTY):
+                if not oe_start:
+                    oe_start = True
+
+                if oe_end:
+                    raise Exception("Non-contiguous OWN/EMPTY squares!")
+            else:
+                if oe_start and not oe_end:
+                    oe_end = True
+
         self.pattern = np.array(pattern, dtype=np.byte)
         self.critical_sqs = np.array(critical_sqs, dtype=np.byte)
         self.own_sqs = np.array([i for i, v in enumerate(pattern) if v == OWN], dtype=np.byte)
@@ -44,11 +60,16 @@ class Pattern:
         self.name = name
         self.index = -1  # Initialize index to -1.
 
+        # Add entry for empty-sqs. critical_sqs appear first.
+        other_empty_sqs = [i for i, v in enumerate(pattern) if v == EMPTY and i not in critical_sqs]
+        self.empty_sqs = np.array(critical_sqs + other_empty_sqs, dtype=np.byte)
+
         # Checks on data fields.
         assert self.pattern.ndim == 1
         assert self.pattern.size > 0
         assert self.critical_sqs.ndim == 1
         assert self.own_sqs.ndim == 1
+        assert self.empty_sqs.ndim == 1
 
     def __repr__(self):
         desc_list = [GEN_ELEMS_TO_NAMES[x] for x in self.pattern]
@@ -56,11 +77,13 @@ class Pattern:
                 "defcon: {1}\n"
                 "critical_sqs: {2}\n"
                 "own_sqs: {3}\n"
-                "name: {4}\n"
-                "index: {5}\n").format(str(desc_list),
+                "empty_sqs: {4}\n"
+                "name: {5}\n"
+                "index: {6}\n").format(str(desc_list),
                                        str(self.defcon),
                                        str(self.critical_sqs),
                                        str(self.own_sqs),
+                                       str(self.empty_sqs),
                                        str(self.name),
                                        str(self.index))
 
