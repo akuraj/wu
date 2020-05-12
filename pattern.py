@@ -7,7 +7,7 @@ from utils import (search_board, search_point, search_point_own,
 
 
 class Pattern:
-    """Pattern: Used to represent generic patterns (including threat patterns)."""
+    """Pattern: Used to represent threat patterns."""
 
     def __init__(self,
                  pattern,
@@ -55,7 +55,7 @@ class Pattern:
         self.name = name
         self.index = -1  # Initialize index to -1.
 
-        # Add entry for empty-sqs. critical_sqs appear first.
+        # Add entry for empty_sqs. critical_sqs appear first.
         other_empty_sqs = [i for i, v in enumerate(pattern) if v == EMPTY and i not in critical_sqs]
         self.empty_sqs = np.array(critical_sqs + other_empty_sqs, dtype=np.byte)
 
@@ -69,6 +69,13 @@ class Pattern:
         assert self.own_sqs.ndim == 1
         assert self.empty_sqs.ndim == 1
         assert self.defcon in DEFCON_RANGE
+
+        # Check on empty_sqs that they need to be useful.
+        curr_degree = degree(self.pattern)
+        for esq in self.empty_sqs:
+            next_pattern = np.array(self.pattern, dtype=np.byte)
+            next_pattern[esq] = OWN
+            assert degree(next_pattern) == curr_degree + 1
 
     def __repr__(self):
         desc_list = [GEN_ELEMS_TO_NAMES[x] for x in self.pattern]
