@@ -1,6 +1,9 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Figure out appropriate tree data structure for TSS.
+# TODO: Implement dependency and conflict checks for TSS tree.
+# TODO: Implement process/algo to combine useful sets of independent TSS trees.
 # TODO: Cleanup/reorg/remove the rich data structures in state as needed.
 # TODO: Remove unnecessary functions that were recently added.
 # TODO: Estimate impact of njit by turning it off to see if it's actually useful.
