@@ -1,6 +1,8 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Cleanup or remove the rich data structures in state if needed.
+# TODO: Remove unnecessary functions that were recently added.
 # TODO: Implement full threat search!
 # TODO: Remove empty squares from threat data, and also any other unnecessary data!
 # TODO: Take point as a tuple and not two separate arguments!
