@@ -6,7 +6,7 @@ from utils import (search_board, search_point, search_point_own,
                    get_pattern, apply_pattern, assert_nb, set_sq, clear_sq,
                    point_on_line, point_set_on_line)
 from numba import njit
-from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN, WALL, STONE
+from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN, WALL, STONE, MAX_DEFCON
 from pattern import (P_3_B, P_4_ST, P_4_A, PATTERNS,
                      search_all_board, search_all_point, search_all_point_own,
                      search_all_board_next_sq, search_all_point_next_sq,
@@ -16,8 +16,8 @@ from collections import deque
 
 
 state = get_state(["a1", "a2", "a3", "a13", "a14", "a15", "b1", "b15", "c1", "c15",
-                    "f14", "g13", "i9", "i10", "m1", "m15", "n1", "n15", "o1", "o2",
-                    "o3", "o13", "o14", "o15"],
+                   "f14", "g13", "i9", "i10", "m1", "m15", "n1", "n15", "o1", "o2",
+                   "o3", "o13", "o14", "o15"],
                   ["i6", "i13", "j10"],
                   BLACK,
                   False)
@@ -61,7 +61,7 @@ def threat_space_search(board, color, point):
     return (potential_win, variation)
 
 
-# n = 50000
+# n = 200000
 
 # for _ in range(n):
 #     threat_space_search(state.board, BLACK, (5, 9))
@@ -73,23 +73,8 @@ def threat_space_search(board, color, point):
 # print("Time taken: ", end - start, " seconds")
 
 threats_next_sq = search_all_board_next_sq(state.board, state.turn)
-# print(state.threats_next_sq[state.turn] == threats_next_sq)
+print(state.threats_next_sq[state.turn] == threats_next_sq)
 next_sqs = list(set([x["next_sq"] for x in threats_next_sq]))
 
 for next_sq in next_sqs:
     print(next_sq, threat_space_search(state.board, state.turn, next_sq))
-
-# # n = 100000
-# # print("\n")
-# # print(search_all_board_next_sq(board, color))
-
-# # def test_fn(n):
-# #     for _ in range(n):
-# #         x = search_all_board_next_sq(board, color)
-
-# # test_fn(n)
-
-# # start = time.monotonic()
-# # test_fn(n)
-# # end = time.monotonic()
-# # print("Time taken: ", end - start, " seconds")
