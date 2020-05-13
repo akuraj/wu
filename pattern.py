@@ -145,10 +145,7 @@ def search_all_board(board, color, patterns=PATTERNS):
                             "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[0],
                                                               elem[1],
-                                                              p.critical_sqs),
-                            "empty_sqs": point_set_on_line(elem[0],
-                                                           elem[1],
-                                                           p.empty_sqs)})
+                                                              p.critical_sqs)})
 
     return matches
 
@@ -163,10 +160,7 @@ def search_all_point(board, color, point, patterns=PATTERNS):
                             "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[0],
                                                               elem[1],
-                                                              p.critical_sqs),
-                            "empty_sqs": point_set_on_line(elem[0],
-                                                           elem[1],
-                                                           p.empty_sqs)})
+                                                              p.critical_sqs)})
 
     return matches
 
@@ -181,10 +175,7 @@ def search_all_point_own(board, color, point, patterns=PATTERNS):
                             "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[0],
                                                               elem[1],
-                                                              p.critical_sqs),
-                            "empty_sqs": point_set_on_line(elem[0],
-                                                           elem[1],
-                                                           p.empty_sqs)})
+                                                              p.critical_sqs)})
 
     return matches
 

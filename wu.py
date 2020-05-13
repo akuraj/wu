@@ -33,7 +33,7 @@ print(state)
 def threat_space_search(board, color, point):
     set_sq(board, color, point)
     threats = search_all_point_own(board, color, point)
-    csqs = reduce(set.intersection, [x["critical_sqs"] for x in threats])
+    csqs = reduce(set.intersection, [x["critical_sqs"] for x in threats]) if threats else set()
 
     potential_win = len(threats) > 0 and len(csqs) == 0
     variation = deque()  # We will add current point at the end if potential_win.
@@ -61,7 +61,7 @@ def threat_space_search(board, color, point):
     return (potential_win, variation)
 
 
-# n = 200000
+# n = 50000
 
 # for _ in range(n):
 #     threat_space_search(state.board, BLACK, (5, 9))
