@@ -6,15 +6,15 @@
 # TODO: Implement process/algo to combine useful sets of independent TSS trees.
 # TODO: Cleanup/reorg/remove the rich data structures in state as needed.
 # TODO: Remove unnecessary functions that were recently added.
+# TODO: Remove unnecessary fields from threat data.
 # TODO: Estimate impact of njit by turning it off to see if it's actually useful.
 # TODO: Is jitting small functions actually helpful?
-# TODO: Remove empty squares from threat data, and also any other unnecessary data!
 # TODO: Take point as a tuple and not two separate arguments!
+# TODO: Transposition Table?
+# TODO: Find all potential wins instead of just breaking at the first one we find?
 # TODO: Test rich state and incremental update.
 # TODO: Dedupe stored threats?
 # TODO: What happens to rich state when we set multiple squares of opponent during TSS?
-# TODO: Transposition Table?
-# TODO: Find all potential wins instead of just breaking at the first one we find?
 
 # *** Patterns and Threats; Pattern Matching ***
 # TODO: What other pattern search functions do we need?
