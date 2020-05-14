@@ -4,7 +4,7 @@ from state import get_state
 from utils import (search_board, search_point, search_point_own,
                    search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
                    get_pattern, apply_pattern, assert_nb, set_sq, clear_sq,
-                   point_on_line, point_set_on_line, new_search_node)
+                   point_on_line, point_set_on_line, search_node)
 from numba import njit
 from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN, WALL, STONE, MAX_DEFCON
 from pattern import (P_3_B, P_4_ST, P_4_A, PATTERNS,
@@ -35,24 +35,25 @@ def threat_space_search(board, color, point):
     threats = search_all_point_own(board, color, point)
     csqs = reduce(set.intersection, [x["critical_sqs"] for x in threats]) if threats else set()
     potential_win = len(threats) > 0 and len(csqs) == 0
-    node = new_search_node(point, threats, csqs, potential_win)
+    children = []
 
     if not potential_win:
         for csq in csqs:
             set_sq(board, color ^ STONE, csq)
 
+        # TODO: Can we fix duplication of effort?
         threats_next_sq = search_all_point_own_next_sq(board, color, point)
         next_sqs = set([x["next_sq"] for x in threats_next_sq])
 
-        node["children"] = [threat_space_search(board, color, x) for x in next_sqs]
-        node["potential_win"] = any([x["potential_win"] for x in node["children"]])
+        children = [threat_space_search(board, color, x) for x in next_sqs]
+        potential_win = any([x["potential_win"] for x in children])
 
         for csq in csqs:
             clear_sq(board, color ^ STONE, csq)
 
     clear_sq(board, color, point)
 
-    return node
+    return search_node(point, threats, csqs, potential_win, children)
 
 
 # n = 50000
@@ -74,3 +75,4 @@ nodes = [threat_space_search(state.board, state.turn, x) for x in next_sqs]
 for node in nodes:
     if node["potential_win"]:
         print(node["next_sq"])
+    # print(node)

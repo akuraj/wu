@@ -142,6 +142,7 @@ def search_all_board(board, color, patterns=PATTERNS):
         for elem in matches_p:
             matches.append({"match": elem,
                             "pidx": p.index,
+                            "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[0],
                                                               elem[1],
                                                               p.critical_sqs)})
@@ -156,6 +157,7 @@ def search_all_point(board, color, point, patterns=PATTERNS):
         for elem in matches_p:
             matches.append({"match": elem,
                             "pidx": p.index,
+                            "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[0],
                                                               elem[1],
                                                               p.critical_sqs)})
@@ -170,6 +172,7 @@ def search_all_point_own(board, color, point, patterns=PATTERNS):
         for elem in matches_p:
             matches.append({"match": elem,
                             "pidx": p.index,
+                            "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[0],
                                                               elem[1],
                                                               p.critical_sqs)})
@@ -185,6 +188,7 @@ def search_all_board_next_sq(board, color, patterns=PATTERNS):
             matches.append({"next_sq": elem[0],
                             "match": elem[1],
                             "pidx": p.index,
+                            "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[1][0],
                                                               elem[1][1],
                                                               p.critical_sqs)})
@@ -200,6 +204,7 @@ def search_all_point_next_sq(board, color, point, patterns=PATTERNS):
             matches.append({"next_sq": elem[0],
                             "match": elem[1],
                             "pidx": p.index,
+                            "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[1][0],
                                                               elem[1][1],
                                                               p.critical_sqs)})
@@ -215,6 +220,7 @@ def search_all_point_own_next_sq(board, color, point, patterns=PATTERNS):
             matches.append({"next_sq": elem[0],
                             "match": elem[1],
                             "pidx": p.index,
+                            "defcon": p.defcon,
                             "critical_sqs": point_set_on_line(elem[1][0],
                                                               elem[1][1],
                                                               p.critical_sqs)})
