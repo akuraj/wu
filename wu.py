@@ -29,10 +29,13 @@ state = get_state(["a1", "a2", "a3", "a13", "a14", "a15", "b1", "b15", "c1", "c1
 print(state)
 
 
-def threat_space_search(board, color, point):
-    set_sq(board, color, point)
+def threat_space_search(board, color, point=None):
+    if point:
+        set_sq(board, color, point)
 
-    threats = search_all_point_own(board, color, point)
+    threats = (search_all_point_own(board, color, point)
+               if point
+               else search_all_board(board, color))
     csqs = reduce(set.intersection, [x["critical_sqs"] for x in threats]) if threats else set()
     potential_win = len(threats) > 0 and len(csqs) == 0
     children = []
@@ -42,7 +45,9 @@ def threat_space_search(board, color, point):
             set_sq(board, color ^ STONE, csq)
 
         # TODO: Can we fix duplication of effort?
-        threats_next_sq = search_all_point_own_next_sq(board, color, point)
+        threats_next_sq = (search_all_point_own_next_sq(board, color, point)
+                           if point
+                           else search_all_board_next_sq(board, color))
         next_sqs = set([x["next_sq"] for x in threats_next_sq])
 
         children = [threat_space_search(board, color, x) for x in next_sqs]
@@ -51,7 +56,8 @@ def threat_space_search(board, color, point):
         for csq in csqs:
             clear_sq(board, color ^ STONE, csq)
 
-    clear_sq(board, color, point)
+    if point:
+        clear_sq(board, color, point)
 
     return search_node(point, threats, csqs, potential_win, children)
 
@@ -67,12 +73,8 @@ def threat_space_search(board, color, point):
 # end = time.monotonic()
 # print("Time taken: ", end - start, " seconds")
 
-threats_next_sq = search_all_board_next_sq(state.board, state.turn)
-assert state.threats_next_sq[state.turn] == threats_next_sq
-next_sqs = list(set([x["next_sq"] for x in threats_next_sq]))
+node = threat_space_search(state.board, state.turn)
 
-nodes = [threat_space_search(state.board, state.turn, x) for x in next_sqs]
-for node in nodes:
+for node in node["children"]:
     if node["potential_win"]:
         print(node["next_sq"])
-    # print(node)
