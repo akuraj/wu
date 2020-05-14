@@ -30,11 +30,11 @@ print(state)
 
 
 def threat_space_search(board, color, point=None):
-    if point:
+    if point is not None:
         set_sq(board, color, point)
 
     threats = (search_all_point_own(board, color, point)
-               if point
+               if point is not None
                else search_all_board(board, color))
     csqs = reduce(set.intersection, [x["critical_sqs"] for x in threats]) if threats else set()
     potential_win = len(threats) > 0 and len(csqs) == 0
@@ -46,7 +46,7 @@ def threat_space_search(board, color, point=None):
 
         # TODO: Can we fix duplication of effort?
         threats_next_sq = (search_all_point_own_next_sq(board, color, point)
-                           if point
+                           if point is not None
                            else search_all_board_next_sq(board, color))
         next_sqs = set([x["next_sq"] for x in threats_next_sq])
 
@@ -56,7 +56,7 @@ def threat_space_search(board, color, point=None):
         for csq in csqs:
             clear_sq(board, color ^ STONE, csq)
 
-    if point:
+    if point is not None:
         clear_sq(board, color, point)
 
     return search_node(point, threats, csqs, potential_win, children)
