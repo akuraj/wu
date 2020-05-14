@@ -614,3 +614,14 @@ def degree(gen_pattern):
 @njit
 def defcon_from_degree(degree):
     return MAX_DEFCON - degree
+
+
+def new_search_node(next_sq, threats=[], critical_sqs=set(),
+                    potential_win=False, children=[]):
+    new_node = {"next_sq": next_sq,
+                "threats": threats,
+                "critical_sqs": critical_sqs,
+                "potential_win": potential_win,
+                "children": children}
+
+    return new_node
