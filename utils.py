@@ -555,6 +555,20 @@ def point_on_line(start, end, i):
 
 
 @njit
+def is_normal_line(start, end):
+    adx = abs(end[0] - start[0])
+    ady = abs(end[1] - start[1])
+    return (adx * ady == 0 or adx == ady) and adx + ady > 0
+
+
+@njit
+def chebyshev_distance(start, end):
+    adx = abs(end[0] - start[0])
+    ady = abs(end[1] - start[1])
+    return max(adx, ady)
+
+
+@njit
 def point_set_on_line(start, end, idxs):
     return set([point_on_line(start, end, i) for i in idxs])
 
@@ -616,8 +630,8 @@ def defcon_from_degree(degree):
     return MAX_DEFCON - degree
 
 
-def search_node(next_sq, threats=[], critical_sqs=set(),
-                potential_win=False, children=[]):
+def new_search_node(next_sq, threats=[], critical_sqs=set(),
+                    potential_win=False, children=[]):
     node = {"next_sq": next_sq,
             "threats": threats,
             "critical_sqs": critical_sqs,
@@ -625,3 +639,55 @@ def search_node(next_sq, threats=[], critical_sqs=set(),
             "children": children}
 
     return node
+
+
+def next_sqs_from_node(node):
+    next_sqs = []
+
+    if node["next_sq"]:
+        next_sqs.append(node["next_sq"])
+
+    for child in node["children"]:
+        next_sqs.extend(next_sqs_from_node(child))
+
+    return next_sqs
+
+
+@njit
+def slope_intercept(start, end):
+    dx = end[0] - start[0]
+    dy = end[1] - start[1]
+
+    adx = abs(dx)
+    ady = abs(dy)
+    assert (adx * ady == 0 or adx == ady) and adx + ady > 0
+
+    if dx == 0:
+        return (0, 1, -start[0])
+    else:
+        slope = signum(dx) * signum(dy)
+        return (1, slope, start[1] - slope * start[0])
+
+
+def lines_from_next_sqs_arr(next_sqs_arr):
+    next_sqs_all = [(y, i) for (i, x) in enumerate(next_sqs_arr) for y in x]
+    n = len(next_sqs_all)
+
+    lines_dict = dict()
+    for i in range(n):
+        p_i = next_sqs_all[i]
+
+        for j in range(i + 1, n):
+            p_j = next_sqs_all[j]
+
+            # FIXME: Same gain_sq case is being excluded!
+            if is_normal_line(p_i[0], p_j[0]) and p_i[1] != p_j[1]:
+                line = slope_intercept(p_i[0], p_j[0])
+
+                if line in lines_dict:
+                    lines_dict[line].add(p_i)
+                    lines_dict[line].add(p_j)
+                else:
+                    lines_dict[line] = set([p_i, p_j])
+
+    return lines_dict

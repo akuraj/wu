@@ -1,6 +1,10 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Write code for combination of two searches, or multiple as well?
+# TODO: Traverse graph without recursion to make fns faster?
+# TODO: Introduce a max-depth for combination searches in TSS?
+# TODO: Make search node and threat item classes to make access faster?
 # TODO: Figure out appropriate tree data structure for TSS.
 # TODO: Implement dependency and conflict checks for TSS tree.
 # TODO: Implement process/algo to combine useful sets of independent TSS trees.
