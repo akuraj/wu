@@ -2,6 +2,8 @@
 
 # *** TODO SOON ***
 # TODO: Write code for combination of two searches, or multiple as well?
+# TODO: Can combine pairs by maintaining gain and cost squares upto relevant point,
+#       and comparing the cumulative sets will determine if the points are in conflict or not.
 # TODO: Traverse graph without recursion to make fns faster?
 # TODO: Introduce a max-depth for combination searches in TSS?
 # TODO: Make search node and threat item classes to make access faster?
