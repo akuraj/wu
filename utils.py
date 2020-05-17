@@ -641,16 +641,29 @@ def new_search_node(next_sq, threats=[], critical_sqs=set(),
     return node
 
 
-def next_sqs_from_node(node):
-    next_sqs = []
+def next_sqs_info_from_node(node, path=[], cumulative_nsqs=set(),
+                            cumulative_csqs=set()):
+    next_sqs_info = []
+
+    next_sqs = set([node["next_sq"]]) if node["next_sq"] else set()
+    critical_sqs = node["critical_sqs"]
+
+    cumulative_nsqs_new = set.union(cumulative_nsqs, next_sqs)
+    cumulative_csqs_new = set.union(cumulative_csqs, critical_sqs)
 
     if node["next_sq"]:
-        next_sqs.append(node["next_sq"])
+        next_sqs_info.append({"next_sq": node["next_sq"],
+                              "path": path.copy(),
+                              "cumulative_nsqs": cumulative_nsqs_new,
+                              "cumulative_csqs": cumulative_csqs_new})
 
-    for child in node["children"]:
-        next_sqs.extend(next_sqs_from_node(child))
+    for i, child in enumerate(node["children"]):
+        next_sqs_info.extend(next_sqs_info_from_node(child,
+                                                     path + [i],
+                                                     cumulative_nsqs_new,
+                                                     cumulative_csqs_new))
 
-    return next_sqs
+    return next_sqs_info
 
 
 @njit
@@ -669,25 +682,44 @@ def slope_intercept(start, end):
         return (1, slope, start[1] - slope * start[0])
 
 
-def lines_from_next_sqs_arr(next_sqs_arr):
-    next_sqs_all = [(y, i) for (i, x) in enumerate(next_sqs_arr) for y in x]
-    n = len(next_sqs_all)
+def lines_from_next_sqs_info_arr(next_sqs_info_arr):
+    next_sqs_info_all = [(y, i) for (i, x) in enumerate(next_sqs_info_arr)
+                         for y in x]
+    n = len(next_sqs_info_all)
 
-    lines_dict = dict()
+    # lines_dict = dict()
+    lines = []
     for i in range(n):
-        p_i = next_sqs_all[i]
+        item_i = next_sqs_info_all[i]
+        val_i = item_i[0]
+        idx_i = item_i[1]
+        nsq_i = val_i["next_sq"]
+        c_nsqs_i = val_i["cumulative_nsqs"]
+        c_csqs_i = val_i["cumulative_csqs"]
 
         for j in range(i + 1, n):
-            p_j = next_sqs_all[j]
+            item_j = next_sqs_info_all[j]
+            val_j = item_j[0]
+            idx_j = item_j[1]
+            nsq_j = val_j["next_sq"]
+            c_nsqs_j = val_j["cumulative_nsqs"]
+            c_csqs_j = val_j["cumulative_csqs"]
 
             # FIXME: Same gain_sq case is being excluded!
-            if is_normal_line(p_i[0], p_j[0]) and p_i[1] != p_j[1]:
-                line = slope_intercept(p_i[0], p_j[0])
+            if (is_normal_line(nsq_i, nsq_j)
+                and chebyshev_distance(nsq_i, nsq_j) < MAX_DEFCON
+                and idx_i != idx_j
+                and set.intersection(c_nsqs_i, c_csqs_j) == set()
+                and set.intersection(c_csqs_i, c_nsqs_j) == set()
+                and set.intersection(c_csqs_i, c_csqs_j) == set()):
+                # line = slope_intercept(nsq_i, nsq_j)
 
-                if line in lines_dict:
-                    lines_dict[line].add(p_i)
-                    lines_dict[line].add(p_j)
-                else:
-                    lines_dict[line] = set([p_i, p_j])
+                # if line in lines_dict:
+                #     lines_dict[line].append(item_i)
+                #     lines_dict[line].append(item_j)
+                # else:
+                #     lines_dict[line] = [item_i, item_j]
+                lines.append((item_i, item_j))
 
-    return lines_dict
+    # return lines_dict
+    return lines

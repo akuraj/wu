@@ -5,7 +5,7 @@ from utils import (search_board, search_point, search_point_own,
                    search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
                    get_pattern, apply_pattern, assert_nb, set_sq, clear_sq,
                    point_on_line, point_set_on_line, new_search_node,
-                   next_sqs_from_node, lines_from_next_sqs_arr,
+                   next_sqs_info_from_node, lines_from_next_sqs_info_arr,
                    chebyshev_distance)
 from numba import njit
 from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN, WALL, STONE, MAX_DEFCON
@@ -31,7 +31,7 @@ state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "
 print(state)
 
 
-def threat_space_search(board, color, point=None):
+def threat_space_search(board, color, point=None, combinations=False):
     if point:
         set_sq(board, color, point)
 
@@ -55,25 +55,28 @@ def threat_space_search(board, color, point=None):
         children = [threat_space_search(board, color, x) for x in next_sqs]
         potential_win = any([x["potential_win"] for x in children])
 
-        if not point and not potential_win and len(children) > 1:
-            next_sqs_children = [next_sqs_from_node(x) for x in children]
-            lines_dict = lines_from_next_sqs_arr(next_sqs_children)
+        if combinations and not potential_win and len(children) > 1:
+            next_sqs_info_children = [next_sqs_info_from_node(x) for x in children]
+            lines = lines_from_next_sqs_info_arr(next_sqs_info_children)
 
-            for line_set in lines_dict.values():
-                line = list(line_set)
-                num_pts = len(line)
-                for i in range(num_pts):
-                    for j in range(i + 1, num_pts):
-                        idx_i = line[i][1]
-                        idx_j = line[j][1]
-                        p_i = line[i][0]
-                        p_j = line[j][0]
-                        if (idx_i != idx_j and
-                            chebyshev_distance(p_i, p_j) < MAX_DEFCON):
-                            node_i = children[line[i][1]]
-                            node_j = children[line[j][1]]
+            for line in lines:
+                a = 2
 
-                            # WORKING HERE.
+            # for line_set in lines_dict.values():
+            #     line = list(line_set)
+            #     num_pts = len(line)
+            #     for i in range(num_pts):
+            #         for j in range(i + 1, num_pts):
+            #             idx_i = line[i][1]
+            #             idx_j = line[j][1]
+            #             p_i = line[i][0]
+            #             p_j = line[j][0]
+            #             if (idx_i != idx_j and
+            #                 chebyshev_distance(p_i, p_j) < MAX_DEFCON):
+            #                 node_i = children[line[i][1]]
+            #                 node_j = children[line[j][1]]
+
+            #                 # WORKING HERE.
 
 
 
@@ -97,7 +100,7 @@ def threat_space_search(board, color, point=None):
 # end = time.monotonic()
 # print("Time taken: ", end - start, " seconds")
 
-node = threat_space_search(state.board, state.turn)
+node = threat_space_search(state.board, state.turn, None, True)
 for child in node["children"]:
     if child["potential_win"]:
         print(child["next_sq"])
