@@ -1,6 +1,15 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Cleanup unnecessary functions first!!!
+# TODO: Formulate the idea clearly reg combinations first.
+# TODO: How to make the TSS func generic enough for different starting points:
+#       1) "None" point move.
+#       2) "Normal" move.
+#       3) Generic combination.
+
+
+# *** TODO SOONISH ***
 # TODO: When getting next_sqs from node, also get path as well as cumulative gain and cost sqs.
 #       That should make it more convenient to get compatible pairs/combinations.
 # TODO: Write code for combination of two searches, or multiple as well?

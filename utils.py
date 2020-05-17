@@ -682,13 +682,30 @@ def slope_intercept(start, end):
         return (1, slope, start[1] - slope * start[0])
 
 
+def dedupe_line_items(items):
+    i = 0
+    n = len(items)
+
+    while i < n - 1:
+        val = items[i]
+        j = i + 1
+
+        while j < n:
+            if items[j][1] == val[1] and items[j][0]["path"] == val[0]["path"]:
+                del items[j]
+                n -= 1
+            else:
+                j += 1
+
+        i += 1
+
+
 def lines_from_next_sqs_info_arr(next_sqs_info_arr):
     next_sqs_info_all = [(y, i) for (i, x) in enumerate(next_sqs_info_arr)
                          for y in x]
     n = len(next_sqs_info_all)
 
-    # lines_dict = dict()
-    lines = []
+    lines_dict = dict()
     for i in range(n):
         item_i = next_sqs_info_all[i]
         val_i = item_i[0]
@@ -712,14 +729,15 @@ def lines_from_next_sqs_info_arr(next_sqs_info_arr):
                 and set.intersection(c_nsqs_i, c_csqs_j) == set()
                 and set.intersection(c_csqs_i, c_nsqs_j) == set()
                 and set.intersection(c_csqs_i, c_csqs_j) == set()):
-                # line = slope_intercept(nsq_i, nsq_j)
+                line = slope_intercept(nsq_i, nsq_j)
 
-                # if line in lines_dict:
-                #     lines_dict[line].append(item_i)
-                #     lines_dict[line].append(item_j)
-                # else:
-                #     lines_dict[line] = [item_i, item_j]
-                lines.append((item_i, item_j))
+                if line in lines_dict:
+                    lines_dict[line].append(item_i)
+                    lines_dict[line].append(item_j)
+                else:
+                    lines_dict[line] = [item_i, item_j]
 
-    # return lines_dict
-    return lines
+    for v in lines_dict.values():
+        dedupe_line_items(v)
+
+    return lines_dict

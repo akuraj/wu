@@ -57,10 +57,12 @@ def threat_space_search(board, color, point=None, combinations=False):
 
         if combinations and not potential_win and len(children) > 1:
             next_sqs_info_children = [next_sqs_info_from_node(x) for x in children]
-            lines = lines_from_next_sqs_info_arr(next_sqs_info_children)
+            lines_dict = lines_from_next_sqs_info_arr(next_sqs_info_children)
 
-            for line in lines:
-                a = 2
+            for info in lines_dict.values():
+                b = 2
+
+            a = 2
 
             # for line_set in lines_dict.values():
             #     line = list(line_set)
