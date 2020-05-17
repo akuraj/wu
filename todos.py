@@ -1,6 +1,8 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: When getting next_sqs from node, also get path as well as cumulative gain and cost sqs.
+#       That should make it more convenient to get compatible pairs/combinations.
 # TODO: Write code for combination of two searches, or multiple as well?
 # TODO: Can combine pairs by maintaining gain and cost squares upto relevant point,
 #       and comparing the cumulative sets will determine if the points are in conflict or not.
