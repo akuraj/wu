@@ -15,14 +15,11 @@
 # TODO: Write code for combination of two searches, or multiple as well?
 # TODO: Can combine pairs by maintaining gain and cost squares upto relevant point,
 #       and comparing the cumulative sets will determine if the points are in conflict or not.
-# TODO: Traverse graph without recursion to make fns faster?
 # TODO: Introduce a max-depth for combination searches in TSS?
 # TODO: Make search node and threat item classes to make access faster?
 # TODO: Figure out appropriate tree data structure for TSS.
 # TODO: Implement dependency and conflict checks for TSS tree.
 # TODO: Implement process/algo to combine useful sets of independent TSS trees.
-# TODO: Cleanup/reorg/remove the rich data structures in state as needed.
-# TODO: Remove unnecessary functions that were recently added.
 # TODO: Remove unnecessary fields from threat data.
 # TODO: Estimate impact of njit by turning it off to see if it's actually useful.
 # TODO: Is jitting small functions actually helpful?
