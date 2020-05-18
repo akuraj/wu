@@ -596,14 +596,6 @@ def del_threats_at_point(threats, point):
             i += 1
 
 
-def has_won(threats):
-    for threat in threats:
-        if threat["defcon"] == 0:
-            return True
-
-    return False
-
-
 @njit
 def degree(gen_pattern):
     """Maximum number of 'OWN's in a sub-sequence of length = WIN_LENGTH,
