@@ -108,7 +108,7 @@ class State:
                 "turn: {1}\n"
                 "status: {2}\n").format(board_repr,
                                         ACT_ELEMS_TO_NAMES[self.turn],
-                                        self.status)
+                                        str(self.status))
 
     def __str__(self):
         return repr(self)
