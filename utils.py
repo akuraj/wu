@@ -573,17 +573,6 @@ def point_set_on_line(start, end, idxs):
     return set([point_on_line(start, end, i) for i in idxs])
 
 
-def status_str(status):
-    if status == EMPTY:
-        return "ONGOING"
-    elif status == BLACK:
-        return "BLACK WON"
-    elif status == WHITE:
-        return "WHITE WON"
-    else:
-        raise Exception(f"Unknown status: {status}!")
-
-
 def del_threats_at_point(threats, point):
     i = 0
     n = len(threats)

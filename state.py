@@ -1,9 +1,17 @@
+from enum import IntEnum, auto, unique
 import numpy as np
 from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL, COLORS,
-                    ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR, STONE)
+                    ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR)
 from utils import (new_board, row_idx_to_num, col_idx_to_chr, get_board,
-                   set_sq, clear_sq, status_str, search_board)
+                   search_board)
 from pattern import P_WIN
+
+
+@unique
+class Status(IntEnum):
+    ONGOING = auto()
+    BLACK_WON = auto()
+    WHITE_WON = auto()
 
 
 class State:
@@ -42,13 +50,25 @@ class State:
                 raise Exception(f"""Invalid number of stones on the board:\
                                 Black: {black_total}, White: {white_total}""")
 
+        # Calculate game status.
+        status = Status.ONGOING
+
+        black_won = len(search_board(board, P_WIN.pattern, BLACK)) > 0
+        white_won = len(search_board(board, P_WIN.pattern, WHITE)) > 0
+
+        if black_won and white_won:
+            raise Exception("Both BLACK and WHITE cannot have won!")
+        elif black_won:
+            status = Status.BLACK_WON
+            assert turn == WHITE
+        elif white_won:
+            status = Status.WHITE_WON
+            assert turn == BLACK
+
         # Copy onto self.
         self.board = np.copy(board.astype(np.byte))
         self.turn = turn
-
-        # Update status.
-        self.status = EMPTY
-        self.update_status()
+        self.status = status
 
     def __repr__(self):
         board_repr = ""
@@ -88,40 +108,10 @@ class State:
                 "turn: {1}\n"
                 "status: {2}\n").format(board_repr,
                                         ACT_ELEMS_TO_NAMES[self.turn],
-                                        status_str(self.status))
+                                        self.status)
 
     def __str__(self):
         return repr(self)
-
-    def update_status(self):
-        status = EMPTY
-
-        # FIXME: Checking the whole board every time is slow!
-        black_won = len(search_board(self.board, P_WIN.pattern, BLACK)) > 0
-        white_won = len(search_board(self.board, P_WIN.pattern, WHITE)) > 0
-
-        if black_won and white_won:
-            raise Exception("Both BLACK and WHITE cannot have won!")
-        elif black_won:
-            status = BLACK
-            assert self.turn == WHITE
-        elif white_won:
-            status = WHITE
-            assert self.turn == BLACK
-
-        self.status = status
-
-    def make(self, point):
-        assert self.status == EMPTY
-        set_sq(self.board, self.turn, point)
-        self.turn ^= STONE
-        self.update_status()
-
-    def unmake(self, point):
-        self.turn ^= STONE
-        clear_sq(self.board, self.turn, point)
-        self.update_status()
-        assert self.status == EMPTY
 
 
 def get_state(blacks, whites, turn, strict_stone_count):
