@@ -7,6 +7,7 @@
 #       1) "None" point move.
 #       2) "Normal" move.
 #       3) Generic combination.
+# TODO: Need fn to search along direction at point?
 
 
 # *** TODO SOONISH ***
