@@ -14,29 +14,34 @@ from pattern import (P_3_B, P_4_ST, P_4_A, PATTERNS,
                      search_all_board_next_sq, search_all_point_next_sq,
                      search_all_point_own_next_sq)
 from functools import reduce
+from itertools import chain, combinations
 
 
-state = get_state(["a1", "a2", "a3", "a13", "a14", "a15", "b1", "b15", "c1", "c15",
-                    "f14", "g13", "i9", "i10", "m1", "m15", "n1", "n15", "o1", "o2",
-                    "o3", "o13", "o14", "o15"],
-                  ["i6", "i13", "j10"],
-                  BLACK,
-                  False)
-
-# state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "i9"],
-#                   ["g4", "e5", "f6", "h6", "j6", "f7", "j7", "f8", "g8", "i8", "f9"],
+# state = get_state(["a1", "a2", "a3", "a13", "a14", "a15", "b1", "b15", "c1", "c15",
+#                     "f14", "g13", "i9", "i10", "m1", "m15", "n1", "n15", "o1", "o2",
+#                     "o3", "o13", "o14", "o15"],
+#                   ["i6", "i13", "j10"],
 #                   BLACK,
-#                   True)
+#                   False)
+
+state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "i9"],
+                  ["g4", "e5", "f6", "h6", "j6", "f7", "j7", "f8", "g8", "i8", "f9"],
+                  BLACK,
+                  True)
 
 print(state)
 
 
+def subsets(s, min_size=0):
+    return chain.from_iterable(combinations(s, r) for r in range(min_size, len(s) + 1))
+
+
 def threat_space_search(board, color, point=None, combinations=False):
-    if point:
+    if point is not None:
         set_sq(board, color, point)
 
     threats = (search_all_point_own(board, color, point)
-               if point
+               if point is not None
                else search_all_board(board, color))
     csqs = reduce(set.intersection, [x["critical_sqs"] for x in threats]) if threats else set()
     potential_win = len(threats) > 0 and len(csqs) == 0
@@ -46,9 +51,9 @@ def threat_space_search(board, color, point=None, combinations=False):
         for csq in csqs:
             set_sq(board, color ^ STONE, csq)
 
-        # TODO: Can we fix duplication of effort?
+        # TODO: Fix duplication of effort?
         threats_next_sq = (search_all_point_own_next_sq(board, color, point)
-                           if point
+                           if point is not None
                            else search_all_board_next_sq(board, color))
         next_sqs = set([x["next_sq"] for x in threats_next_sq])
 
@@ -59,7 +64,8 @@ def threat_space_search(board, color, point=None, combinations=False):
             next_sqs_info_children = [next_sqs_info_from_node(x) for x in children]
             lines_dict = lines_from_next_sqs_info_arr(next_sqs_info_children)
 
-            for info in lines_dict.values():
+            for line, info in lines_dict.items():
+                point_sets = list(subsets(info, 2))
                 b = 2
 
             a = 2
@@ -85,7 +91,7 @@ def threat_space_search(board, color, point=None, combinations=False):
         for csq in csqs:
             clear_sq(board, color ^ STONE, csq)
 
-    if point:
+    if point is not None:
         clear_sq(board, color, point)
 
     return new_search_node(point, threats, csqs, potential_win, children)

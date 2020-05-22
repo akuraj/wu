@@ -626,7 +626,7 @@ def next_sqs_info_from_node(node, path=[], cumulative_nsqs=set(),
                             cumulative_csqs=set()):
     next_sqs_info = []
 
-    next_sqs = set([node["next_sq"]]) if node["next_sq"] else set()
+    next_sqs = set([node["next_sq"]]) if node["next_sq"] is not None else set()
     critical_sqs = node["critical_sqs"]
 
     cumulative_nsqs_new = set.union(cumulative_nsqs, next_sqs)
@@ -661,6 +661,11 @@ def slope_intercept(start, end):
     else:
         slope = signum(dx) * signum(dy)
         return (1, slope, start[1] - slope * start[0])
+
+
+@njit
+def point_idx_on_line(line, point):
+    return point[0] if line[0] else point[1]
 
 
 def dedupe_line_items(items):
@@ -703,13 +708,15 @@ def lines_from_next_sqs_info_arr(next_sqs_info_arr):
             c_nsqs_j = val_j["cumulative_nsqs"]
             c_csqs_j = val_j["cumulative_csqs"]
 
-            # FIXME: Same gain_sq case is being excluded!
+            # NOTE: Same gain_sq case is being excluded.
+            #       It does not need to be handled.
             if (is_normal_line(nsq_i, nsq_j)
                 and chebyshev_distance(nsq_i, nsq_j) < MAX_DEFCON
                 and idx_i != idx_j
-                and set.intersection(c_nsqs_i, c_csqs_j) == set()
-                and set.intersection(c_csqs_i, c_nsqs_j) == set()
-                and set.intersection(c_csqs_i, c_csqs_j) == set()):
+                and not set.intersection(c_nsqs_i, c_csqs_j)
+                and not set.intersection(c_csqs_i, c_nsqs_j)
+                and not set.intersection(c_csqs_i, c_csqs_j)):
+
                 line = slope_intercept(nsq_i, nsq_j)
 
                 if line in lines_dict:
