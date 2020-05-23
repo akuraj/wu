@@ -6,7 +6,7 @@ from utils import (search_board, search_point, search_point_own,
                    get_pattern, apply_pattern, assert_nb, set_sq, clear_sq,
                    point_on_line, point_set_on_line, new_search_node,
                    next_sqs_info_from_node, lines_from_next_sqs_info_arr,
-                   chebyshev_distance)
+                   chebyshev_distance, point_set_is_compatible)
 from numba import njit
 from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN, WALL, STONE, MAX_DEFCON
 from pattern import (P_3_B, P_4_ST, P_4_A, PATTERNS,
@@ -51,7 +51,7 @@ def threat_space_search(board, color, point=None, combinations=False):
         for csq in csqs:
             set_sq(board, color ^ STONE, csq)
 
-        # TODO: Fix duplication of effort?
+        # TODO: Fix duplication of effort.
         threats_next_sq = (search_all_point_own_next_sq(board, color, point)
                            if point is not None
                            else search_all_board_next_sq(board, color))
@@ -66,27 +66,9 @@ def threat_space_search(board, color, point=None, combinations=False):
 
             for line, info in lines_dict.items():
                 point_sets = list(subsets(info, 2))
-                b = 2
-
-            a = 2
-
-            # for line_set in lines_dict.values():
-            #     line = list(line_set)
-            #     num_pts = len(line)
-            #     for i in range(num_pts):
-            #         for j in range(i + 1, num_pts):
-            #             idx_i = line[i][1]
-            #             idx_j = line[j][1]
-            #             p_i = line[i][0]
-            #             p_j = line[j][0]
-            #             if (idx_i != idx_j and
-            #                 chebyshev_distance(p_i, p_j) < MAX_DEFCON):
-            #                 node_i = children[line[i][1]]
-            #                 node_j = children[line[j][1]]
-
-            #                 # WORKING HERE.
-
-
+                for point_set in point_sets:
+                    if point_set_is_compatible(point_set, line):
+                        b = 2
 
         for csq in csqs:
             clear_sq(board, color ^ STONE, csq)

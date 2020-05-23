@@ -664,7 +664,7 @@ def slope_intercept(start, end):
 
 
 @njit
-def point_idx_on_line(line, point):
+def point_idx_on_line(point, line):
     return point[0] if line[0] else point[1]
 
 
@@ -729,3 +729,34 @@ def lines_from_next_sqs_info_arr(next_sqs_info_arr):
         dedupe_line_items(v)
 
     return lines_dict
+
+
+def point_set_is_compatible(point_set, line):
+    point_idxs = [point_idx_on_line(x[0]["next_sq"], line) for x in point_set]
+    point_set_range = max(point_idxs) - min(point_idxs)
+    if MAX_DEFCON <= point_set_range:
+        return False
+
+    n = len(point_set)
+
+    for i in range(n):
+        item_i = point_set[i]
+        val_i = item_i[0]
+        idx_i = item_i[1]
+        c_nsqs_i = val_i["cumulative_nsqs"]
+        c_csqs_i = val_i["cumulative_csqs"]
+
+        for j in range(i + 1, n):
+            item_j = point_set[j]
+            val_j = item_j[0]
+            idx_j = item_j[1]
+            c_nsqs_j = val_j["cumulative_nsqs"]
+            c_csqs_j = val_j["cumulative_csqs"]
+
+            if not (idx_i != idx_j
+                    and not set.intersection(c_nsqs_i, c_csqs_j)
+                    and not set.intersection(c_csqs_i, c_nsqs_j)
+                    and not set.intersection(c_csqs_i, c_csqs_j)):
+                return False
+
+    return True

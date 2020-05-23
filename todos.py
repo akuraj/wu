@@ -8,6 +8,7 @@
 #       2) "Normal" move.
 #       3) Generic combination.
 # TODO: Need fn to search along direction at point?
+# TODO: Function documentation!
 
 
 # *** TODO SOONISH ***
