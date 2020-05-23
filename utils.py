@@ -731,12 +731,14 @@ def lines_from_next_sqs_info_arr(next_sqs_info_arr):
     return lines_dict
 
 
-def point_set_is_compatible(point_set, line):
+def point_set_is_useful(point_set, line):
+    # Check that the points in the combination are close enough.
     point_idxs = [point_idx_on_line(x[0]["next_sq"], line) for x in point_set]
     point_set_range = max(point_idxs) - min(point_idxs)
     if MAX_DEFCON <= point_set_range:
         return False
 
+    # Check that the point trees are not in conflict.
     n = len(point_set)
 
     for i in range(n):

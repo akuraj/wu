@@ -6,7 +6,7 @@ from utils import (search_board, search_point, search_point_own,
                    get_pattern, apply_pattern, assert_nb, set_sq, clear_sq,
                    point_on_line, point_set_on_line, new_search_node,
                    next_sqs_info_from_node, lines_from_next_sqs_info_arr,
-                   chebyshev_distance, point_set_is_compatible)
+                   chebyshev_distance, point_set_is_useful)
 from numba import njit
 from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN, WALL, STONE, MAX_DEFCON
 from pattern import (P_3_B, P_4_ST, P_4_A, PATTERNS,
@@ -37,6 +37,9 @@ def subsets(s, min_size=0):
 
 
 def threat_space_search(board, color, point=None, combinations=False):
+    # Play is a dict with info on cum_nsqs, cum_csqs, variations, threats etc.
+    # Generalize relevant functions over this type of input dict.
+
     if point is not None:
         set_sq(board, color, point)
 
@@ -67,7 +70,7 @@ def threat_space_search(board, color, point=None, combinations=False):
             for line, info in lines_dict.items():
                 point_sets = list(subsets(info, 2))
                 for point_set in point_sets:
-                    if point_set_is_compatible(point_set, line):
+                    if point_set_is_useful(point_set, line):
                         b = 2
 
         for csq in csqs:
