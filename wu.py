@@ -6,7 +6,8 @@ from utils import (search_board, search_point, search_point_own,
                    get_pattern, apply_pattern, assert_nb, set_sq, clear_sq,
                    point_on_line, point_set_on_line, new_search_node,
                    next_sqs_info_from_node, lines_from_next_sqs_info_arr,
-                   chebyshev_distance, point_set_is_useful)
+                   chebyshev_distance, point_set_is_useful,
+                   threat_sequence)
 from numba import njit
 from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN, WALL, STONE, MAX_DEFCON
 from pattern import (P_3_B, P_4_ST, P_4_A, PATTERNS,
@@ -71,6 +72,7 @@ def threat_space_search(board, color, point=None, combinations=False):
                 point_sets = list(subsets(info, 2))
                 for point_set in point_sets:
                     if point_set_is_useful(point_set, line):
+                        threat_seqs = [threat_sequence(children[x[1]], x[0]["path"]) for x in point_set]
                         b = 2
 
         for csq in csqs:

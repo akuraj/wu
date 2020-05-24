@@ -25,6 +25,8 @@ def new_board():
 
 
 def get_board(blacks, whites):
+    assert not set.intersection(set(blacks), set(whites))
+
     board = new_board()
 
     for elem in blacks:
@@ -610,6 +612,26 @@ def degree(gen_pattern):
 def defcon_from_degree(degree):
     return MAX_DEFCON - degree
 
+
+def get_threat_sequence(node, path):
+    sequence = []
+
+    sub_node = node
+    for seq in node["move"]["threat_seqs"]:
+        sequence.extend(seq)
+
+    for idx in path:
+        sub_node = sub_node["children"][idx]
+        for seq in node["move"]["threat_seqs"]:
+            sequence.extend(seq)
+
+    return sequence
+
+
+def new_move(threat_seqs=[]):
+    move = {"threat_seqs": threat_seqs
+        }
+    return move
 
 def new_search_node(next_sq, threats=[], critical_sqs=set(),
                     potential_win=False, children=[]):

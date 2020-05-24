@@ -3,6 +3,15 @@
 # *** TODO SOON ***
 # TODO: Cleanup unnecessary functions first!!!
 # TODO: Formulate the idea clearly reg combinations first.
+# TODO: Move:
+#       1) Threat Sequences: [[item]], where item: {next_sq: , critical_sqs: }
+#       2) c_nsqs
+#       3) c_csqs
+#       4) last_sqs?
+#       5) type? (none, point, line or cluster?)
+#       6) Store line slope intercept as well?
+#       7) When getting threat sequence out of a (search node, path),
+#          do we flatten it? If yes, how do we flatten it?
 # TODO: How to make the TSS func generic enough for different starting points:
 #       1) "None" point move.
 #       2) "Normal" move.
