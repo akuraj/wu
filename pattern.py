@@ -4,6 +4,7 @@ from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
 from utils import (search_board, search_point, search_point_own,
                    search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
                    point_set_on_line, degree, defcon_from_degree)
+from functools import reduce
 
 
 class Pattern:
@@ -178,6 +179,26 @@ def search_all_point_own(board, color, point, patterns=PATTERNS):
                                                               p.critical_sqs)})
 
     return matches
+
+
+def search_all_points_own(board, color, points, patterns=PATTERNS,
+                          intersection=False):
+    matches_for_points = [search_all_point_own(board, color, x) for x in points]
+
+    all_matches_dict = dict()
+    for matches in matches_for_points:
+        for match in matches:
+            key = (match["match"], match["pidx"])
+            if key not in all_matches_dict:
+                all_matches_dict[key] = match
+
+    if intersection:
+        keys_for_points = [set([(x["match"], x["pidx"]) for x in matches])
+                           for matches in matches_for_points]
+        common_keys = reduce(set.intersection, keys_for_points)
+        return [all_matches_dict[x] for x in common_keys]
+    else:
+        return list(all_matches_dict.values())
 
 
 def search_all_board_next_sq(board, color, patterns=PATTERNS):

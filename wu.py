@@ -7,13 +7,15 @@ from utils import (search_board, search_point, search_point_own,
                    point_on_line, point_set_on_line, new_search_node,
                    next_sqs_info_from_node, lines_from_next_sqs_info_arr,
                    chebyshev_distance, point_set_is_useful,
-                   threat_sequence)
+                   new_move, MoveType, set_move, clear_move,
+                   new_threat_seq_item, get_threat_sequence)
 from numba import njit
 from consts import OWN, EMPTY, BLACK, WHITE, NOT_OWN, WALL, STONE, MAX_DEFCON
 from pattern import (P_3_B, P_4_ST, P_4_A, PATTERNS,
                      search_all_board, search_all_point, search_all_point_own,
                      search_all_board_next_sq, search_all_point_next_sq,
-                     search_all_point_own_next_sq)
+                     search_all_point_own_next_sq,
+                     search_all_points_own)
 from functools import reduce
 from itertools import chain, combinations
 
@@ -37,51 +39,86 @@ def subsets(s, min_size=0):
     return chain.from_iterable(combinations(s, r) for r in range(min_size, len(s) + 1))
 
 
-def threat_space_search(board, color, point=None, combinations=False):
-    # Play is a dict with info on cum_nsqs, cum_csqs, variations, threats etc.
-    # Generalize relevant functions over this type of input dict.
-
-    if point is not None:
+def threat_space_search(board, color, move=new_move(), combinations=False):
+    if move["move_type"] == MoveType.POINT and move["critical_sqs"] is None:
+        point = move["last_sqs"][0]
         set_sq(board, color, point)
+        threats_temp = search_all_point_own(board, color, point)
+        critical_sqs = (reduce(set.intersection,
+                               [x["critical_sqs"] for x in threats_temp])
+                        if threats_temp
+                        else set())
+        move["threat_seqs"][0][0]["critical_sqs"] = critical_sqs
+        move["critical_sqs"] = critical_sqs
+        clear_sq(board, color, point)
 
-    threats = (search_all_point_own(board, color, point)
-               if point is not None
-               else search_all_board(board, color))
-    csqs = reduce(set.intersection, [x["critical_sqs"] for x in threats]) if threats else set()
-    potential_win = len(threats) > 0 and len(csqs) == 0
+    set_move(board, color, move)
+
+    threats = []
+    potential_win = False
     children = []
 
+    if move["move_type"] == MoveType.EMPTY:
+        threats = search_all_board(board, color)
+    elif move["move_type"] == MoveType.POINT:
+        threats = search_all_point_own(board, color, move["last_sqs"][0])
+    elif move["move_type"] == MoveType.COMBINATION:
+        threats = search_all_points_own(board, color, move["last_sqs"])
+    else:
+        raise Exception("Invalid move type!")
+
+    potential_win = len(threats) > 0
+
     if not potential_win:
-        for csq in csqs:
-            set_sq(board, color ^ STONE, csq)
+        # TODO: Remove duplication of effort.
+        # TODO: Remove unnecessary work.
+        next_sqs = set()
+        if move["move_type"] == MoveType.EMPTY:
+            next_sqs = set([x["next_sq"]
+                            for x in search_all_board_next_sq(board, color)])
+        elif move["move_type"] == MoveType.POINT:
+            next_sqs = set([x["next_sq"]
+                            for x in search_all_point_own_next_sq(board,
+                                                                  color,
+                                                                  move["last_sqs"][0])])
+        elif move["move_type"] == MoveType.COMBINATION:
+            next_sqs_for_combination = [set([x["next_sq"]
+                                             for x in search_all_point_own_next_sq(board,
+                                                                                   color,
+                                                                                   y)])
+                                        for y in move["last_sqs"]]
+            next_sqs = reduce(set.union, next_sqs_for_combination)
+        else:
+            raise Exception("Invalid move type!")
 
-        # TODO: Fix duplication of effort.
-        threats_next_sq = (search_all_point_own_next_sq(board, color, point)
-                           if point is not None
-                           else search_all_board_next_sq(board, color))
-        next_sqs = set([x["next_sq"] for x in threats_next_sq])
-
-        children = [threat_space_search(board, color, x) for x in next_sqs]
+        children = [threat_space_search(board,
+                                        color,
+                                        new_move([[new_threat_seq_item(x)]]))
+                    for x in next_sqs]
         potential_win = any([x["potential_win"] for x in children])
 
         if combinations and not potential_win and len(children) > 1:
             next_sqs_info_children = [next_sqs_info_from_node(x) for x in children]
             lines_dict = lines_from_next_sqs_info_arr(next_sqs_info_children)
 
+            children_combinations = []
+
             for line, info in lines_dict.items():
                 point_sets = list(subsets(info, 2))
                 for point_set in point_sets:
                     if point_set_is_useful(point_set, line):
-                        threat_seqs = [threat_sequence(children[x[1]], x[0]["path"]) for x in point_set]
-                        b = 2
+                        threat_seqs = [get_threat_sequence(children[x[1]],
+                                                           x[0]["path"])
+                                       for x in point_set]
+                        children_combinations.append(threat_space_search(board,
+                                                                         color,
+                                                                         new_move(threat_seqs)))
 
-        for csq in csqs:
-            clear_sq(board, color ^ STONE, csq)
+            potential_win = any([x["potential_win"] for x in children_combinations])
 
-    if point is not None:
-        clear_sq(board, color, point)
+    clear_move(board, color, move)
 
-    return new_search_node(point, threats, csqs, potential_win, children)
+    return new_search_node(move, threats, potential_win, children)
 
 
 # n = 10000
@@ -95,7 +132,7 @@ def threat_space_search(board, color, point=None, combinations=False):
 # end = time.monotonic()
 # print("Time taken: ", end - start, " seconds")
 
-node = threat_space_search(state.board, state.turn, None, True)
+node = threat_space_search(state.board, state.turn, combinations=True)
 for child in node["children"]:
     if child["potential_win"]:
-        print(child["next_sq"])
+        print(child["move"]["last_sqs"])

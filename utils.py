@@ -2,6 +2,7 @@ import numpy as np
 from numba import njit
 from consts import (SIDE_LEN, SIDE_LEN_ACT, NUM_DIRECTIONS, WALL, BLACK, WHITE,
                     EMPTY, STONE, COLORS, WIN_LENGTH, OWN, MAX_DEFCON)
+from enum import IntEnum, auto, unique
 
 
 @njit
@@ -613,49 +614,124 @@ def defcon_from_degree(degree):
     return MAX_DEFCON - degree
 
 
-def get_threat_sequence(node, path):
-    sequence = []
+def new_threat_seq_item(next_sq, critical_sqs=None):
+    item = {"next_sq": next_sq,
+            "critical_sqs": critical_sqs}
 
-    sub_node = node
-    for seq in node["move"]["threat_seqs"]:
-        sequence.extend(seq)
+    return item
 
-    for idx in path:
-        sub_node = sub_node["children"][idx]
-        for seq in node["move"]["threat_seqs"]:
-            sequence.extend(seq)
 
-    return sequence
+@unique
+class MoveType(IntEnum):
+    EMPTY = auto()
+    POINT = auto()
+    COMBINATION = auto()
 
 
 def new_move(threat_seqs=[]):
-    move = {"threat_seqs": threat_seqs
-        }
+    next_sqs = None
+    critical_sqs = None
+    last_sqs = []
+    move_type = MoveType.EMPTY
+
+    if not threat_seqs:
+        pass
+    elif len(threat_seqs) == 1:
+        assert len(threat_seqs[0]) == 1
+        next_sqs = set([threat_seqs[0][0]["next_sq"]])
+        critical_sqs = threat_seqs[0][0]["critical_sqs"]
+        last_sqs.append(threat_seqs[0][0]["next_sq"])
+        move_type = MoveType.POINT
+    else:
+        next_sqs = set()
+        critical_sqs = set()
+        for threat_seq in threat_seqs:
+            seq_len = len(threat_seq)
+            assert seq_len > 0
+            for i, item in enumerate(threat_seq):
+                assert item["next_sq"] not in next_sqs
+                next_sqs.add(item["next_sq"])
+
+                assert not critical_sqs.intersection(item["critical_sqs"])
+                critical_sqs.update(item["critical_sqs"])
+
+                if i == seq_len - 1:
+                    last_sqs.append(item["next_sq"])
+
+        move_type = MoveType.COMBINATION
+
+    if next_sqs is not None and critical_sqs is not None:
+        assert not set.intersection(next_sqs, critical_sqs)
+
+    move = {"threat_seqs": threat_seqs,
+            "next_sqs": next_sqs,
+            "critical_sqs": critical_sqs,
+            "last_sqs": last_sqs,
+            "move_type": move_type}
+
     return move
 
-def new_search_node(next_sq, threats=[], critical_sqs=set(),
-                    potential_win=False, children=[]):
-    node = {"next_sq": next_sq,
+
+def set_move(board, color, move):
+    if move["next_sqs"] is not None:
+        for next_sq in move["next_sqs"]:
+            set_sq(board, color, next_sq)
+
+    if move["critical_sqs"] is not None:
+        for critical_sq in move["critical_sqs"]:
+            set_sq(board, color ^ STONE, critical_sq)
+
+
+def clear_move(board, color, move):
+    if move["next_sqs"] is not None:
+        for next_sq in move["next_sqs"]:
+            clear_sq(board, color, next_sq)
+
+    if move["critical_sqs"] is not None:
+        for critical_sq in move["critical_sqs"]:
+            clear_sq(board, color ^ STONE, critical_sq)
+
+
+def new_search_node(move, threats=[], potential_win=False, children=[]):
+    node = {"move": move,
             "threats": threats,
-            "critical_sqs": critical_sqs,
             "potential_win": potential_win,
             "children": children}
 
     return node
 
 
+def get_threat_sequence(node, path):
+    sequence = []
+
+    sub_node = node
+    for seq in sub_node["move"]["threat_seqs"]:
+        sequence.extend(seq)
+
+    for idx in path:
+        sub_node = sub_node["children"][idx]
+        for seq in sub_node["move"]["threat_seqs"]:
+            sequence.extend(seq)
+
+    return sequence
+
+
 def next_sqs_info_from_node(node, path=[], cumulative_nsqs=set(),
                             cumulative_csqs=set()):
     next_sqs_info = []
 
-    next_sqs = set([node["next_sq"]]) if node["next_sq"] is not None else set()
-    critical_sqs = node["critical_sqs"]
+    next_sqs = (node["move"]["next_sqs"]
+                if node["move"]["next_sqs"] is not None
+                else set())
+    critical_sqs = (node["move"]["critical_sqs"]
+                    if node["move"]["critical_sqs"] is not None
+                    else set())
 
     cumulative_nsqs_new = set.union(cumulative_nsqs, next_sqs)
     cumulative_csqs_new = set.union(cumulative_csqs, critical_sqs)
 
-    if node["next_sq"]:
-        next_sqs_info.append({"next_sq": node["next_sq"],
+    if node["move"]["last_sqs"]:
+        next_sqs_info.append({"next_sq": node["move"]["last_sqs"][-1],
                               "path": path.copy(),
                               "cumulative_nsqs": cumulative_nsqs_new,
                               "cumulative_csqs": cumulative_csqs_new})
