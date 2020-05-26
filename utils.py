@@ -495,6 +495,36 @@ def defcon_from_degree(d):
     return MAX_DEFCON - d
 
 
+@njit
+def is_one_step_from_straight_threat(gen_pattern):
+    """True if a straight threat (straight four) can be
+    achieved in one move."""
+
+    n = len(gen_pattern)
+
+    # Length of a straight threat: WIN_LENGTH - 1 OWN's in a row,
+    # with an empty space on either side.
+    l = WIN_LENGTH + 1
+
+    for idx, v in enumerate(gen_pattern):
+        if v == EMPTY:
+            for i in range(n - l + 1):
+                for j in range(l):
+                    # Straight threat pattern value.
+                    value = EMPTY if j == 0 or j == l - 1 else OWN
+
+                    if i + j == idx:
+                        if value != OWN:
+                            break
+                    else:
+                        if value != gen_pattern[i + j]:
+                            break
+                else:
+                    return True
+
+    return False
+
+
 def new_threat_seq_item(next_sq, critical_sqs=None):
     item = {"next_sq": next_sq,
             "critical_sqs": critical_sqs}

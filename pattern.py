@@ -4,7 +4,7 @@ from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
 from geometry import point_set_on_line
 from utils import (search_board, search_point, search_point_own,
                    search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
-                   degree, defcon_from_degree)
+                   degree, defcon_from_degree, is_one_step_from_straight_threat)
 from functools import reduce
 
 
@@ -64,6 +64,9 @@ class Pattern:
         # Add defcon.
         self.defcon = defcon_from_degree(degree(self.pattern))
 
+        # Add "immediate" flag.
+        self.immediate = True if self.defcon < 2 else is_one_step_from_straight_threat(self.pattern)
+
         # Checks on data fields.
         assert self.pattern.ndim == 1
         assert self.pattern.size > 0
@@ -83,12 +86,14 @@ class Pattern:
         desc_list = [GEN_ELEMS_TO_NAMES[x] for x in self.pattern]
         return ("pattern: {0}\n"
                 "defcon: {1}\n"
-                "critical_sqs: {2}\n"
-                "own_sqs: {3}\n"
-                "empty_sqs: {4}\n"
-                "name: {5}\n"
-                "index: {6}\n").format(str(desc_list),
+                "immediate: {2}\n"
+                "critical_sqs: {3}\n"
+                "own_sqs: {4}\n"
+                "empty_sqs: {5}\n"
+                "name: {6}\n"
+                "index: {7}\n").format(str(desc_list),
                                        str(self.defcon),
+                                       str(self.immediate),
                                        str(self.critical_sqs),
                                        str(self.own_sqs),
                                        str(self.empty_sqs),
@@ -112,9 +117,14 @@ P_4_C = Pattern([NOT_OWN, OWN, OWN, EMPTY, OWN, OWN, NOT_OWN], [3], "P_4_C")
 P_3_ST = Pattern([EMPTY, EMPTY, OWN, OWN, OWN, EMPTY, EMPTY], [1, 5], "P_3_ST")
 P_3_A = Pattern([WALL_ENEMY, EMPTY, OWN, OWN, OWN, EMPTY, EMPTY], [1, 5, 6], "P_3_A")
 P_3_B = Pattern([EMPTY, OWN, OWN, EMPTY, OWN, EMPTY], [0, 3, 5], "P_3_B")
+P_3_C = Pattern([WALL_ENEMY, OWN, OWN, OWN, EMPTY, EMPTY], [4, 5], "P_3_C")
+P_3_D = Pattern([WALL_ENEMY, OWN, OWN, EMPTY, OWN, EMPTY], [3, 5], "P_3_D")
+P_3_E = Pattern([WALL_ENEMY, OWN, EMPTY, OWN, OWN, EMPTY], [2, 5], "P_3_E")
+P_3_F = Pattern([WALL_ENEMY, EMPTY, OWN, OWN, OWN, EMPTY, WALL_ENEMY], [1, 5], "P_3_F")
 
 # NOTE: Put all the patterns defined above in this list.
-PATTERNS = [P_WIN, P_4_ST, P_4_A, P_4_B, P_4_C, P_3_ST, P_3_A, P_3_B]
+PATTERNS = [P_WIN, P_4_ST, P_4_A, P_4_B, P_4_C, P_3_ST, P_3_A, P_3_B,
+            P_3_C, P_3_D, P_3_E, P_3_F]
 
 # Setting indices of PATTERNS.
 for i, p in enumerate(PATTERNS):
@@ -136,6 +146,7 @@ for p in PATTERNS:
 
 
 # *** PATTERN SEARCH FUNCTIONS ***
+
 
 def search_all_board(board, color, patterns=PATTERNS):
     matches = []
