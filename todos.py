@@ -1,29 +1,16 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
-# TODO: Define low priority threats that can convert into normal threats in one more move!
-#       Use this priority flag to decide what to do next w.r.t to critical sqs etc.?
+# TODO: Use this priority flag to decide what to do next w.r.t to critical sqs etc.?
 #       You can play a low priority threat connected to last move,
 #       as long as that move also generates a high priority threat!
-# TODO: Cleanup unnecessary functions first!!!
 # TODO: Refactor utils code into separate modules!!!
-# TODO: Formulate the idea clearly reg combinations first.
-# TODO: Move:
-#       1) Threat Sequences: [[item]], where item: {next_sq: , critical_sqs: }
-#       2) c_nsqs
-#       3) c_csqs
-#       4) last_sqs?
-#       5) type? (none, point, line or cluster?)
-#       6) Store line slope intercept as well?
-#       7) When getting threat sequence out of a (search node, path),
-#          do we flatten it? If yes, how do we flatten it?
-# TODO: How to make the TSS func generic enough for different starting points:
-#       1) "None" point move.
-#       2) "Normal" move.
-#       3) Generic combination.
+# TODO: Cleanup unnecessary functions first!!!
+# TODO: Finalize idea/format of combinations.
+# TODO: Need function to search using a given sets of points as own sqs!
+#       Something efficient and proper, not some hack.
 # TODO: Need fn to search along direction at point?
 # TODO: Function documentation!
-
 
 # *** TODO SOONISH ***
 # TODO: When getting next_sqs from node, also get path as well as cumulative gain and cost sqs.
