@@ -1,3 +1,5 @@
+"""Useful constants."""
+
 SIDE_LEN_ACT = 15
 SIDE_LEN = SIDE_LEN_ACT + 2  # Including the walls.
 
@@ -9,6 +11,13 @@ WHITE = 1 << 2
 WALL = 1 << 3
 
 ACT_ELEMS = [EMPTY, BLACK, WHITE, WALL]
+
+# Check that ACT_ELEMS are defined without mutual overlap.
+NUM_ACT_ELEMS = len(ACT_ELEMS)
+for i in range(NUM_ACT_ELEMS):
+    for j in range(i + 1, NUM_ACT_ELEMS):
+        assert ACT_ELEMS[i] & ACT_ELEMS[j] == 0
+
 COLORS = (BLACK, WHITE)
 
 BLACK_CIRCLE = chr(9679)

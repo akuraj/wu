@@ -2,6 +2,7 @@
 
 # *** TODO SOON ***
 # TODO: Cleanup unnecessary functions first!!!
+# TODO: Refactor utils code into separate modules!!!
 # TODO: Formulate the idea clearly reg combinations first.
 # TODO: Move:
 #       1) Threat Sequences: [[item]], where item: {next_sq: , critical_sqs: }
