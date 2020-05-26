@@ -146,6 +146,12 @@ for p in PATTERNS:
     assert p.name not in PATTERNS_BY_NAME
     PATTERNS_BY_NAME[p.name] = p
 
+# Immediate/High Priority PATTERNS.
+PATTERNS_I = [x for x in PATTERNS if x.immediate]
+
+# Low Priority PATTERNS.
+PATTERNS_NI = [x for x in PATTERNS if not x.immediate]
+
 
 # *** PATTERN SEARCH FUNCTIONS ***
 
