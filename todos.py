@@ -1,6 +1,7 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Define low priority threats that can convert into normal threats in one more move!
 # TODO: Cleanup unnecessary functions first!!!
 # TODO: Refactor utils code into separate modules!!!
 # TODO: Formulate the idea clearly reg combinations first.
