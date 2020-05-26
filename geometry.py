@@ -135,7 +135,9 @@ def point_set_on_line(start, end, idxs):
     See point_on_line for more info.
     """
 
-    return {point_on_line(start, end, i) for i in idxs}
+    # pylint: disable=R1718
+
+    return set([point_on_line(start, end, i) for i in idxs])
 
 
 @njit

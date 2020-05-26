@@ -4,7 +4,7 @@ from state import get_state
 from utils import (search_board, search_point, search_point_own,
                    search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
                    get_pattern, apply_pattern, assert_nb, set_sq, clear_sq,
-                   point_on_line, point_set_on_line, new_search_node,
+                   new_search_node,
                    next_sqs_info_from_node, lines_from_next_sqs_info_arr,
                    chebyshev_distance, point_set_is_useful,
                    new_move, MoveType, set_move, clear_move,

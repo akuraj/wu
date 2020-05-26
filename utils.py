@@ -354,7 +354,7 @@ row_num_to_idx = row_idx_to_num
 
 def col_idx_to_chr(x):
     assert 1 <= x <= SIDE_LEN_ACT
-    return(chr(ord("a") + x - 1))
+    return chr(ord("a") + x - 1)
 
 
 def col_chr_to_idx(x):
@@ -373,7 +373,7 @@ def point_to_algebraic(x):
 def algebraic_to_point(x):
     col_idx = col_chr_to_idx(x[0])
     row_idx = row_num_to_idx(int(x[1:]))
-    return(row_idx, col_idx)
+    return (row_idx, col_idx)
 
 
 @njit
@@ -491,8 +491,8 @@ def degree(gen_pattern):
 
 
 @njit
-def defcon_from_degree(degree):
-    return MAX_DEFCON - degree
+def defcon_from_degree(d):
+    return MAX_DEFCON - d
 
 
 def new_threat_seq_item(next_sq, critical_sqs=None):
