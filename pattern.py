@@ -109,7 +109,7 @@ class Pattern:
 # Win pattern.
 P_WIN = Pattern([OWN, OWN, OWN, OWN, OWN], [], "P_WIN")
 
-# Threat patterns.
+# Threat patterns (including low priority threats).
 P_4_ST = Pattern([EMPTY, OWN, OWN, OWN, OWN, EMPTY], [], "P_4_ST")
 P_4_A = Pattern([WALL_ENEMY, OWN, OWN, OWN, OWN, EMPTY], [5], "P_4_A")
 P_4_B = Pattern([NOT_OWN, OWN, OWN, OWN, EMPTY, OWN], [4], "P_4_B")
@@ -121,10 +121,12 @@ P_3_C = Pattern([WALL_ENEMY, OWN, OWN, OWN, EMPTY, EMPTY], [4, 5], "P_3_C")
 P_3_D = Pattern([WALL_ENEMY, OWN, OWN, EMPTY, OWN, EMPTY], [3, 5], "P_3_D")
 P_3_E = Pattern([WALL_ENEMY, OWN, EMPTY, OWN, OWN, EMPTY], [2, 5], "P_3_E")
 P_3_F = Pattern([WALL_ENEMY, EMPTY, OWN, OWN, OWN, EMPTY, WALL_ENEMY], [1, 5], "P_3_F")
+P_3_G = Pattern([OWN, OWN, EMPTY, EMPTY, OWN], [2, 3], "P_3_G")
+P_3_H = Pattern([OWN, EMPTY, OWN, EMPTY, OWN], [1, 3], "P_3_H")
 
 # NOTE: Put all the patterns defined above in this list.
 PATTERNS = [P_WIN, P_4_ST, P_4_A, P_4_B, P_4_C, P_3_ST, P_3_A, P_3_B,
-            P_3_C, P_3_D, P_3_E, P_3_F]
+            P_3_C, P_3_D, P_3_E, P_3_F, P_3_G, P_3_H]
 
 # Setting indices of PATTERNS.
 for i, p in enumerate(PATTERNS):
