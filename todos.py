@@ -2,6 +2,9 @@
 
 # *** TODO SOON ***
 # TODO: Define low priority threats that can convert into normal threats in one more move!
+#       Use this priority flag to decide what to do next w.r.t to critical sqs etc.?
+#       You can play a low priority threat connected to last move,
+#       as long as that move also generates a high priority threat!
 # TODO: Cleanup unnecessary functions first!!!
 # TODO: Refactor utils code into separate modules!!!
 # TODO: Formulate the idea clearly reg combinations first.
