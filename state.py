@@ -1,3 +1,5 @@
+"""Implement a class to represent State and related methods."""
+
 from enum import IntEnum, auto, unique
 import numpy as np
 from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL, COLORS,
@@ -9,6 +11,8 @@ from pattern import P_WIN
 
 @unique
 class Status(IntEnum):
+    """Enum to represent the current status."""
+
     ONGOING = auto()
     BLACK_WON = auto()
     WHITE_WON = auto()
@@ -115,4 +119,6 @@ class State:
 
 
 def get_state(blacks, whites, turn, strict_stone_count):
+    """Return State object."""
+
     return State(get_board(blacks, whites), turn, strict_stone_count)

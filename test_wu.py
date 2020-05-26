@@ -1,11 +1,11 @@
 from numba import njit
 from consts import SIDE_LEN, COLORS, NUM_DIRECTIONS, EMPTY
 from pattern import PATTERNS
+from geometry import point_is_on_line, point_on_line
 from utils import (new_board, get_pattern, apply_pattern, increments,
-                   point_is_on_line, matches_are_equal,
-                   search_board, search_point, search_point_own,
-                   search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
-                   assert_nb, next_sq_matches_are_subset, point_on_line)
+                   matches_are_equal, search_board, search_point,
+                   search_point_own, search_board_next_sq, search_point_next_sq,
+                   search_point_own_next_sq, assert_nb, next_sq_matches_are_subset)
 
 
 @njit
@@ -55,8 +55,6 @@ def subtest_search_point_own(board, gen_pattern, color, own_sqs,
 @njit
 def subtest_search_board_next_sq(board, gen_pattern, color, own_sqs,
                                  start, end):
-    (i, j) = start
-
     for own_sq in own_sqs:
         test_sq = point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]
@@ -77,8 +75,6 @@ def subtest_search_board_next_sq(board, gen_pattern, color, own_sqs,
 @njit
 def subtest_search_point_next_sq(board, gen_pattern, color, own_sqs,
                                  start, end):
-    (i, j) = start
-
     for own_sq in own_sqs:
         test_sq = point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]
@@ -109,8 +105,6 @@ def subtest_search_point_next_sq(board, gen_pattern, color, own_sqs,
 @njit
 def subtest_search_point_own_next_sq(board, gen_pattern, color, own_sqs,
                                      start, end):
-    (i, j) = start
-
     for own_sq in own_sqs:
         test_sq = point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]

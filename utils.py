@@ -346,7 +346,7 @@ def search_point_own_next_sq(board, gen_pattern, color, point, own_sqs):
 
 def row_idx_to_num(x):
     assert 1 <= x <= SIDE_LEN_ACT
-    return(SIDE_LEN_ACT + 1 - x)
+    return SIDE_LEN_ACT + 1 - x
 
 
 row_num_to_idx = row_idx_to_num
