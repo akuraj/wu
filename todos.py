@@ -1,6 +1,7 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Add function to inspect or pretty print winning variations in node.
 # TODO: Use this priority flag to decide what to do next w.r.t to critical sqs etc.?
 #       You can play a low priority threat connected to last move,
 #       as long as that move also generates a high priority threat!
