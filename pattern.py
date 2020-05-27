@@ -1,3 +1,4 @@
+from enum import IntEnum, auto, unique
 import numpy as np
 from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
                     NOT_OWN, GEN_ELEMS_TO_NAMES)
@@ -157,10 +158,32 @@ PATTERNS_I = [x for x in PATTERNS if x.immediate]
 PATTERNS_NI = [x for x in PATTERNS if not x.immediate]
 
 
+# *** THREAT PRIORITY ENUM ***
+
+@unique
+class ThreatPri(IntEnum):
+    """Enum to represent the priority of a Threat."""
+
+    ALL = auto()
+    IMMEDIATE = auto()
+    NON_IMMEDIATE = auto()
+
 # *** PATTERN SEARCH FUNCTIONS ***
 
 
-def search_all_board(board, color, patterns=PATTERNS):
+def get_patterns_with_pri(pri):
+    if pri == ThreatPri.ALL:
+        return PATTERNS
+    elif pri == ThreatPri.IMMEDIATE:
+        return PATTERNS_I
+    elif pri == ThreatPri.NON_IMMEDIATE:
+        return PATTERNS_NI
+    else:
+        raise Exception(f"Invalid priority: {pri}")
+
+
+def search_all_board(board, color, pri):
+    patterns = get_patterns_with_pri(pri)
     matches = []
     for p in patterns:
         matches_p = search_board(board, p.pattern, color)
@@ -175,7 +198,8 @@ def search_all_board(board, color, patterns=PATTERNS):
     return matches
 
 
-def search_all_point(board, color, point, patterns=PATTERNS):
+def search_all_point(board, color, point, pri):
+    patterns = get_patterns_with_pri(pri)
     matches = []
     for p in patterns:
         matches_p = search_point(board, p.pattern, color, point)
@@ -190,7 +214,8 @@ def search_all_point(board, color, point, patterns=PATTERNS):
     return matches
 
 
-def search_all_point_own(board, color, point, patterns=PATTERNS):
+def search_all_point_own(board, color, point, pri):
+    patterns = get_patterns_with_pri(pri)
     matches = []
     for p in patterns:
         matches_p = search_point_own(board, p.pattern, color, point, p.own_sqs)
@@ -205,9 +230,8 @@ def search_all_point_own(board, color, point, patterns=PATTERNS):
     return matches
 
 
-def search_all_points_own(board, color, points, patterns=PATTERNS,
-                          intersection=False):
-    matches_for_points = [search_all_point_own(board, color, x) for x in points]
+def search_all_points_own(board, color, points, pri, intersection=False):
+    matches_for_points = [search_all_point_own(board, color, x, pri) for x in points]
 
     all_matches_dict = dict()
     for matches in matches_for_points:
@@ -225,49 +249,16 @@ def search_all_points_own(board, color, points, patterns=PATTERNS,
         return list(all_matches_dict.values())
 
 
-def search_all_board_next_sq(board, color, patterns=PATTERNS):
-    matches = []
-    for p in patterns:
-        matches_p = search_board_next_sq(board, p.pattern, color)
-        for elem in matches_p:
-            matches.append({"next_sq": elem[0],
-                            "match": elem[1],
-                            "pidx": p.index,
-                            "defcon": p.defcon,
-                            "critical_sqs": point_set_on_line(elem[1][0],
-                                                              elem[1][1],
-                                                              p.critical_sqs)})
-
-    return matches
+def search_all_board_get_next_sqs(board, color, pri):
+    return {x[0] for p in get_patterns_with_pri(pri)
+            for x in search_board_next_sq(board, p.pattern, color)}
 
 
-def search_all_point_next_sq(board, color, point, patterns=PATTERNS):
-    matches = []
-    for p in patterns:
-        matches_p = search_point_next_sq(board, p.pattern, color, point)
-        for elem in matches_p:
-            matches.append({"next_sq": elem[0],
-                            "match": elem[1],
-                            "pidx": p.index,
-                            "defcon": p.defcon,
-                            "critical_sqs": point_set_on_line(elem[1][0],
-                                                              elem[1][1],
-                                                              p.critical_sqs)})
-
-    return matches
+def search_all_point_get_next_sqs(board, color, point, pri):
+    return {x[0] for p in get_patterns_with_pri(pri)
+            for x in search_point_next_sq(board, p.pattern, color, point)}
 
 
-def search_all_point_own_next_sq(board, color, point, patterns=PATTERNS):
-    matches = []
-    for p in patterns:
-        matches_p = search_point_own_next_sq(board, p.pattern, color, point, p.own_sqs)
-        for elem in matches_p:
-            matches.append({"next_sq": elem[0],
-                            "match": elem[1],
-                            "pidx": p.index,
-                            "defcon": p.defcon,
-                            "critical_sqs": point_set_on_line(elem[1][0],
-                                                              elem[1][1],
-                                                              p.critical_sqs)})
-
-    return matches
+def search_all_point_own_get_next_sqs(board, color, point, pri):
+    return {x[0] for p in get_patterns_with_pri(pri)
+            for x in search_point_own_next_sq(board, p.pattern, color, point, p.own_sqs)}

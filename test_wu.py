@@ -1,3 +1,5 @@
+"""Regression tests for this projet."""
+
 from numba import njit
 from consts import SIDE_LEN, COLORS, NUM_DIRECTIONS, EMPTY, WIN_LENGTH
 from pattern import PATTERNS

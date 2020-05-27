@@ -1,3 +1,4 @@
+from enum import IntEnum, auto, unique
 import numpy as np
 from numba import njit
 from consts import (SIDE_LEN, SIDE_LEN_ACT, NUM_DIRECTIONS, WALL, BLACK, WHITE,
@@ -5,7 +6,6 @@ from consts import (SIDE_LEN, SIDE_LEN_ACT, NUM_DIRECTIONS, WALL, BLACK, WHITE,
 from geometry import (increments, index_bounds, index_bounds_incl,
                       is_normal_line, chebyshev_distance, slope_intercept,
                       point_idx_on_line)
-from enum import IntEnum, auto, unique
 
 
 @njit
@@ -469,6 +469,18 @@ def clear_sq(board, color, point):
     board[point] = EMPTY
 
 
+def set_sqs(board, color, sqs):
+    if sqs is not None:
+        for sq in sqs:
+            set_sq(board, color, sq)
+
+
+def clear_sqs(board, color, sqs):
+    if sqs is not None:
+        for sq in sqs:
+            clear_sq(board, color, sq)
+
+
 @njit
 def degree(gen_pattern):
     """Maximum number of 'OWN's in a sub-sequence of length = WIN_LENGTH,
@@ -581,26 +593,6 @@ def new_move(threat_seqs=[]):
             "move_type": move_type}
 
     return move
-
-
-def set_move(board, color, move):
-    if move["next_sqs"] is not None:
-        for next_sq in move["next_sqs"]:
-            set_sq(board, color, next_sq)
-
-    if move["critical_sqs"] is not None:
-        for critical_sq in move["critical_sqs"]:
-            set_sq(board, color ^ STONE, critical_sq)
-
-
-def clear_move(board, color, move):
-    if move["next_sqs"] is not None:
-        for next_sq in move["next_sqs"]:
-            clear_sq(board, color, next_sq)
-
-    if move["critical_sqs"] is not None:
-        for critical_sq in move["critical_sqs"]:
-            clear_sq(board, color ^ STONE, critical_sq)
 
 
 def new_search_node(move, threats=[], potential_win=False, children=[]):
