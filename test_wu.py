@@ -1,5 +1,5 @@
 from numba import njit
-from consts import SIDE_LEN, COLORS, NUM_DIRECTIONS, EMPTY
+from consts import SIDE_LEN, COLORS, NUM_DIRECTIONS, EMPTY, WIN_LENGTH
 from pattern import PATTERNS
 from geometry import point_is_on_line, point_on_line
 from utils import (new_board, get_pattern, apply_pattern, increments,
@@ -54,7 +54,7 @@ def subtest_search_point_own(board, gen_pattern, color, own_sqs,
 
 @njit
 def subtest_search_board_next_sq(board, gen_pattern, color, own_sqs,
-                                 start, end):
+                                 defcon, start, end):
     for own_sq in own_sqs:
         test_sq = point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]
@@ -68,13 +68,15 @@ def subtest_search_board_next_sq(board, gen_pattern, color, own_sqs,
         assert_nb(next_sq_matches_are_subset(expected_ns_matches, ns_matches))
 
         # All matches must lie on the same line as the pattern.
-        for nsm in ns_matches:
-            assert_nb(point_is_on_line(nsm[0], start, end, False))
+        # Doesn't apply to patterns having 2 or less OWN squares.
+        if WIN_LENGTH - defcon > 2:
+            for nsm in ns_matches:
+                assert_nb(point_is_on_line(nsm[0], start, end, False))
 
 
 @njit
 def subtest_search_point_next_sq(board, gen_pattern, color, own_sqs,
-                                 start, end):
+                                 defcon, start, end):
     for own_sq in own_sqs:
         test_sq = point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]
@@ -95,16 +97,20 @@ def subtest_search_point_next_sq(board, gen_pattern, color, own_sqs,
                 elif point_is_on_line(point, start, end, False):
                     pass
                 else:
-                    assert_nb(len(ns_matches) == 0)
+                    # Doesn't apply to patterns having 2 or less OWN squares.
+                    if WIN_LENGTH - defcon > 2:
+                        assert_nb(len(ns_matches) == 0)
 
                 # All matches must lie on the same line as the pattern.
-                for nsm in ns_matches:
-                    assert_nb(point_is_on_line(nsm[0], start, end, False))
+                # Doesn't apply to patterns having 2 or less OWN squares.
+                if WIN_LENGTH - defcon > 2:
+                    for nsm in ns_matches:
+                        assert_nb(point_is_on_line(nsm[0], start, end, False))
 
 
 @njit
 def subtest_search_point_own_next_sq(board, gen_pattern, color, own_sqs,
-                                     start, end):
+                                     defcon, start, end):
     for own_sq in own_sqs:
         test_sq = point_on_line(start, end, own_sq)
         expected_ns_matches = [(test_sq, (start, end))]
@@ -127,15 +133,19 @@ def subtest_search_point_own_next_sq(board, gen_pattern, color, own_sqs,
                 elif point_is_own_sq and point_is_on_line(point, start, end, False):
                     pass
                 else:
-                    assert_nb(len(ns_matches) == 0)
+                    # Doesn't apply to patterns having 2 or less OWN squares.
+                    if WIN_LENGTH - defcon > 2:
+                        assert_nb(len(ns_matches) == 0)
 
                 # All matches must lie on the same line as the pattern.
-                for nsm in ns_matches:
-                    assert_nb(point_is_on_line(nsm[0], start, end, False))
+                # Doesn't apply to patterns having 2 or less OWN squares.
+                if WIN_LENGTH - defcon > 2:
+                    for nsm in ns_matches:
+                        assert_nb(point_is_on_line(nsm[0], start, end, False))
 
 
 @njit
-def subtest_search_fns(gen_pattern, color, own_sqs):
+def subtest_search_fns(gen_pattern, color, own_sqs, defcon):
     pattern = get_pattern(gen_pattern, color)
     length = pattern.size
 
@@ -154,14 +164,14 @@ def subtest_search_fns(gen_pattern, color, own_sqs):
                                              start, end)
 
                     subtest_search_board_next_sq(board, gen_pattern, color, own_sqs,
-                                                 start, end)
+                                                 defcon, start, end)
                     subtest_search_point_next_sq(board, gen_pattern, color, own_sqs,
-                                                 start, end)
+                                                 defcon, start, end)
                     subtest_search_point_own_next_sq(board, gen_pattern, color, own_sqs,
-                                                     start, end)
+                                                     defcon, start, end)
 
 
 def test_search_fns():
     for color in COLORS:
-        for pattern in PATTERNS:
-            subtest_search_fns(pattern.pattern, color, pattern.own_sqs)
+        for p in PATTERNS:
+            subtest_search_fns(p.pattern, color, p.own_sqs, p.defcon)
