@@ -1,7 +1,6 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
-# TODO: Cleanup pattern.py
 # TODO: Refactor utils code into separate modules!!!
 # TODO: Fix dangerous defaults!
 # TODO: Print variations and search nodes in algebraic notation.

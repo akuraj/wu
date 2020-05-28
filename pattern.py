@@ -1,4 +1,7 @@
+"""Define class to represent threat patterns, and related functions (search etc.)."""
+
 from enum import IntEnum, auto, unique
+from functools import reduce
 import numpy as np
 from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
                     NOT_OWN, GEN_ELEMS_TO_NAMES)
@@ -7,7 +10,6 @@ from pattern_search import (search_board, search_point, search_point_own,
                             search_board_next_sq, search_point_next_sq,
                             search_point_own_next_sq, one_step_from_straight_threat,
                             degree, defcon_from_degree)
-from functools import reduce
 
 
 class Pattern:
@@ -172,7 +174,19 @@ class ThreatPri(IntEnum):
 # *** PATTERN SEARCH FUNCTIONS ***
 
 
+def threat_item(match, pattern):
+    """Threat: the where and the what."""
+
+    return {"match": match,
+            "pidx": pattern.index,
+            "critical_sqs": point_set_on_line(match[0],
+                                              match[1],
+                                              pattern.critical_sqs)}
+
+
 def get_patterns_with_pri(pri):
+    """Get patterns with the given priority level."""
+
     if pri == ThreatPri.ALL:
         return PATTERNS
     elif pri == ThreatPri.IMMEDIATE:
@@ -184,54 +198,32 @@ def get_patterns_with_pri(pri):
 
 
 def search_all_board(board, color, pri):
-    patterns = get_patterns_with_pri(pri)
-    matches = []
-    for p in patterns:
-        matches_p = search_board(board, p.pattern, color)
-        for elem in matches_p:
-            matches.append({"match": elem,
-                            "pidx": p.index,
-                            "defcon": p.defcon,
-                            "critical_sqs": point_set_on_line(elem[0],
-                                                              elem[1],
-                                                              p.critical_sqs)})
+    """Self explanatory."""
 
-    return matches
+    return [threat_item(match, p)
+            for p in get_patterns_with_pri(pri)
+            for match in search_board(board, p.pattern, color)]
 
 
 def search_all_point(board, color, point, pri):
-    patterns = get_patterns_with_pri(pri)
-    matches = []
-    for p in patterns:
-        matches_p = search_point(board, p.pattern, color, point)
-        for elem in matches_p:
-            matches.append({"match": elem,
-                            "pidx": p.index,
-                            "defcon": p.defcon,
-                            "critical_sqs": point_set_on_line(elem[0],
-                                                              elem[1],
-                                                              p.critical_sqs)})
+    """Self explanatory."""
 
-    return matches
+    return [threat_item(match, p)
+            for p in get_patterns_with_pri(pri)
+            for match in search_point(board, p.pattern, color, point)]
 
 
 def search_all_point_own(board, color, point, pri):
-    patterns = get_patterns_with_pri(pri)
-    matches = []
-    for p in patterns:
-        matches_p = search_point_own(board, p.pattern, color, point, p.own_sqs)
-        for elem in matches_p:
-            matches.append({"match": elem,
-                            "pidx": p.index,
-                            "defcon": p.defcon,
-                            "critical_sqs": point_set_on_line(elem[0],
-                                                              elem[1],
-                                                              p.critical_sqs)})
+    """Self explanatory."""
 
-    return matches
+    return [threat_item(match, p)
+            for p in get_patterns_with_pri(pri)
+            for match in search_point_own(board, p.pattern, color, point, p.own_sqs)]
 
 
 def search_all_points_own(board, color, points, pri, intersection=False):
+    """Self explanatory."""
+
     matches_for_points = [search_all_point_own(board, color, x, pri) for x in points]
 
     all_matches_dict = dict()
@@ -251,15 +243,21 @@ def search_all_points_own(board, color, points, pri, intersection=False):
 
 
 def search_all_board_get_next_sqs(board, color, pri):
+    """Self explanatory."""
+
     return {x[0] for p in get_patterns_with_pri(pri)
             for x in search_board_next_sq(board, p.pattern, color)}
 
 
 def search_all_point_get_next_sqs(board, color, point, pri):
+    """Self explanatory."""
+
     return {x[0] for p in get_patterns_with_pri(pri)
             for x in search_point_next_sq(board, p.pattern, color, point)}
 
 
 def search_all_point_own_get_next_sqs(board, color, point, pri):
+    """Self explanatory."""
+
     return {x[0] for p in get_patterns_with_pri(pri)
             for x in search_point_own_next_sq(board, p.pattern, color, point, p.own_sqs)}
