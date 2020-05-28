@@ -65,7 +65,10 @@ disable=R1705,
         R1720,
         R0912,
         R0913,
-        R0914
+        R0914,
+        R1702,
+        R0916,
+        R0902
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

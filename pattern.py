@@ -3,9 +3,10 @@ import numpy as np
 from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
                     NOT_OWN, GEN_ELEMS_TO_NAMES)
 from geometry import point_set_on_line
-from utils import (search_board, search_point, search_point_own,
-                   search_board_next_sq, search_point_next_sq, search_point_own_next_sq,
-                   degree, defcon_from_degree, is_one_step_from_straight_threat)
+from pattern_search import (search_board, search_point, search_point_own,
+                            search_board_next_sq, search_point_next_sq,
+                            search_point_own_next_sq)
+from utils import degree, defcon_from_degree, is_one_step_from_straight_threat
 from functools import reduce
 
 

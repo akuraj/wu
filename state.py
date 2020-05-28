@@ -1,11 +1,11 @@
-"""Implement a class to represent State and related methods."""
+"""Implements a class to represent State and related methods."""
 
 from enum import IntEnum, auto, unique
 import numpy as np
 from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL, COLORS,
                     ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR)
-from utils import (new_board, row_idx_to_num, col_idx_to_chr, get_board,
-                   search_board)
+from pattern_search import search_board
+from utils import new_board, row_idx_to_num, col_idx_to_chr, get_board
 from pattern import P_WIN
 
 

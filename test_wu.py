@@ -1,13 +1,14 @@
-"""Regression tests for this projet."""
+"""Regression tests for this project."""
 
 from numba import njit
 from consts import SIDE_LEN, COLORS, NUM_DIRECTIONS, EMPTY, WIN_LENGTH
 from pattern import PATTERNS
-from geometry import point_is_on_line, point_on_line
-from utils import (new_board, get_pattern, apply_pattern, increments,
-                   matches_are_equal, search_board, search_point,
-                   search_point_own, search_board_next_sq, search_point_next_sq,
-                   search_point_own_next_sq, assert_nb, next_sq_matches_are_subset)
+from geometry import point_is_on_line, point_on_line, increments
+from pattern_search import (get_pattern, apply_pattern, search_board, search_point,
+                            search_point_own, search_board_next_sq,
+                            search_point_next_sq, search_point_own_next_sq)
+from utils import (new_board, matches_are_equal, assert_nb,
+                   next_sq_matches_are_subset)
 
 
 @njit
