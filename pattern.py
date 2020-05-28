@@ -242,7 +242,7 @@ def search_all_points_own(board, color, points, pri, intersection=False):
                 all_matches_dict[key] = match
 
     if intersection:
-        keys_for_points = [set([(x["match"], x["pidx"]) for x in matches])
+        keys_for_points = [{(x["match"], x["pidx"]) for x in matches}
                            for matches in matches_for_points]
         common_keys = reduce(set.intersection, keys_for_points)
         return [all_matches_dict[x] for x in common_keys]
