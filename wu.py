@@ -1,5 +1,9 @@
+"""Driver module."""
+
 # import time
 # from numba import njit
+from functools import reduce
+from itertools import chain, combinations
 from state import get_state
 from utils import (new_search_node, next_sqs_info_from_node,
                    lines_from_next_sqs_info_arr, point_set_is_useful,
@@ -10,8 +14,6 @@ from pattern import (ThreatPri, search_all_board, search_all_point_own,
                      search_all_board_get_next_sqs,
                      search_all_point_own_get_next_sqs,
                      search_all_points_own)
-from functools import reduce
-from itertools import chain, combinations
 
 
 # state = get_state(["a1", "a2", "a3", "a13", "a14", "a15", "b1", "b15", "c1", "c15",
