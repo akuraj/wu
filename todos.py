@@ -22,6 +22,7 @@
 #       What about no threats in case of combination?
 # TODO: Need fn to search along direction at point?
 # TODO: Function documentation! Stop using "Self explanatory." as documentation.
+# TODO: Can we have a better way to input position?
 
 # *** TODO SOONISH ***
 # TODO: When getting next_sqs from node, also get path as well as cumulative gain and cost sqs.
