@@ -12,62 +12,6 @@ def assert_nb(truth_value, assert_err_msg=""):
         raise Exception
 
 
-@njit
-def degree(gen_pattern):
-    """Maximum number of 'OWN's in a sub-sequence of length = WIN_LENGTH,
-    full of OWN/EMPTY sqs."""
-
-    n = len(gen_pattern)
-    max_owns = 0
-    for i in range(n - WIN_LENGTH + 1):
-        owns = 0
-        for j in range(WIN_LENGTH):
-            if gen_pattern[i + j] not in (OWN, EMPTY):
-                break
-
-            if gen_pattern[i + j] == OWN:
-                owns += 1
-        else:
-            max_owns = max(max_owns, owns)
-
-    return max_owns
-
-
-@njit
-def defcon_from_degree(d):
-    return MAX_DEFCON - d
-
-
-@njit
-def is_one_step_from_straight_threat(gen_pattern):
-    """True if a straight threat (straight four) can be
-    achieved in one move."""
-
-    n = len(gen_pattern)
-
-    # Length of a straight threat: WIN_LENGTH - 1 OWN's in a row,
-    # with an empty space on either side.
-    l = WIN_LENGTH + 1
-
-    for idx, v in enumerate(gen_pattern):
-        if v == EMPTY:
-            for i in range(n - l + 1):
-                for j in range(l):
-                    # Straight threat pattern value.
-                    value = EMPTY if j in (0, l - 1) else OWN
-
-                    if i + j == idx:
-                        if value != OWN:
-                            break
-                    else:
-                        if value != gen_pattern[i + j]:
-                            break
-                else:
-                    return True
-
-    return False
-
-
 def new_threat_seq_item(next_sq, critical_sqs=None):
     item = {"next_sq": next_sq,
             "critical_sqs": critical_sqs}
@@ -77,6 +21,7 @@ def new_threat_seq_item(next_sq, critical_sqs=None):
 
 @unique
 class MoveType(IntEnum):
+    # FIXME: don't call it empty!
     EMPTY = auto()
     POINT = auto()
     COMBINATION = auto()

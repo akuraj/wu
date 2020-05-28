@@ -2,7 +2,8 @@
 
 import numpy as np
 from numba import njit
-from consts import BLACK, WHITE, EMPTY, STONE, NUM_DIRECTIONS
+from consts import (BLACK, WHITE, EMPTY, STONE, NUM_DIRECTIONS, WIN_LENGTH,
+                    OWN, MAX_DEFCON)
 from geometry import increments, index_bounds, index_bounds_incl
 
 
@@ -393,3 +394,61 @@ def next_sq_matches_are_equal(x, y):
 
     # pylint: disable=W1114
     return next_sq_matches_are_subset(x, y) and next_sq_matches_are_subset(y, x)
+
+
+@njit
+def degree(gen_pattern):
+    """Maximum number of 'OWN's in a sub-sequence of length = WIN_LENGTH,
+    full of OWN/EMPTY sqs."""
+
+    n = len(gen_pattern)
+    max_owns = 0
+    for i in range(n - WIN_LENGTH + 1):
+        owns = 0
+        for j in range(WIN_LENGTH):
+            if gen_pattern[i + j] not in (OWN, EMPTY):
+                break
+
+            if gen_pattern[i + j] == OWN:
+                owns += 1
+        else:
+            max_owns = max(max_owns, owns)
+
+    return max_owns
+
+
+@njit
+def defcon_from_degree(d):
+    """Self explanatory."""
+
+    return MAX_DEFCON - d
+
+
+@njit
+def one_step_from_straight_threat(gen_pattern):
+    """True if a straight threat (unstoppable: a straight four for example)
+    can be achieved in one more move."""
+
+    n = len(gen_pattern)
+
+    # Length of a straight threat: WIN_LENGTH - 1 OWN's in a row,
+    # with an empty space on either side.
+    l = WIN_LENGTH + 1
+
+    for idx, v in enumerate(gen_pattern):
+        if v == EMPTY:
+            for i in range(n - l + 1):
+                for j in range(l):
+                    # Straight threat pattern value.
+                    value = EMPTY if j in (0, l - 1) else OWN
+
+                    if i + j == idx:
+                        if value != OWN:
+                            break
+                    else:
+                        if value != gen_pattern[i + j]:
+                            break
+                else:
+                    return True
+
+    return False
