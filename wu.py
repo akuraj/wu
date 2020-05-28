@@ -43,7 +43,7 @@ def subsets(s, min_size=0):
     return chain.from_iterable(combinations(s, r) for r in range(min_size, len(s) + 1))
 
 
-def threat_space_search(board, color, move=new_move(), combinations=False):
+def threat_space_search(board, color, move=new_move(), search_combinations=False):
     # If True, we've been given a specific move to try out,
     # as opposed to being given a starting point to explore from.
     try_move = move["next_sqs"] is not None and move["critical_sqs"] is None
@@ -57,7 +57,7 @@ def threat_space_search(board, color, move=new_move(), combinations=False):
     potential_win = False
     children = []
 
-    if move["move_type"] == MoveType.EMPTY:
+    if move["move_type"] == MoveType.NONE:
         threats = search_all_board(board, color, ThreatPri.IMMEDIATE)
     elif move["move_type"] == MoveType.POINT:
         threats = search_all_point_own(board, color, move["last_sqs"][0], ThreatPri.IMMEDIATE)
@@ -94,7 +94,7 @@ def threat_space_search(board, color, move=new_move(), combinations=False):
         # TODO: Remove duplication of effort.
         # TODO: Remove unnecessary work.
         next_sqs = set()
-        if move["move_type"] == MoveType.EMPTY:
+        if move["move_type"] == MoveType.NONE:
             next_sqs = search_all_board_get_next_sqs(board, color, ThreatPri.ALL)
         elif move["move_type"] == MoveType.POINT:
             next_sqs = search_all_point_own_get_next_sqs(board,
@@ -118,7 +118,7 @@ def threat_space_search(board, color, move=new_move(), combinations=False):
                     for x in next_sqs]
         potential_win = any([x["potential_win"] for x in children])
 
-        if combinations and not potential_win and len(children) > 1:
+        if search_combinations and not potential_win and len(children) > 1:
             next_sqs_info_children = [next_sqs_info_from_node(x) for x in children]
             lines_dict = lines_from_next_sqs_info_arr(next_sqs_info_children)
 
@@ -159,7 +159,7 @@ def threat_space_search(board, color, move=new_move(), combinations=False):
 # end = time.monotonic()
 # print("Time taken: ", end - start, " seconds")
 
-node = threat_space_search(state.board, state.turn, combinations=False)
+node = threat_space_search(state.board, state.turn, search_combinations=False)
 for child in node["children"]:
     if child["potential_win"]:
         print(child["move"]["last_sqs"])

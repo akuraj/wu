@@ -1,6 +1,6 @@
 from enum import IntEnum, auto, unique
 from numba import njit
-from consts import EMPTY, WIN_LENGTH, OWN, MAX_DEFCON
+from consts import WIN_LENGTH
 from geometry import (is_normal_line, chebyshev_distance, slope_intercept,
                       point_idx_on_line)
 
@@ -21,8 +21,7 @@ def new_threat_seq_item(next_sq, critical_sqs=None):
 
 @unique
 class MoveType(IntEnum):
-    # FIXME: don't call it empty!
-    EMPTY = auto()
+    NONE = auto()
     POINT = auto()
     COMBINATION = auto()
 
@@ -31,7 +30,7 @@ def new_move(threat_seqs=[]):
     next_sqs = None
     critical_sqs = None
     last_sqs = []
-    move_type = MoveType.EMPTY
+    move_type = MoveType.NONE
 
     if not threat_seqs:
         pass
@@ -167,7 +166,7 @@ def lines_from_next_sqs_info_arr(next_sqs_info_arr):
             # NOTE: Same gain_sq case is being excluded.
             #       It does not need to be handled.
             if (is_normal_line(nsq_i, nsq_j)
-                and chebyshev_distance(nsq_i, nsq_j) < MAX_DEFCON
+                and chebyshev_distance(nsq_i, nsq_j) < WIN_LENGTH
                 and idx_i != idx_j
                 and not set.intersection(c_nsqs_i, c_csqs_j)
                 and not set.intersection(c_csqs_i, c_nsqs_j)
@@ -191,7 +190,7 @@ def point_set_is_useful(point_set, line):
     # Check that the points in the combination are close enough.
     point_idxs = [point_idx_on_line(x[0]["next_sq"], line) for x in point_set]
     point_set_range = max(point_idxs) - min(point_idxs)
-    if MAX_DEFCON <= point_set_range:
+    if WIN_LENGTH <= point_set_range:
         return False
 
     # Check that the point trees are not in conflict.

@@ -78,7 +78,13 @@ assert len(set(GEN_ELEMS_TO_NAMES.values())) == len(GEN_ELEMS)
 
 NUM_DIRECTIONS = 8
 
-# If defcon is x, then game will be over in x moves if no action is taken. 0 is game over.
 WIN_LENGTH = 5  # Length of a winning sequence.
-MAX_DEFCON = WIN_LENGTH  # Effectively, the maximum distance away from winning.
+
+# Some things implicitly assume a win length of 5, for example, threat pattern definitions.
+# Don't change WIN_LENGTH without making all other relevant changes everywhere else in the project.
+assert WIN_LENGTH == 5
+
+# If defcon is x, then game will be over in x moves if no action is taken. 0 is game over.
+# Effectively, the maximum distance away from winning.
+MAX_DEFCON = WIN_LENGTH
 DEFCON_RANGE = range(MAX_DEFCON + 1)
