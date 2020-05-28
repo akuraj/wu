@@ -76,13 +76,10 @@ def algebraic_to_point(x):
 @njit
 def matches_are_subset(x, y):
     for a in x:
-        found = False
         for b in y:
             if a == b or a == b[::-1]:
-                found = True
                 break
-
-        if not found:
+        else:
             return False
 
     return True
@@ -97,13 +94,10 @@ def matches_are_equal(x, y):
 @njit
 def next_sq_matches_are_subset(x, y):
     for a in x:
-        found = False
         for b in y:
             if a[0] == b[0] and (a[1] == b[1] or a[1] == b[1][::-1]):
-                found = True
                 break
-
-        if not found:
+        else:
             return False
 
     return True
