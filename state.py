@@ -2,10 +2,9 @@
 
 from enum import IntEnum, auto, unique
 import numpy as np
-from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL, COLORS,
-                    ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR)
+from consts import SIDE_LEN, EMPTY, BLACK, WHITE, WALL, COLORS, ACT_ELEMS_TO_NAMES
 from pattern_search import search_board
-from board import new_board, row_idx_to_num, col_idx_to_chr, get_board
+from board import new_board, get_board, board_to_str
 from pattern import P_WIN
 
 
@@ -75,42 +74,9 @@ class State:
         self.status = status
 
     def __repr__(self):
-        board_repr = ""
-
-        for i in range(self.board.shape[0]):
-            num_str = "  "
-            if 1 <= i <= SIDE_LEN_ACT:
-                num_str = str(row_idx_to_num(i))
-                if len(num_str) == 2:
-                    pass
-                elif len(num_str) == 1:
-                    num_str = " " + num_str
-                else:
-                    raise Exception(f"Invalid index: {i}!")
-
-            board_repr += num_str + " "
-
-            for j in range(self.board.shape[1]):
-                if self.board[i][j] in ACT_ELEMS_TO_CHRS:
-                    board_repr += ACT_ELEMS_TO_CHRS[self.board[i][j]]
-                else:
-                    board_repr += SPL_ELEM_CHR
-
-                board_repr += " "
-
-            board_repr += "\n"
-
-        board_repr += "     "
-
-        for i in range(1, SIDE_LEN_ACT + 1):
-            board_repr += col_idx_to_chr(i)
-            board_repr += " "
-
-        board_repr += "\n\n"
-
         return ("\nboard:\n{0}"
                 "turn: {1}\n"
-                "status: {2}\n").format(board_repr,
+                "status: {2}\n").format(board_to_str(self.board),
                                         ACT_ELEMS_TO_NAMES[self.turn],
                                         str(self.status))
 

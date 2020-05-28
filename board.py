@@ -2,7 +2,8 @@
 
 import numpy as np
 from numba import njit
-from consts import SIDE_LEN_ACT, SIDE_LEN, EMPTY, WALL, BLACK, WHITE, COLORS
+from consts import (SIDE_LEN_ACT, SIDE_LEN, EMPTY, WALL, BLACK, WHITE, COLORS,
+                    ACT_ELEMS_TO_CHRS, SPL_ELEM_CHR)
 
 
 def row_idx_to_num(x):
@@ -76,6 +77,45 @@ def get_board(blacks, whites):
         board[algebraic_to_point(elem)] = WHITE
 
     return board
+
+
+def board_to_str(board):
+    """Representation of the board as a string."""
+
+    board_repr = ""
+
+    for i in range(board.shape[0]):
+        num_str = "  "
+        if 1 <= i <= SIDE_LEN_ACT:
+            num_str = str(row_idx_to_num(i))
+            if len(num_str) == 2:
+                pass
+            elif len(num_str) == 1:
+                num_str = " " + num_str
+            else:
+                raise Exception(f"Invalid index: {i}!")
+
+        board_repr += num_str + " "
+
+        for j in range(board.shape[1]):
+            if board[i][j] in ACT_ELEMS_TO_CHRS:
+                board_repr += ACT_ELEMS_TO_CHRS[board[i][j]]
+            else:
+                board_repr += SPL_ELEM_CHR
+
+            board_repr += " "
+
+        board_repr += "\n"
+
+    board_repr += "     "
+
+    for i in range(1, SIDE_LEN_ACT + 1):
+        board_repr += col_idx_to_chr(i)
+        board_repr += " "
+
+    board_repr += "\n\n"
+
+    return board_repr
 
 
 @njit
