@@ -8,7 +8,8 @@ from pattern_search import (get_pattern, apply_pattern, search_board, search_poi
                             search_point_own, search_board_next_sq,
                             search_point_next_sq, search_point_own_next_sq,
                             matches_are_equal, next_sq_matches_are_subset)
-from utils import new_board, assert_nb
+from utils import assert_nb
+from board import new_board
 
 
 @njit

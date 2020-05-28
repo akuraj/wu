@@ -1,8 +1,6 @@
 from enum import IntEnum, auto, unique
-import numpy as np
 from numba import njit
-from consts import (SIDE_LEN, SIDE_LEN_ACT, WALL, BLACK, WHITE,
-                    EMPTY, COLORS, WIN_LENGTH, OWN, MAX_DEFCON)
+from consts import EMPTY, WIN_LENGTH, OWN, MAX_DEFCON
 from geometry import (is_normal_line, chebyshev_distance, slope_intercept,
                       point_idx_on_line)
 
@@ -12,91 +10,6 @@ def assert_nb(truth_value, assert_err_msg=""):
     if not truth_value:
         print(assert_err_msg)
         raise Exception
-
-
-@njit
-def new_board():
-    board = np.full((SIDE_LEN, SIDE_LEN), EMPTY, dtype=np.byte)
-
-    # Set the walls.
-    for wall in (0, SIDE_LEN - 1):
-        for i in range(SIDE_LEN):
-            board[wall, i] = WALL
-            board[i, wall] = WALL
-
-    return board
-
-
-def get_board(blacks, whites):
-    assert not set.intersection(set(blacks), set(whites))
-
-    board = new_board()
-
-    for elem in blacks:
-        board[algebraic_to_point(elem)] = BLACK
-
-    for elem in whites:
-        board[algebraic_to_point(elem)] = WHITE
-
-    return board
-
-
-def row_idx_to_num(x):
-    assert 1 <= x <= SIDE_LEN_ACT
-    return SIDE_LEN_ACT + 1 - x
-
-
-row_num_to_idx = row_idx_to_num
-
-
-def col_idx_to_chr(x):
-    assert 1 <= x <= SIDE_LEN_ACT
-    return chr(ord("a") + x - 1)
-
-
-def col_chr_to_idx(x):
-    idx = ord(x) - ord("a") + 1
-    assert 1 <= idx <= SIDE_LEN_ACT
-    return idx
-
-
-def point_to_algebraic(x):
-    assert len(x) == 2
-    row_num = row_idx_to_num(x[0])
-    col_chr = col_idx_to_chr(x[1])
-    return f"{col_chr}{row_num}"
-
-
-def algebraic_to_point(x):
-    col_idx = col_chr_to_idx(x[0])
-    row_idx = row_num_to_idx(int(x[1:]))
-    return (row_idx, col_idx)
-
-
-@njit
-def set_sq(board, color, point):
-    assert color in COLORS
-    assert board[point] == EMPTY
-    board[point] = color
-
-
-@njit
-def clear_sq(board, color, point):
-    assert color in COLORS
-    assert board[point] == color
-    board[point] = EMPTY
-
-
-def set_sqs(board, color, sqs):
-    if sqs is not None:
-        for sq in sqs:
-            set_sq(board, color, sq)
-
-
-def clear_sqs(board, color, sqs):
-    if sqs is not None:
-        for sq in sqs:
-            clear_sq(board, color, sq)
 
 
 @njit
@@ -141,7 +54,7 @@ def is_one_step_from_straight_threat(gen_pattern):
             for i in range(n - l + 1):
                 for j in range(l):
                     # Straight threat pattern value.
-                    value = EMPTY if j == 0 or j == l - 1 else OWN
+                    value = EMPTY if j in (0, l - 1) else OWN
 
                     if i + j == idx:
                         if value != OWN:

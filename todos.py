@@ -4,6 +4,7 @@
 # TODO: Refactor utils code into separate modules!!!
 # TODO: Cleanup unnecessary functions first!!!
 # TODO: Refactor function to print board (out of State class into a lib)!
+# TODO: Print variations and search nodes in algebraic notation.
 # TODO: Are we searching too wide/too deep? Should we stop a loop if a win is found?
 #       Is it valuable to find all potential wins by searching all children?
 # TODO: Add function to inspect or pretty print winning variations in node.

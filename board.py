@@ -1,0 +1,112 @@
+"""Functions related to the board and it's representation."""
+
+import numpy as np
+from numba import njit
+from consts import SIDE_LEN_ACT, SIDE_LEN, EMPTY, WALL, BLACK, WHITE, COLORS
+
+
+def row_idx_to_num(x):
+    """Self explanatory."""
+
+    assert 1 <= x <= SIDE_LEN_ACT
+    return SIDE_LEN_ACT + 1 - x
+
+
+row_num_to_idx = row_idx_to_num
+
+
+def col_idx_to_chr(x):
+    """Self explanatory."""
+
+    assert 1 <= x <= SIDE_LEN_ACT
+    return chr(ord("a") + x - 1)
+
+
+def col_chr_to_idx(x):
+    """Self explanatory."""
+
+    idx = ord(x) - ord("a") + 1
+    assert 1 <= idx <= SIDE_LEN_ACT
+    return idx
+
+
+def point_to_algebraic(x):
+    """Self explanatory."""
+
+    assert len(x) == 2
+    row_num = row_idx_to_num(x[0])
+    col_chr = col_idx_to_chr(x[1])
+    return f"{col_chr}{row_num}"
+
+
+def algebraic_to_point(x):
+    """Self explanatory."""
+
+    col_idx = col_chr_to_idx(x[0])
+    row_idx = row_num_to_idx(int(x[1:]))
+    return (row_idx, col_idx)
+
+
+@njit
+def new_board():
+    """Get new board."""
+
+    board = np.full((SIDE_LEN, SIDE_LEN), EMPTY, dtype=np.byte)
+
+    # Set the walls.
+    for wall in (0, SIDE_LEN - 1):
+        for i in range(SIDE_LEN):
+            board[wall, i] = WALL
+            board[i, wall] = WALL
+
+    return board
+
+
+def get_board(blacks, whites):
+    """Get board from lists of points."""
+
+    assert not set.intersection(set(blacks), set(whites))
+
+    board = new_board()
+
+    for elem in blacks:
+        board[algebraic_to_point(elem)] = BLACK
+
+    for elem in whites:
+        board[algebraic_to_point(elem)] = WHITE
+
+    return board
+
+
+@njit
+def set_sq(board, color, point):
+    """Sets given square on board to given color."""
+
+    assert color in COLORS
+    assert board[point] == EMPTY
+    board[point] = color
+
+
+@njit
+def clear_sq(board, color, point):
+    """Clears given square on board of given color."""
+
+    assert color in COLORS
+    assert board[point] == color
+    board[point] = EMPTY
+
+
+def set_sqs(board, color, sqs):
+    """Sets given squares on board to given color."""
+
+    if sqs is not None:
+        for sq in sqs:
+            set_sq(board, color, sq)
+
+
+def clear_sqs(board, color, sqs):
+    """Clears given squares on board of given color."""
+
+    if sqs is not None:
+        for sq in sqs:
+            clear_sq(board, color, sq)

@@ -5,7 +5,7 @@ import numpy as np
 from consts import (SIDE_LEN, SIDE_LEN_ACT, EMPTY, BLACK, WHITE, WALL, COLORS,
                     ACT_ELEMS_TO_CHRS, ACT_ELEMS_TO_NAMES, SPL_ELEM_CHR)
 from pattern_search import search_board
-from utils import new_board, row_idx_to_num, col_idx_to_chr, get_board
+from board import new_board, row_idx_to_num, col_idx_to_chr, get_board
 from pattern import P_WIN
 
 

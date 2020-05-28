@@ -1,9 +1,9 @@
 import time
 from state import get_state
-from utils import (set_sq, clear_sq, new_search_node,
-                   next_sqs_info_from_node, lines_from_next_sqs_info_arr,
-                   point_set_is_useful, new_move, MoveType, set_sqs, clear_sqs,
-                   new_threat_seq_item, get_threat_sequence)
+from utils import (new_search_node, next_sqs_info_from_node,
+                   lines_from_next_sqs_info_arr, point_set_is_useful,
+                   new_move, MoveType, new_threat_seq_item, get_threat_sequence)
+from board import set_sqs, clear_sqs
 from numba import njit
 from consts import BLACK, STONE
 from pattern import (ThreatPri, search_all_board, search_all_point_own,
