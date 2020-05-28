@@ -1,6 +1,6 @@
 """Driver module."""
 
-# import time
+import time
 # from numba import njit
 from functools import reduce
 from itertools import chain, combinations
@@ -23,20 +23,20 @@ from pattern import (ThreatPri, search_all_board, search_all_point_own,
 #                   BLACK,
 #                   False)
 
-# state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "i9"],
-#                   ["g4", "e5", "f6", "h6", "j6", "f7", "j7", "f8", "g8", "i8", "f9"],
-#                   BLACK,
-#                   True)
+state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "i9"],
+                  ["g4", "e5", "f6", "h6", "j6", "f7", "j7", "f8", "g8", "i8", "f9"],
+                  BLACK,
+                  True)
 
 # state = get_state(["g10", "h8", "i7", "j7", "j9"],
 #                   ["g7", "g8", "g9", "i9", "k8"],
 #                   BLACK,
 #                   True)
 
-state = get_state(["f6", "h6", "g7", "h7", "h8", "g11"],
-                  ["e5", "h5", "g6", "l6", "f7", "g8"],
-                  BLACK,
-                  True)
+# state = get_state(["f6", "h6", "g7", "h7", "h8", "g11"],
+#                   ["e5", "h5", "g6", "l6", "f7", "g8"],
+#                   BLACK,
+#                   True)
 
 print(state)
 
@@ -45,6 +45,7 @@ def subsets(s, min_size=0):
     return chain.from_iterable(combinations(s, r) for r in range(min_size, len(s) + 1))
 
 
+# TODO: Profile threat space search!
 def threat_space_search(board, color, move=new_move(), search_combinations=False):
     # If True, we've been given a specific move to try out,
     # as opposed to being given a starting point to explore from.
@@ -161,7 +162,9 @@ def threat_space_search(board, color, move=new_move(), search_combinations=False
 # end = time.monotonic()
 # print("Time taken: ", end - start, " seconds")
 
+# FIXME: Search Combinations = False yields a result?!
 node = threat_space_search(state.board, state.turn, search_combinations=False)
+
 for child in node["children"]:
     if child["potential_win"]:
         print(child["move"]["last_sqs"])
