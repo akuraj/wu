@@ -21,8 +21,18 @@ from itertools import chain, combinations
 #                   BLACK,
 #                   False)
 
-state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "i9"],
-                  ["g4", "e5", "f6", "h6", "j6", "f7", "j7", "f8", "g8", "i8", "f9"],
+# state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "i9"],
+#                   ["g4", "e5", "f6", "h6", "j6", "f7", "j7", "f8", "g8", "i8", "f9"],
+#                   BLACK,
+#                   True)
+
+# state = get_state(["g10", "h8", "i7", "j7", "j9"],
+#                   ["g7", "g8", "g9", "i9", "k8"],
+#                   BLACK,
+#                   True)
+
+state = get_state(["f6", "h6", "g7", "h7", "h8", "g11"],
+                  ["e5", "h5", "g6", "l6", "f7", "g8"],
                   BLACK,
                   True)
 
@@ -36,11 +46,11 @@ def subsets(s, min_size=0):
 def threat_space_search(board, color, move=new_move(), combinations=False):
     # If True, we've been given a specific move to try out,
     # as opposed to being given a starting point to explore from.
-    try_the_move = move["next_sqs"] is not None and move["critical_sqs"] is None
+    try_move = move["next_sqs"] is not None and move["critical_sqs"] is None
 
     set_sqs(board, color, move["next_sqs"])
 
-    if not try_the_move:
+    if not try_move:
         set_sqs(board, color ^ STONE, move["critical_sqs"])
 
     threats = []
@@ -58,7 +68,7 @@ def threat_space_search(board, color, move=new_move(), combinations=False):
         raise Exception("Invalid move type!")
 
     # Check if we have a potential win.
-    if try_the_move:
+    if try_move:
         # Update critical_sqs data in move.
         critical_sqs = (reduce(set.intersection,
                                [x["critical_sqs"] for x in threats])
@@ -75,10 +85,10 @@ def threat_space_search(board, color, move=new_move(), combinations=False):
         potential_win = len(threats) > 0
 
     # If the move given to try produces no threats, then we stop.
-    explore = not try_the_move or len(threats) > 0
+    explore = not try_move or len(threats) > 0
 
     if explore and not potential_win:
-        if try_the_move:
+        if try_move:
             set_sqs(board, color ^ STONE, move["critical_sqs"])
 
         # TODO: Remove duplication of effort.
@@ -127,10 +137,10 @@ def threat_space_search(board, color, move=new_move(), combinations=False):
 
             potential_win = any([x["potential_win"] for x in children_combinations])
 
-        if try_the_move:
+        if try_move:
             clear_sqs(board, color ^ STONE, move["critical_sqs"])
 
-    if not try_the_move:
+    if not try_move:
         clear_sqs(board, color ^ STONE, move["critical_sqs"])
 
     clear_sqs(board, color, move["next_sqs"])
