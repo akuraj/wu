@@ -357,7 +357,7 @@ def matches_are_subset(x, y):
 
     for a in x:
         for b in y:
-            if a == b or a == b[::-1]:
+            if a in (b, b[::-1]):
                 break
         else:
             return False
@@ -379,7 +379,7 @@ def next_sq_matches_are_subset(x, y):
 
     for a in x:
         for b in y:
-            if a[0] == b[0] and (a[1] == b[1] or a[1] == b[1][::-1]):
+            if a[0] == b[0] and a[1] in (b[1], b[1][::-1]):
                 break
         else:
             return False
