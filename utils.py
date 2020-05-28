@@ -74,42 +74,6 @@ def algebraic_to_point(x):
 
 
 @njit
-def matches_are_subset(x, y):
-    for a in x:
-        for b in y:
-            if a == b or a == b[::-1]:
-                break
-        else:
-            return False
-
-    return True
-
-
-@njit
-def matches_are_equal(x, y):
-    # pylint: disable=W1114
-    return matches_are_subset(x, y) and matches_are_subset(y, x)
-
-
-@njit
-def next_sq_matches_are_subset(x, y):
-    for a in x:
-        for b in y:
-            if a[0] == b[0] and (a[1] == b[1] or a[1] == b[1][::-1]):
-                break
-        else:
-            return False
-
-    return True
-
-
-@njit
-def next_sq_matches_are_equal(x, y):
-    # pylint: disable=W1114
-    return next_sq_matches_are_subset(x, y) and next_sq_matches_are_subset(y, x)
-
-
-@njit
 def set_sq(board, color, point):
     assert color in COLORS
     assert board[point] == EMPTY

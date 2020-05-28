@@ -349,3 +349,47 @@ def apply_pattern(board, pattern, point, d):
             board[x + row_inc * k, y + col_inc * k] = pattern[k]
 
     return can_apply
+
+
+@njit
+def matches_are_subset(x, y):
+    """Check if x is a subset of y."""
+
+    for a in x:
+        for b in y:
+            if a == b or a == b[::-1]:
+                break
+        else:
+            return False
+
+    return True
+
+
+@njit
+def matches_are_equal(x, y):
+    """Self explanatory; see above."""
+
+    # pylint: disable=W1114
+    return matches_are_subset(x, y) and matches_are_subset(y, x)
+
+
+@njit
+def next_sq_matches_are_subset(x, y):
+    """Check if x is a subset of y."""
+
+    for a in x:
+        for b in y:
+            if a[0] == b[0] and (a[1] == b[1] or a[1] == b[1][::-1]):
+                break
+        else:
+            return False
+
+    return True
+
+
+@njit
+def next_sq_matches_are_equal(x, y):
+    """Self explanatory; see above."""
+
+    # pylint: disable=W1114
+    return next_sq_matches_are_subset(x, y) and next_sq_matches_are_subset(y, x)

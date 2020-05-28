@@ -6,9 +6,9 @@ from pattern import PATTERNS
 from geometry import point_is_on_line, point_on_line, increments
 from pattern_search import (get_pattern, apply_pattern, search_board, search_point,
                             search_point_own, search_board_next_sq,
-                            search_point_next_sq, search_point_own_next_sq)
-from utils import (new_board, matches_are_equal, assert_nb,
-                   next_sq_matches_are_subset)
+                            search_point_next_sq, search_point_own_next_sq,
+                            matches_are_equal, next_sq_matches_are_subset)
+from utils import new_board, assert_nb
 
 
 @njit
