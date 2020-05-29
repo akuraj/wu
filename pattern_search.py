@@ -368,8 +368,6 @@ def matches_are_subset(x, y):
 
 @njit
 def matches_are_equal(x, y):
-    """Self explanatory; see above."""
-
     # pylint: disable=W1114
     return matches_are_subset(x, y) and matches_are_subset(y, x)
 
@@ -390,8 +388,6 @@ def next_sq_matches_are_subset(x, y):
 
 @njit
 def next_sq_matches_are_equal(x, y):
-    """Self explanatory; see above."""
-
     # pylint: disable=W1114
     return next_sq_matches_are_subset(x, y) and next_sq_matches_are_subset(y, x)
 
@@ -419,8 +415,6 @@ def degree(gen_pattern):
 
 @njit
 def defcon_from_degree(d):
-    """Self explanatory."""
-
     return MAX_DEFCON - d
 
 

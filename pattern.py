@@ -198,32 +198,24 @@ def get_patterns_with_pri(pri):
 
 
 def search_all_board(board, color, pri):
-    """Self explanatory."""
-
     return [threat_item(match, p)
             for p in get_patterns_with_pri(pri)
             for match in search_board(board, p.pattern, color)]
 
 
 def search_all_point(board, color, point, pri):
-    """Self explanatory."""
-
     return [threat_item(match, p)
             for p in get_patterns_with_pri(pri)
             for match in search_point(board, p.pattern, color, point)]
 
 
 def search_all_point_own(board, color, point, pri):
-    """Self explanatory."""
-
     return [threat_item(match, p)
             for p in get_patterns_with_pri(pri)
             for match in search_point_own(board, p.pattern, color, point, p.own_sqs)]
 
 
 def search_all_points_own(board, color, points, pri, intersection=False):
-    """Self explanatory."""
-
     matches_for_points = [search_all_point_own(board, color, x, pri) for x in points]
 
     all_matches_dict = dict()
@@ -243,21 +235,15 @@ def search_all_points_own(board, color, points, pri, intersection=False):
 
 
 def search_all_board_get_next_sqs(board, color, pri):
-    """Self explanatory."""
-
     return {x[0] for p in get_patterns_with_pri(pri)
             for x in search_board_next_sq(board, p.pattern, color)}
 
 
 def search_all_point_get_next_sqs(board, color, point, pri):
-    """Self explanatory."""
-
     return {x[0] for p in get_patterns_with_pri(pri)
             for x in search_point_next_sq(board, p.pattern, color, point)}
 
 
 def search_all_point_own_get_next_sqs(board, color, point, pri):
-    """Self explanatory."""
-
     return {x[0] for p in get_patterns_with_pri(pri)
             for x in search_point_own_next_sq(board, p.pattern, color, point, p.own_sqs)}

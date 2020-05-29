@@ -151,20 +151,21 @@ def threat_space_search(board, color, move=new_move(), search_combinations=False
     return new_search_node(move, threats, potential_win, children)
 
 
-# n = 10000
+n = 10
 
-# for _ in range(n):
-#     threat_space_search(state.board, state.turn)
+for _ in range(n):
+    threat_space_search(state.board, state.turn, search_combinations=False)
 
-# start = time.monotonic()
-# for _ in range(n):
-#     threat_space_search(state.board, state.turn)
-# end = time.monotonic()
-# print("Time taken: ", end - start, " seconds")
+start = time.monotonic()
 
-# FIXME: Search Combinations = False yields a result?!
-node = threat_space_search(state.board, state.turn, search_combinations=False)
+for _ in range(n):
+    threat_space_search(state.board, state.turn, search_combinations=False)
 
-for child in node["children"]:
-    if child["potential_win"]:
-        print(child["move"]["last_sqs"])
+end = time.monotonic()
+print("Time taken: ", end - start, " seconds")
+
+# # FIXME: Search Combinations = False yields a result?!
+# node = threat_space_search(state.board, state.turn, search_combinations=False)
+# for child in node["children"]:
+#     if child["potential_win"]:
+#         print(child["move"]["last_sqs"])

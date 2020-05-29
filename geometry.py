@@ -79,8 +79,6 @@ def index_bounds_incl(side, length, x, y, row_inc, col_inc):
 
 @njit
 def point_is_on_line(point, start, end, segment_only):
-    """Self explanatory."""
-
     dx1 = point[0] - start[0]
     dy1 = point[1] - start[1]
     dx2 = point[0] - end[0]
@@ -90,8 +88,6 @@ def point_is_on_line(point, start, end, segment_only):
 
 @njit
 def signum(x):
-    """Self explanatory."""
-
     if x > 0:
         return 1
     elif x < 0:
@@ -121,8 +117,6 @@ def is_normal_line(start, end):
 
 @njit
 def chebyshev_distance(start, end):
-    """Self explanatory."""
-
     adx = abs(end[0] - start[0])
     ady = abs(end[1] - start[1])
     return max(adx, ady)
