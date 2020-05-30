@@ -217,3 +217,25 @@ def point_set_is_useful(point_set, line):
                 return False
 
     return True
+
+
+def next_sqs_from_threat_seqs(threat_seqs):
+    return [x["next_sq"] for seq in threat_seqs for x in seq]
+
+
+def potential_win_variations(node):
+    variations = []
+
+    if node["potential_win"]:
+        node_var = next_sqs_from_threat_seqs(node["move"]["threat_seqs"])
+
+        if node["children"]:
+            for child in node["children"]:
+                if child["potential_win"]:
+                    child_variations = potential_win_variations(child)
+                    for child_variation in child_variations:
+                        variations.append(node_var + child_variation)
+        else:
+            variations.append(node_var)
+
+    return variations

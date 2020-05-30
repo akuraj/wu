@@ -1,9 +1,15 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
+# TODO: Too many garbage variations!!
+# TODO: Perhaps we must only check the lowpri threats when we are looking for combinations?
+# TODO: Print variations and search nodes in algebraic notation.
+# TODO: Animate a variation.
 # TODO: Refactor utils code into separate modules!!!
 # TODO: Fix dangerous defaults!
-# TODO: Print variations and search nodes in algebraic notation.
+# TODO: Check that listed patterns fully cover all possibilities.
+#       Verify that there are no holes.
+# TODO: Do we need P_2_D as well?
 # TODO: Are we searching too wide/too deep? Should we stop a loop if a win is found?
 #       Is it valuable to find all potential wins by searching all children?
 # TODO: Add function to inspect or pretty print winning variations in node.
