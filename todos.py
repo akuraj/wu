@@ -13,6 +13,8 @@
 #       6) Only store winning variations to help save space!
 #       7) Sort win variations by length? Shorter is better.
 #       7) Implement a transposition table. How do we cope with having different last_sqs?
+#          A Zobrit hash?
+#          A hash that depends on position as well as latest move?
 #       8) What's the correct/viable TSS impl according to the paper? How does mine compare?
 #       9) Max-depth for certain/all kinds of TSS?
 # TODO: Check all test positions in paper. Implement regtests based on them.
