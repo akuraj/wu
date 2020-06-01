@@ -130,6 +130,15 @@ def threat_space_search(board, color, move=new_move(), search_combinations=False
                     for x in next_sqs]
         potential_win = any([x["potential_win"] for x in children])
 
+        # if not potential_win:
+        #     next_sqs_other = get_next_sqs_from_state(board, color, move, ThreatPri.NON_IMMEDIATE)
+        #     children_other = [threat_space_search(board,
+        #                                           color,
+        #                                           new_move([[new_threat_seq_item(x)]]))
+        #                       for x in next_sqs_other]
+        #     potential_win = any([x["potential_win"] for x in children_other])
+        #     children.extend(children_other)
+
         if search_combinations and not potential_win and len(children) > 1:
             next_sqs_info_children = [next_sqs_info_from_node(x) for x in children]
             lines_dict = lines_from_next_sqs_info_arr(next_sqs_info_children)
@@ -181,5 +190,5 @@ for child in node["children"]:
 
 win_vars = potential_win_variations(node)
 print(len(win_vars))
-variation = [point_to_algebraic(x) for x in win_vars[10]]
-print(variation)
+# variation = [point_to_algebraic(x) for x in win_vars[10]]
+# print(variation)
