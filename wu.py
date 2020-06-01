@@ -24,10 +24,10 @@ from pattern import (ThreatPri, search_all_board, search_all_point_own,
 #                   BLACK,
 #                   False)
 
-# state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "i9"],
-#                   ["g4", "e5", "f6", "h6", "j6", "f7", "j7", "f8", "g8", "i8", "f9"],
-#                   BLACK,
-#                   True)
+state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "i9"],
+                  ["g4", "e5", "f6", "h6", "j6", "f7", "j7", "f8", "g8", "i8", "f9"],
+                  BLACK,
+                  True)
 
 # state = get_state(["g10", "h8", "i7", "j7", "j9"],
 #                   ["g7", "g8", "g9", "i9", "k8"],
@@ -39,10 +39,10 @@ from pattern import (ThreatPri, search_all_board, search_all_point_own,
 #                   BLACK,
 #                   True)
 
-state = get_state(["j5", "j6", "i10", "i11"],
-                  [],
-                  BLACK,
-                  False)
+# state = get_state(["j5", "j6", "i10", "i11"],
+#                   [],
+#                   BLACK,
+#                   False)
 
 print(state)
 
@@ -51,27 +51,24 @@ def subsets(s, min_size=0):
     return chain.from_iterable(combinations(s, r) for r in range(min_size, len(s) + 1))
 
 
-def get_next_sqs_from_state(board, color, move):
-    next_sqs = set()
+def get_next_sqs_from_state(board, color, move, pri):
     if move["move_type"] == MoveType.NONE:
-        next_sqs = search_all_board_get_next_sqs(board, color, ThreatPri.IMMEDIATE)
+        return search_all_board_get_next_sqs(board, color, pri)
     elif move["move_type"] == MoveType.POINT:
-        next_sqs = search_all_point_own_get_next_sqs(board,
-                                                     color,
-                                                     move["last_sqs"][0],
-                                                     ThreatPri.IMMEDIATE)
+        return search_all_point_own_get_next_sqs(board,
+                                                 color,
+                                                 move["last_sqs"][0],
+                                                 pri)
     elif move["move_type"] == MoveType.COMBINATION:
         # TODO: Refine methodology.
         next_sqs_for_combination = [search_all_point_own_get_next_sqs(board,
                                                                       color,
                                                                       x,
-                                                                      ThreatPri.ALL)
+                                                                      pri)
                                     for x in move["last_sqs"]]
-        next_sqs = reduce(set.union, next_sqs_for_combination)
+        return reduce(set.union, next_sqs_for_combination)
     else:
         raise Exception("Invalid move type!")
-
-    return next_sqs
 
 
 # TODO: Profile threat space search!
@@ -125,43 +122,13 @@ def threat_space_search(board, color, move=new_move(), search_combinations=False
 
         # TODO: Remove duplication of effort.
         # TODO: Remove unnecessary work.
-        next_sqs = get_next_sqs_from_state(board, color, move)
-
-        # if move["move_type"] == MoveType.NONE:
-        #     next_sqs = search_all_board_get_next_sqs(board, color, ThreatPri.ALL)
-        # elif move["move_type"] == MoveType.POINT:
-        #     next_sqs = search_all_point_own_get_next_sqs(board,
-        #                                                  color,
-        #                                                  move["last_sqs"][0],
-        #                                                  ThreatPri.ALL)
-        # elif move["move_type"] == MoveType.COMBINATION:
-        #     # TODO: Refine methodology.
-        #     next_sqs_for_combination = [search_all_point_own_get_next_sqs(board,
-        #                                                                   color,
-        #                                                                   x,
-        #                                                                   ThreatPri.ALL)
-        #                                 for x in move["last_sqs"]]
-        #     next_sqs = reduce(set.union, next_sqs_for_combination)
-        # else:
-        #     raise Exception("Invalid move type!")
+        next_sqs = get_next_sqs_from_state(board, color, move, ThreatPri.ALL)
 
         children = [threat_space_search(board,
                                         color,
                                         new_move([[new_threat_seq_item(x)]]))
                     for x in next_sqs]
         potential_win = any([x["potential_win"] for x in children])
-
-        # if not potential_win:
-        #     next_sqs_other = (get_next_sqs_from_state(board, color, move, ThreatPri.NON_IMMEDIATE)
-        #                       - next_sqs)
-
-        #     children_other = [threat_space_search(board,
-        #                                           color,
-        #                                           new_move([[new_threat_seq_item(x)]]))
-        #                       for x in next_sqs_other]
-
-        #     potential_win = any([x["potential_win"] for x in children_other])
-        #     children.extend(children_other)
 
         if search_combinations and not potential_win and len(children) > 1:
             next_sqs_info_children = [next_sqs_info_from_node(x) for x in children]
@@ -194,7 +161,7 @@ def threat_space_search(board, color, move=new_move(), search_combinations=False
     return new_search_node(move, threats, potential_win, children)
 
 
-# n = 10
+# n = 20
 
 # for _ in range(n):
 #     threat_space_search(state.board, state.turn, search_combinations=False)
@@ -207,12 +174,12 @@ def threat_space_search(board, color, move=new_move(), search_combinations=False
 # end = time.monotonic()
 # print("Time taken: ", end - start, " seconds")
 
-# FIXME: Search Combinations = False yields a result?!
-node = threat_space_search(state.board, state.turn, search_combinations=True)
+node = threat_space_search(state.board, state.turn, search_combinations=False)
 for child in node["children"]:
     if child["potential_win"]:
         print(child["move"]["last_sqs"])
 
 win_vars = potential_win_variations(node)
+print(len(win_vars))
 variation = [point_to_algebraic(x) for x in win_vars[10]]
 print(variation)
