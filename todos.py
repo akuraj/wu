@@ -71,6 +71,7 @@
 
 # *** State Represenation ***
 # TODO: Stricter check on win status to make sure no multiple wins for a given player?
+# TODO: Implement code to update status after move is made!
 # TODO: Calculate and store Rich State?
 
 # *** Performance Concerns ***
