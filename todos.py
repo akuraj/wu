@@ -1,8 +1,6 @@
 """A place for general TODOs."""
 
 # *** TODO SOON ***
-# TODO: Check that listed patterns fully cover all possibilities.
-#       Verify that there are no holes.
 # TODO: FIXME: Too many garbage variations when using LowPri threats!
 #       1) Can play LowPri threat as long as the move also generates a HighPri threat!
 #       2) Search LowPri threats only if no win found via HighPri threats? Or always?
@@ -19,6 +17,8 @@
 #       9) What's the correct/viable TSS impl according to the paper? How does mine compare?
 #       10) Max-depth for certain/all kinds of TSS?
 #       11) Threats data and other data should be lean to reduce memory usage.
+#       12) We don't actually need critical sqs for NON_IMMEDIATE threats.
+#           Should we keep them as they are currently?
 # TODO: Check all test positions in paper. Implement regtests based on them.
 # TODO: Print variations and search nodes in algebraic notation.
 # TODO: Animate a variation.
