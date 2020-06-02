@@ -14,8 +14,8 @@ from pattern import (ThreatPri, search_all_board, search_all_point_own,
 
 
 # state = get_state(["a1", "a2", "a3", "a13", "a14", "a15", "b1", "b15", "c1", "c15",
-#                    "f14", "g13", "i9", "i10", "m1", "m15", "n1", "n15", "o1", "o2",
-#                    "o3", "o13", "o14", "o15"],
+#                     "f14", "g13", "i9", "i10", "m1", "m15", "n1", "n15", "o1", "o2",
+#                     "o3", "o13", "o14", "o15"],
 #                   ["i6", "i13", "j10"],
 #                   BLACK,
 #                   False)
@@ -103,7 +103,7 @@ def threat_space_search(board, color, move=new_move()):
 
         # TODO: Remove duplication of effort.
         # TODO: Remove unnecessary work.
-        next_sqs = get_next_sqs_from_state(board, color, move, ThreatPri.ALL)
+        next_sqs = get_next_sqs_from_state(board, color, move, ThreatPri.IMMEDIATE)
 
         children = [threat_space_search(board,
                                         color,
@@ -111,14 +111,14 @@ def threat_space_search(board, color, move=new_move()):
                     for x in next_sqs]
         potential_win = any([x["potential_win"] for x in children])
 
-        # if not potential_win:
-        #     next_sqs_other = get_next_sqs_from_state(board, color, move, ThreatPri.NON_IMMEDIATE)
-        #     children_other = [threat_space_search(board,
-        #                                           color,
-        #                                           new_move([[new_threat_seq_item(x)]]))
-        #                       for x in next_sqs_other]
-        #     potential_win = any([x["potential_win"] for x in children_other])
-        #     children.extend(children_other)
+        if not potential_win:
+            next_sqs_other = get_next_sqs_from_state(board, color, move, ThreatPri.NON_IMMEDIATE)
+            children_other = [threat_space_search(board,
+                                                  color,
+                                                  new_move([[new_threat_seq_item(x)]]))
+                              for x in next_sqs_other]
+            potential_win = any([x["potential_win"] for x in children_other])
+            children.extend(children_other)
 
         if try_move:
             clear_sqs(board, color ^ STONE, move["critical_sqs"])

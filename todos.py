@@ -8,17 +8,16 @@
 #       2) Search LowPri threats only if no win found via HighPri threats? Or always?
 #       3) Only search LowPri threats a max number of ply in a given variation!
 #          We can control this via a LowPriMaxDepth(?) variable.
-#       3) Stop searching children if a win is found? Or find all possible wins?
-#       4) Stop searching and return False if opponent is winning via critical squares?
+#       4) Stop searching children if a win is found? Or find all possible wins?
+#       5) Stop searching and return False if opponent is winning via critical squares?
 #          Under what conditions do we assume that opponent is winning?
-#       5) Drop the combinations idea in favor of the LowPri idea?
 #       6) Only store winning variations to help save space!
 #       7) Sort win variations by length? Shorter is better.
-#       7) Implement a transposition table. How do we cope with having different last_sqs?
+#       8) Implement a transposition table. How do we cope with having different last_sqs?
 #          A Zobrit hash? Or just use a dict? What's the most efficient data structure?
 #          A hash that depends on position as well as latest move?
-#       8) What's the correct/viable TSS impl according to the paper? How does mine compare?
-#       9) Max-depth for certain/all kinds of TSS?
+#       9) What's the correct/viable TSS impl according to the paper? How does mine compare?
+#       10) Max-depth for certain/all kinds of TSS?
 # TODO: Check all test positions in paper. Implement regtests based on them.
 # TODO: Print variations and search nodes in algebraic notation.
 # TODO: Animate a variation.
