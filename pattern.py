@@ -170,6 +170,13 @@ class ThreatPri(IntEnum):
     IMMEDIATE = auto()
     NON_IMMEDIATE = auto()
 
+
+PATTERNS_BY_PRI = dict()
+PATTERNS_BY_PRI[ThreatPri.ALL] = PATTERNS
+PATTERNS_BY_PRI[ThreatPri.IMMEDIATE] = PATTERNS_I
+PATTERNS_BY_PRI[ThreatPri.NON_IMMEDIATE] = PATTERNS_NI
+
+
 # *** PATTERN SEARCH FUNCTIONS ***
 
 
@@ -183,47 +190,34 @@ def threat_item(match, pattern):
                                               pattern.critical_sqs)}
 
 
-def get_patterns_with_pri(pri):
-    """Get patterns with the given priority level."""
-
-    if pri == ThreatPri.ALL:
-        return PATTERNS
-    elif pri == ThreatPri.IMMEDIATE:
-        return PATTERNS_I
-    elif pri == ThreatPri.NON_IMMEDIATE:
-        return PATTERNS_NI
-    else:
-        raise Exception(f"Invalid priority: {pri}")
-
-
 def search_all_board(board, color, pri):
     return [threat_item(match, p)
-            for p in get_patterns_with_pri(pri)
+            for p in PATTERNS_BY_PRI[pri]
             for match in search_board(board, p.pattern, color)]
 
 
 def search_all_point(board, color, point, pri):
     return [threat_item(match, p)
-            for p in get_patterns_with_pri(pri)
+            for p in PATTERNS_BY_PRI[pri]
             for match in search_point(board, p.pattern, color, point)]
 
 
 def search_all_point_own(board, color, point, pri):
     return [threat_item(match, p)
-            for p in get_patterns_with_pri(pri)
+            for p in PATTERNS_BY_PRI[pri]
             for match in search_point_own(board, p.pattern, color, point, p.own_sqs)]
 
 
 def search_all_board_get_next_sqs(board, color, pri):
-    return {x[0] for p in get_patterns_with_pri(pri)
+    return {x[0] for p in PATTERNS_BY_PRI[pri]
             for x in search_board_next_sq(board, p.pattern, color)}
 
 
 def search_all_point_get_next_sqs(board, color, point, pri):
-    return {x[0] for p in get_patterns_with_pri(pri)
+    return {x[0] for p in PATTERNS_BY_PRI[pri]
             for x in search_point_next_sq(board, p.pattern, color, point)}
 
 
 def search_all_point_own_get_next_sqs(board, color, point, pri):
-    return {x[0] for p in get_patterns_with_pri(pri)
+    return {x[0] for p in PATTERNS_BY_PRI[pri]
             for x in search_point_own_next_sq(board, p.pattern, color, point, p.own_sqs)}

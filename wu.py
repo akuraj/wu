@@ -13,16 +13,16 @@ from pattern import (ThreatPri, search_all_board, search_all_point_own,
 
 
 # state = get_state(["a1", "a2", "a3", "a13", "a14", "a15", "b1", "b15", "c1", "c15",
-#                     "f14", "g13", "i9", "i10", "m1", "m15", "n1", "n15", "o1", "o2",
-#                     "o3", "o13", "o14", "o15"],
+#                    "f14", "g13", "i9", "i10", "m1", "m15", "n1", "n15", "o1", "o2",
+#                    "o3", "o13", "o14", "o15"],
 #                   ["i6", "i13", "j10"],
 #                   BLACK,
 #                   False)
 
-state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "i9"],
-                  ["g4", "e5", "f6", "h6", "j6", "f7", "j7", "f8", "g8", "i8", "f9"],
-                  BLACK,
-                  True)
+# state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "i9"],
+#                   ["g4", "e5", "f6", "h6", "j6", "f7", "j7", "f8", "g8", "i8", "f9"],
+#                   BLACK,
+#                   True)
 
 # state = get_state(["g10", "h8", "i7", "j7", "j9"],
 #                   ["g7", "g8", "g9", "i9", "k8"],
@@ -34,10 +34,10 @@ state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "
 #                   BLACK,
 #                   True)
 
-# state = get_state(["j5", "j6", "i10", "i11"],
-#                   [],
-#                   BLACK,
-#                   False)
+state = get_state(["j5", "j6", "i10", "i11"],
+                  [],
+                  BLACK,
+                  False)
 
 print(state)
 
