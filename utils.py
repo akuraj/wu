@@ -1,8 +1,5 @@
 from enum import IntEnum, auto, unique
 from numba import njit
-from consts import WIN_LENGTH
-from geometry import (is_normal_line, chebyshev_distance, slope_intercept,
-                      point_idx_on_line)
 
 
 @njit
@@ -23,7 +20,6 @@ def new_threat_seq_item(next_sq, critical_sqs=None):
 class MoveType(IntEnum):
     NONE = auto()
     POINT = auto()
-    COMBINATION = auto()
 
 
 def new_move(threat_seqs=[]):
@@ -41,22 +37,7 @@ def new_move(threat_seqs=[]):
         last_sqs.append(threat_seqs[0][0]["next_sq"])
         move_type = MoveType.POINT
     else:
-        next_sqs = set()
-        critical_sqs = set()
-        for threat_seq in threat_seqs:
-            seq_len = len(threat_seq)
-            assert seq_len > 0
-            for i, item in enumerate(threat_seq):
-                assert item["next_sq"] not in next_sqs
-                next_sqs.add(item["next_sq"])
-
-                assert not critical_sqs.intersection(item["critical_sqs"])
-                critical_sqs.update(item["critical_sqs"])
-
-                if i == seq_len - 1:
-                    last_sqs.append(item["next_sq"])
-
-        move_type = MoveType.COMBINATION
+        raise Exception
 
     if next_sqs is not None and critical_sqs is not None:
         assert not set.intersection(next_sqs, critical_sqs)
@@ -121,102 +102,6 @@ def next_sqs_info_from_node(node, path=[], cumulative_nsqs=set(),
                                                      cumulative_csqs_new))
 
     return next_sqs_info
-
-
-def dedupe_line_items(items):
-    i = 0
-    n = len(items)
-
-    while i < n - 1:
-        val = items[i]
-        j = i + 1
-
-        while j < n:
-            if items[j][1] == val[1] and items[j][0]["path"] == val[0]["path"]:
-                del items[j]
-                n -= 1
-            else:
-                j += 1
-
-        i += 1
-
-
-def lines_from_next_sqs_info_arr(next_sqs_info_arr):
-    next_sqs_info_all = [(y, i) for (i, x) in enumerate(next_sqs_info_arr)
-                         for y in x]
-    n = len(next_sqs_info_all)
-
-    lines_dict = dict()
-    for i in range(n):
-        item_i = next_sqs_info_all[i]
-        val_i = item_i[0]
-        idx_i = item_i[1]
-        nsq_i = val_i["next_sq"]
-        c_nsqs_i = val_i["cumulative_nsqs"]
-        c_csqs_i = val_i["cumulative_csqs"]
-
-        for j in range(i + 1, n):
-            item_j = next_sqs_info_all[j]
-            val_j = item_j[0]
-            idx_j = item_j[1]
-            nsq_j = val_j["next_sq"]
-            c_nsqs_j = val_j["cumulative_nsqs"]
-            c_csqs_j = val_j["cumulative_csqs"]
-
-            # NOTE: Same gain_sq case is being excluded.
-            #       It does not need to be handled.
-            if (is_normal_line(nsq_i, nsq_j)
-                and chebyshev_distance(nsq_i, nsq_j) < WIN_LENGTH
-                and idx_i != idx_j
-                and not set.intersection(c_nsqs_i, c_csqs_j)
-                and not set.intersection(c_csqs_i, c_nsqs_j)
-                and not set.intersection(c_csqs_i, c_csqs_j)):
-
-                line = slope_intercept(nsq_i, nsq_j)
-
-                if line in lines_dict:
-                    lines_dict[line].append(item_i)
-                    lines_dict[line].append(item_j)
-                else:
-                    lines_dict[line] = [item_i, item_j]
-
-    for v in lines_dict.values():
-        dedupe_line_items(v)
-
-    return lines_dict
-
-
-def point_set_is_useful(point_set, line):
-    # Check that the points in the combination are close enough.
-    point_idxs = [point_idx_on_line(x[0]["next_sq"], line) for x in point_set]
-    point_set_range = max(point_idxs) - min(point_idxs)
-    if WIN_LENGTH <= point_set_range:
-        return False
-
-    # Check that the point trees are not in conflict.
-    n = len(point_set)
-
-    for i in range(n):
-        item_i = point_set[i]
-        val_i = item_i[0]
-        idx_i = item_i[1]
-        c_nsqs_i = val_i["cumulative_nsqs"]
-        c_csqs_i = val_i["cumulative_csqs"]
-
-        for j in range(i + 1, n):
-            item_j = point_set[j]
-            val_j = item_j[0]
-            idx_j = item_j[1]
-            c_nsqs_j = val_j["cumulative_nsqs"]
-            c_csqs_j = val_j["cumulative_csqs"]
-
-            if not (idx_i != idx_j
-                    and not set.intersection(c_nsqs_i, c_csqs_j)
-                    and not set.intersection(c_csqs_i, c_nsqs_j)
-                    and not set.intersection(c_csqs_i, c_csqs_j)):
-                return False
-
-    return True
 
 
 def next_sqs_from_threat_seqs(threat_seqs):

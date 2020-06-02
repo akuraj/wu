@@ -15,18 +15,10 @@
 #       6) Only store winning variations to help save space!
 #       7) Sort win variations by length? Shorter is better.
 #       7) Implement a transposition table. How do we cope with having different last_sqs?
-#          A Zobrit hash?
+#          A Zobrit hash? Or just use a dict? What's the most efficient data structure?
 #          A hash that depends on position as well as latest move?
 #       8) What's the correct/viable TSS impl according to the paper? How does mine compare?
 #       9) Max-depth for certain/all kinds of TSS?
-# TODO: Combinations: Idea Summary!
-#       1) When getting next_sqs from node, also get path as well as cumulative
-#          gain and cost sqs. That should make it more convenient to get
-#          compatible pairs/combinations.
-#       2) Write code for combination of two searches, or multiple as well?
-#       3) Can combine pairs by maintaining gain and cost squares upto relevant point,
-#          and comparing the cumulative sets will determine
-#          if the points are in conflict or not.
 # TODO: Check all test positions in paper. Implement regtests based on them.
 # TODO: Print variations and search nodes in algebraic notation.
 # TODO: Animate a variation.

@@ -1,7 +1,6 @@
 """Define class to represent threat patterns, and related functions (search etc.)."""
 
 from enum import IntEnum, auto, unique
-from functools import reduce
 import numpy as np
 from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
                     NOT_OWN, GEN_ELEMS_TO_NAMES)
@@ -213,25 +212,6 @@ def search_all_point_own(board, color, point, pri):
     return [threat_item(match, p)
             for p in get_patterns_with_pri(pri)
             for match in search_point_own(board, p.pattern, color, point, p.own_sqs)]
-
-
-def search_all_points_own(board, color, points, pri, intersection=False):
-    matches_for_points = [search_all_point_own(board, color, x, pri) for x in points]
-
-    all_matches_dict = dict()
-    for matches in matches_for_points:
-        for match in matches:
-            key = (match["match"], match["pidx"])
-            if key not in all_matches_dict:
-                all_matches_dict[key] = match
-
-    if intersection:
-        keys_for_points = [{(x["match"], x["pidx"]) for x in matches}
-                           for matches in matches_for_points]
-        common_keys = reduce(set.intersection, keys_for_points)
-        return [all_matches_dict[x] for x in common_keys]
-    else:
-        return list(all_matches_dict.values())
 
 
 def search_all_board_get_next_sqs(board, color, pri):
