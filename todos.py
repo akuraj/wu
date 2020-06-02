@@ -19,6 +19,8 @@
 #       11) Threats data and other data should be lean to reduce memory usage.
 #       12) We don't actually need critical sqs for NON_IMMEDIATE threats.
 #           Should we keep them as they are currently?
+# TODO: Use Yixin to check for best moves in test positions.
+#       Use it to guide the development effort and debugging.
 # TODO: Check all test positions in paper. Implement regtests based on them.
 # TODO: Print variations and search nodes in algebraic notation.
 # TODO: Animate a variation.

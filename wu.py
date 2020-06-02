@@ -112,25 +112,25 @@ def threat_space_search(board, color, next_sq=None):
     return new_search_node(next_sq, threats, critical_sqs, potential_win, children)
 
 
-n = 20
+# n = 20
 
-for _ in range(n):
-    threat_space_search(state.board, state.turn)
+# for _ in range(n):
+#     threat_space_search(state.board, state.turn)
 
-start = time.monotonic()
+# start = time.monotonic()
 
-for _ in range(n):
-    threat_space_search(state.board, state.turn)
+# for _ in range(n):
+#     threat_space_search(state.board, state.turn)
 
-end = time.monotonic()
-print("Time taken: ", end - start, " seconds")
+# end = time.monotonic()
+# print("Time taken: ", end - start, " seconds")
 
-# node = threat_space_search(state.board, state.turn)
-# for child in node["children"]:
-#     if child["potential_win"]:
-#         print(child["next_sq"])
+node = threat_space_search(state.board, state.turn)
+for child in node["children"]:
+    if child["potential_win"]:
+        print(child["next_sq"])
 
-# win_vars = potential_win_variations(node)
-# print(len(win_vars))
-# # variation = [point_to_algebraic(x) for x in win_vars[10]]
-# # print(variation)
+win_vars = potential_win_variations(node)
+print(len(win_vars))
+# variation = [point_to_algebraic(x) for x in win_vars[10]]
+# print(variation)
