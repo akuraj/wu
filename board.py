@@ -124,19 +124,3 @@ def clear_sq(board, color, point):
     assert color in COLORS
     assert board[point] == color
     board[point] = EMPTY
-
-
-def set_sqs(board, color, sqs):
-    """Sets given squares on board to given color."""
-
-    if sqs is not None:
-        for sq in sqs:
-            set_sq(board, color, sq)
-
-
-def clear_sqs(board, color, sqs):
-    """Clears given squares on board of given color."""
-
-    if sqs is not None:
-        for sq in sqs:
-            clear_sq(board, color, sq)

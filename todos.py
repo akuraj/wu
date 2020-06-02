@@ -18,6 +18,7 @@
 #          A hash that depends on position as well as latest move?
 #       9) What's the correct/viable TSS impl according to the paper? How does mine compare?
 #       10) Max-depth for certain/all kinds of TSS?
+#       11) Threats data and other data should be lean to reduce memory usage.
 # TODO: Check all test positions in paper. Implement regtests based on them.
 # TODO: Print variations and search nodes in algebraic notation.
 # TODO: Animate a variation.
@@ -30,6 +31,7 @@
 # TODO: Need fn to search along direction at point?
 # TODO: Function documentation!
 # TODO: Can we have a better way to input position?
+# TODO: Remove unnecessary functions.
 
 # *** TODO SOONISH ***
 # TODO: Estimate impact of njit by turning it off to see if it's actually useful.

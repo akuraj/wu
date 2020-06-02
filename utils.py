@@ -1,4 +1,3 @@
-from enum import IntEnum, auto, unique
 from numba import njit
 
 
@@ -9,72 +8,17 @@ def assert_nb(truth_value, assert_err_msg=""):
         raise Exception
 
 
-def new_threat_seq_item(next_sq, critical_sqs=None):
-    item = {"next_sq": next_sq,
-            "critical_sqs": critical_sqs}
-
-    return item
-
-
-@unique
-class MoveType(IntEnum):
-    NONE = auto()
-    POINT = auto()
-
-
-def new_move(threat_seqs=[]):
-    next_sqs = None
-    critical_sqs = None
-    last_sqs = []
-    move_type = MoveType.NONE
-
-    if not threat_seqs:
-        pass
-    elif len(threat_seqs) == 1:
-        assert len(threat_seqs[0]) == 1
-        next_sqs = set([threat_seqs[0][0]["next_sq"]])
-        critical_sqs = threat_seqs[0][0]["critical_sqs"]
-        last_sqs.append(threat_seqs[0][0]["next_sq"])
-        move_type = MoveType.POINT
-    else:
-        raise Exception
-
-    if next_sqs is not None and critical_sqs is not None:
-        assert not set.intersection(next_sqs, critical_sqs)
-
-    move = {"threat_seqs": threat_seqs,
-            "next_sqs": next_sqs,
-            "critical_sqs": critical_sqs,
-            "last_sqs": last_sqs,
-            "move_type": move_type}
-
-    return move
-
-
-def new_search_node(move, threats=[], potential_win=False, children=[]):
-    node = {"move": move,
+def new_search_node(next_sq, threats, critical_sqs, potential_win, children):
+    node = {"next_sq": next_sq,
             "threats": threats,
+            "critical_sqs": critical_sqs,
             "potential_win": potential_win,
             "children": children}
 
     return node
 
 
-def get_threat_sequence(node, path):
-    sequence = []
-
-    sub_node = node
-    for seq in sub_node["move"]["threat_seqs"]:
-        sequence.extend(seq)
-
-    for idx in path:
-        sub_node = sub_node["children"][idx]
-        for seq in sub_node["move"]["threat_seqs"]:
-            sequence.extend(seq)
-
-    return sequence
-
-
+# TODO: Update the below func to new format!
 def next_sqs_info_from_node(node, path=[], cumulative_nsqs=set(),
                             cumulative_csqs=set()):
     next_sqs_info = []
@@ -104,22 +48,18 @@ def next_sqs_info_from_node(node, path=[], cumulative_nsqs=set(),
     return next_sqs_info
 
 
-def next_sqs_from_threat_seqs(threat_seqs):
-    return [x["next_sq"] for seq in threat_seqs for x in seq]
-
-
 def potential_win_variations(node):
     variations = []
 
     if node["potential_win"]:
-        node_var = next_sqs_from_threat_seqs(node["move"]["threat_seqs"])
+        node_var = [node["next_sq"]] if node["next_sq"] is not None else []
 
         if node["children"]:
             for child in node["children"]:
                 if child["potential_win"]:
                     child_variations = potential_win_variations(child)
-                    for child_variation in child_variations:
-                        variations.append(node_var + child_variation)
+                    for child_var in child_variations:
+                        variations.append(node_var + child_var)
         else:
             variations.append(node_var)
 

@@ -4,9 +4,8 @@ import time
 # from numba import njit
 from functools import reduce
 from state import get_state
-from utils import (new_search_node, new_move, MoveType, new_threat_seq_item,
-                   potential_win_variations)
-from board import set_sqs, clear_sqs, point_to_algebraic
+from utils import new_search_node, potential_win_variations
+from board import set_sq, clear_sq, point_to_algebraic
 from consts import BLACK, STONE
 from pattern import (ThreatPri, search_all_board, search_all_point_own,
                      search_all_board_get_next_sqs,
@@ -43,113 +42,95 @@ state = get_state(["f5", "g5", "h5", "g6", "g7", "h7", "i7", "h8", "h9", "g9", "
 print(state)
 
 
-def get_next_sqs_from_state(board, color, move, pri):
-    if move["move_type"] == MoveType.NONE:
-        return search_all_board_get_next_sqs(board, color, pri)
-    elif move["move_type"] == MoveType.POINT:
+def get_next_sqs_from_state(board, color, next_sq, pri):
+    if next_sq is not None:
         return search_all_point_own_get_next_sqs(board,
                                                  color,
-                                                 move["last_sqs"][0],
+                                                 next_sq,
                                                  pri)
     else:
-        raise Exception("Invalid move type!")
+        return search_all_board_get_next_sqs(board, color, pri)
 
 
 # TODO: Profile threat space search!
-def threat_space_search(board, color, move=new_move()):
-    # If True, we've been given a specific move to try out,
+def threat_space_search(board, color, next_sq=None):
+    # If True, we've been given a specific next_sq to try out,
     # as opposed to being given a starting point to explore from.
-    try_move = move["next_sqs"] is not None and move["critical_sqs"] is None
+    try_next_sq = next_sq is not None
 
-    set_sqs(board, color, move["next_sqs"])
-
-    if not try_move:
-        set_sqs(board, color ^ STONE, move["critical_sqs"])
+    if try_next_sq:
+        set_sq(board, color, next_sq)
 
     threats = []
+    critical_sqs = None
     potential_win = False
     children = []
 
-    if move["move_type"] == MoveType.NONE:
-        threats = search_all_board(board, color, ThreatPri.IMMEDIATE)
-    elif move["move_type"] == MoveType.POINT:
-        threats = search_all_point_own(board, color, move["last_sqs"][0], ThreatPri.IMMEDIATE)
+    if try_next_sq:
+        threats = search_all_point_own(board, color, next_sq, ThreatPri.IMMEDIATE)
     else:
-        raise Exception("Invalid move type!")
+        threats = search_all_board(board, color, ThreatPri.IMMEDIATE)
 
     # Check if we have a potential win.
-    if try_move:
-        # Update critical_sqs data in move.
+    if try_next_sq:
         critical_sqs = (reduce(set.intersection,
                                [x["critical_sqs"] for x in threats])
                         if threats
                         else set())
 
-        # Currently, we can only propose a single point as a move to try out.
-        assert move["move_type"] == MoveType.POINT
-        move["threat_seqs"][0][0]["critical_sqs"] = critical_sqs
-        move["critical_sqs"] = critical_sqs
-
         potential_win = len(threats) > 0 and len(critical_sqs) == 0
     else:
         potential_win = len(threats) > 0
 
-    # If the move given to try produces no threats, then we stop.
-    explore = not try_move or len(threats) > 0
+    # If the next_sq given to try produces no threats, then we stop.
+    explore = not try_next_sq or len(threats) > 0
 
     if explore and not potential_win:
-        if try_move:
-            set_sqs(board, color ^ STONE, move["critical_sqs"])
+        if try_next_sq:
+            for csq in critical_sqs:
+                set_sq(board, color ^ STONE, csq)
 
         # TODO: Remove duplication of effort.
         # TODO: Remove unnecessary work.
-        next_sqs = get_next_sqs_from_state(board, color, move, ThreatPri.IMMEDIATE)
-
-        children = [threat_space_search(board,
-                                        color,
-                                        new_move([[new_threat_seq_item(x)]]))
-                    for x in next_sqs]
+        next_sqs = get_next_sqs_from_state(board, color, next_sq, ThreatPri.IMMEDIATE)
+        children = [threat_space_search(board, color, x) for x in next_sqs]
         potential_win = any([x["potential_win"] for x in children])
 
         if not potential_win:
-            next_sqs_other = get_next_sqs_from_state(board, color, move, ThreatPri.NON_IMMEDIATE)
-            children_other = [threat_space_search(board,
-                                                  color,
-                                                  new_move([[new_threat_seq_item(x)]]))
-                              for x in next_sqs_other]
+            next_sqs_other = get_next_sqs_from_state(board, color, next_sq, ThreatPri.NON_IMMEDIATE)
+            children_other = [threat_space_search(board, color, x) for x in next_sqs_other]
             potential_win = any([x["potential_win"] for x in children_other])
             children.extend(children_other)
 
-        if try_move:
-            clear_sqs(board, color ^ STONE, move["critical_sqs"])
+        if try_next_sq:
+            for csq in critical_sqs:
+                clear_sq(board, color ^ STONE, csq)
 
-    if not try_move:
-        clear_sqs(board, color ^ STONE, move["critical_sqs"])
+    if try_next_sq:
+        clear_sq(board, color, next_sq)
 
-    clear_sqs(board, color, move["next_sqs"])
-
-    return new_search_node(move, threats, potential_win, children)
+    return new_search_node(next_sq, threats, critical_sqs, potential_win, children)
 
 
-# n = 20
+n = 20
 
-# for _ in range(n):
-#     threat_space_search(state.board, state.turn)
+for _ in range(n):
+    threat_space_search(state.board, state.turn)
 
-# start = time.monotonic()
+start = time.monotonic()
 
-# for _ in range(n):
-#     threat_space_search(state.board, state.turn)
+for _ in range(n):
+    threat_space_search(state.board, state.turn)
 
-# end = time.monotonic()
-# print("Time taken: ", end - start, " seconds")
+end = time.monotonic()
+print("Time taken: ", end - start, " seconds")
 
-node = threat_space_search(state.board, state.turn)
-for child in node["children"]:
-    if child["potential_win"]:
-        print(child["move"]["last_sqs"])
+# node = threat_space_search(state.board, state.turn)
+# for child in node["children"]:
+#     if child["potential_win"]:
+#         print(child["next_sq"])
 
-win_vars = potential_win_variations(node)
-print(len(win_vars))
-# variation = [point_to_algebraic(x) for x in win_vars[10]]
-# print(variation)
+# win_vars = potential_win_variations(node)
+# print(len(win_vars))
+# # variation = [point_to_algebraic(x) for x in win_vars[10]]
+# # print(variation)
