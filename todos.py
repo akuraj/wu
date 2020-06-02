@@ -3,9 +3,11 @@
 # *** TODO SOON ***
 # TODO: Check that listed patterns fully cover all possibilities.
 #       Verify that there are no holes.
-# TODO: FIXME: Too many garbage variations!
+# TODO: FIXME: Too many garbage variations when using LowPri threats!
 #       1) Can play LowPri threat as long as the move also generates a HighPri threat!
 #       2) Search LowPri threats only if no win found via HighPri threats? Or always?
+#       3) Only search LowPri threats a max number of ply in a given variation!
+#          We can control this via a LowPriMaxDepth(?) variable.
 #       3) Stop searching children if a win is found? Or find all possible wins?
 #       4) Stop searching and return False if opponent is winning via critical squares?
 #          Under what conditions do we assume that opponent is winning?
@@ -17,6 +19,14 @@
 #          A hash that depends on position as well as latest move?
 #       8) What's the correct/viable TSS impl according to the paper? How does mine compare?
 #       9) Max-depth for certain/all kinds of TSS?
+# TODO: Combinations: Idea Summary!
+#       1) When getting next_sqs from node, also get path as well as cumulative
+#          gain and cost sqs. That should make it more convenient to get
+#          compatible pairs/combinations.
+#       2) Write code for combination of two searches, or multiple as well?
+#       3) Can combine pairs by maintaining gain and cost squares upto relevant point,
+#          and comparing the cumulative sets will determine
+#          if the points are in conflict or not.
 # TODO: Check all test positions in paper. Implement regtests based on them.
 # TODO: Print variations and search nodes in algebraic notation.
 # TODO: Animate a variation.
@@ -31,11 +41,6 @@
 # TODO: Can we have a better way to input position?
 
 # *** TODO SOONISH ***
-# TODO: When getting next_sqs from node, also get path as well as cumulative gain and cost sqs.
-#       That should make it more convenient to get compatible pairs/combinations.
-# TODO: Write code for combination of two searches, or multiple as well?
-# TODO: Can combine pairs by maintaining gain and cost squares upto relevant point,
-#       and comparing the cumulative sets will determine if the points are in conflict or not.
 # TODO: Estimate impact of njit by turning it off to see if it's actually useful.
 # TODO: Is jitting small functions actually helpful?
 # TODO: Take point as a tuple and not two separate arguments!
