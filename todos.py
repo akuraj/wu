@@ -9,6 +9,7 @@
 #       4) Stop searching children if a win is found? Or find all possible wins?
 #       5) Stop searching and return False if opponent is winning via critical squares?
 #          Under what conditions do we assume that opponent is winning?
+#          Make a note in search node when we cut off variation due to opponent win!
 #       6) Only store winning variations to help save space!
 #       7) Sort win variations by length? Shorter is better.
 #       8) Implement a transposition table. How do we cope with having different last_sqs?
