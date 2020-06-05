@@ -9,6 +9,9 @@ from pattern import (ThreatPri, search_all_board, search_all_point_own,
 
 
 def new_search_node(next_sq, threats, critical_sqs, potential_win, children):
+    # # Only keep potentially winning children.
+    # children = [x for x in children if x["potential_win"]]
+
     node = {"next_sq": next_sq,
             "threats": threats,
             "critical_sqs": critical_sqs,
@@ -29,6 +32,24 @@ def tss_next_sq(board, color, next_sq):
                     else set())
     potential_win = len(threats) > 0 and len(critical_sqs) == 0
     children = []
+
+    # # If the opponent is potentially winning by playing at one of the critical_sqs,
+    # # then this variation is assumed to not be winning.
+    # for csq in critical_sqs:
+    #     set_sq(board, color ^ STONE, csq)
+
+    #     threats_csq = search_all_point_own(board, color ^ STONE,
+    #                                        next_sq, ThreatPri.IMMEDIATE)
+    #     critical_sqs_csq = (reduce(set.intersection, [x["critical_sqs"] for x in threats_csq])
+    #                         if threats_csq
+    #                         else set())
+    #     potential_win_csq = len(threats_csq) > 0 and len(critical_sqs_csq) == 0
+
+    #     clear_sq(board, color ^ STONE, csq)
+
+    #     if potential_win_csq:
+    #         potential_win = False
+    #         return new_search_node(next_sq, threats, critical_sqs, potential_win, children)
 
     # If next_sq produces no threats or we've found a potential win, we stop.
     if len(threats) > 0 and not potential_win:
