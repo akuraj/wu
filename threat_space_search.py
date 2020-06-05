@@ -1,11 +1,14 @@
 """Implements Threat Space Search."""
 
+from time import sleep
 from functools import reduce
 from consts import STONE
-from board import set_sq, clear_sq
+from board import set_sq, clear_sq, board_to_str
 from pattern import (ThreatPri, search_all_board, search_all_point_own,
                      search_all_board_get_next_sqs,
                      search_all_point_own_get_next_sqs)
+
+ANIMATION_TIMESTEP = 2
 
 
 def new_search_node(next_sq, threats, critical_sqs, potential_win, children):
@@ -33,23 +36,24 @@ def tss_next_sq(board, color, next_sq):
     potential_win = len(threats) > 0 and len(critical_sqs) == 0
     children = []
 
-    # # If the opponent is potentially winning by playing at one of the critical_sqs,
-    # # then this variation is assumed to not be winning.
-    # for csq in critical_sqs:
-    #     set_sq(board, color ^ STONE, csq)
+    # If the opponent is potentially winning by playing at one of the critical_sqs,
+    # then this variation is assumed to not be winning.
+    for csq in critical_sqs:
+        set_sq(board, color ^ STONE, csq)
 
-    #     threats_csq = search_all_point_own(board, color ^ STONE,
-    #                                        next_sq, ThreatPri.IMMEDIATE)
-    #     critical_sqs_csq = (reduce(set.intersection, [x["critical_sqs"] for x in threats_csq])
-    #                         if threats_csq
-    #                         else set())
-    #     potential_win_csq = len(threats_csq) > 0 and len(critical_sqs_csq) == 0
+        threats_csq = search_all_point_own(board, color ^ STONE,
+                                           csq, ThreatPri.IMMEDIATE)
+        critical_sqs_csq = (reduce(set.intersection, [x["critical_sqs"] for x in threats_csq])
+                            if threats_csq
+                            else set())
+        potential_win_csq = len(threats_csq) > 0 and len(critical_sqs_csq) == 0
 
-    #     clear_sq(board, color ^ STONE, csq)
+        clear_sq(board, color ^ STONE, csq)
 
-    #     if potential_win_csq:
-    #         potential_win = False
-    #         return new_search_node(next_sq, threats, critical_sqs, potential_win, children)
+        if potential_win_csq:
+            potential_win = False
+            clear_sq(board, color, next_sq)
+            return new_search_node(next_sq, threats, critical_sqs, potential_win, children)
 
     # If next_sq produces no threats or we've found a potential win, we stop.
     if len(threats) > 0 and not potential_win:
@@ -112,3 +116,23 @@ def potential_win_variations(node):
             variations.append(node_var)
 
     return variations
+
+
+def animate_variation(board, color, variation):
+    print(board_to_str(board))
+    sleep(ANIMATION_TIMESTEP)
+
+    for item in variation:
+        set_sq(board, color, item[0])
+
+        for csq in item[1]:
+            set_sq(board, color ^ STONE, csq)
+
+        print(board_to_str(board))
+        sleep(ANIMATION_TIMESTEP)
+
+    for item in variation:
+        clear_sq(board, color, item[0])
+
+        for csq in item[1]:
+            clear_sq(board, color ^ STONE, csq)
