@@ -2,6 +2,10 @@
 
 # *** TODO SOON ***
 # TODO: FIXME: Too many garbage variations when using LowPri threats!
+#       0) Create a TSS which fully takes into account the opponent's threats.
+#          Handle different possible min_defcon combinations among the threats.
+#          Maintain, update, pass-down threats (both own and opp).
+#          Is this overall a good idea?
 #       1) Can play LowPri threat as long as the move also generates a HighPri threat!
 #       2) Search LowPri threats only if no win found via HighPri threats? Or always?
 #       3) Only search LowPri threats a max number of ply in a given variation!
@@ -25,7 +29,6 @@
 # TODO: Check all test positions in paper. Implement regtests based on them.
 # TODO: Print variations and search nodes in algebraic notation.
 # TODO: Animate a variation.
-# TODO: Refactor utils code into separate modules!!!
 # TODO: Remove unnecessary fields from threat data.
 # TODO: Fix dangerous defaults!
 # TODO: Add function to inspect or pretty print winning variations in node.
