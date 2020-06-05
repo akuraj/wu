@@ -3,7 +3,7 @@
 from enum import IntEnum, auto, unique
 import numpy as np
 from consts import (GEN_ELEMS, EMPTY, DEFCON_RANGE, OWN, WALL_ENEMY,
-                    NOT_OWN, GEN_ELEMS_TO_NAMES)
+                    NOT_OWN, GEN_ELEMS_TO_NAMES, MDFIT)
 from geometry import point_set_on_line
 from pattern_search import (search_board, search_point, search_point_own,
                             search_board_next_sq, search_point_next_sq,
@@ -159,6 +159,11 @@ PATTERNS_I = [x for x in PATTERNS if x.immediate]
 # Low Priority PATTERNS.
 PATTERNS_NI = [x for x in PATTERNS if not x.immediate]
 
+# Check against MDFIT.
+for p in PATTERNS:
+    if p.immediate:
+        assert p.defcon <= MDFIT
+
 
 # *** THREAT PRIORITY ENUM ***
 
@@ -185,6 +190,7 @@ def threat_item(match, pattern):
 
     return {"match": match,
             "pidx": pattern.index,
+            "defcon": pattern.defcon,
             "critical_sqs": point_set_on_line(match[0],
                                               match[1],
                                               pattern.critical_sqs)}

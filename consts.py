@@ -88,3 +88,6 @@ assert WIN_LENGTH == 5
 # Effectively, the maximum distance away from winning.
 MAX_DEFCON = WIN_LENGTH
 DEFCON_RANGE = range(MAX_DEFCON + 1)
+
+# Max defcon for immediate threat.
+MDFIT = 2
