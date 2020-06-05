@@ -59,5 +59,6 @@ for child in node["children"]:
 
 win_vars = potential_win_variations(node)
 print(len(win_vars))
-# variation = [point_to_algebraic(x) for x in win_vars[10]]
-# print(variation)
+variation = [(point_to_algebraic(x[0]), {point_to_algebraic(y) for y in x[1]})
+             for x in win_vars[0]]
+print(variation)

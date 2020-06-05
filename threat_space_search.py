@@ -100,7 +100,7 @@ def potential_win_variations(node):
     variations = []
 
     if node["potential_win"]:
-        node_var = [node["next_sq"]] if node["next_sq"] is not None else []
+        node_var = [(node["next_sq"], node["critical_sqs"])] if node["next_sq"] is not None else []
 
         if node["children"]:
             for child in node["children"]:
