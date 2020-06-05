@@ -3,7 +3,7 @@
 import time
 # from numba import njit
 from state import get_state
-from threat_space_search import threat_space_search_board, potential_win_variations
+from threat_space_search import tss_board, potential_win_variations
 from board import point_to_algebraic
 from consts import BLACK
 
@@ -38,22 +38,21 @@ state = get_state(["j5", "j6", "i10", "i11"],
 print(state)
 
 # TODO: Profile threat space search!
-# TODO: TSS fn names are too long?
 
 n = 10
 
 for _ in range(n):
-    threat_space_search_board(state.board, state.turn)
+    tss_board(state.board, state.turn)
 
 start = time.monotonic()
 
 for _ in range(n):
-    threat_space_search_board(state.board, state.turn)
+    tss_board(state.board, state.turn)
 
 end = time.monotonic()
 print("Time taken: ", end - start, " seconds")
 
-# node = threat_space_search_board(state.board, state.turn)
+# node = tss_board(state.board, state.turn)
 # for child in node["children"]:
 #     if child["potential_win"]:
 #         print(child["next_sq"])

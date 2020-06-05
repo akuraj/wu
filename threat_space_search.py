@@ -18,7 +18,9 @@ def new_search_node(next_sq, threats, critical_sqs, potential_win, children):
     return node
 
 
-def threat_space_search_next_sq(board, color, next_sq):
+def tss_next_sq(board, color, next_sq):
+    """Threat Space Search for a given next_sq."""
+
     set_sq(board, color, next_sq)
 
     threats = search_all_point_own(board, color, next_sq, ThreatPri.IMMEDIATE)
@@ -33,7 +35,7 @@ def threat_space_search_next_sq(board, color, next_sq):
         for csq in critical_sqs:
             set_sq(board, color ^ STONE, csq)
 
-        children = [threat_space_search_next_sq(board, color, x)
+        children = [tss_next_sq(board, color, x)
                     for x in search_all_point_own_get_next_sqs(board,
                                                                color,
                                                                next_sq,
@@ -41,7 +43,7 @@ def threat_space_search_next_sq(board, color, next_sq):
         potential_win = any([x["potential_win"] for x in children])
 
         if not potential_win:
-            children_other = [threat_space_search_next_sq(board, color, x)
+            children_other = [tss_next_sq(board, color, x)
                               for x in search_all_point_own_get_next_sqs(board,
                                                                          color,
                                                                          next_sq,
@@ -57,13 +59,15 @@ def threat_space_search_next_sq(board, color, next_sq):
     return new_search_node(next_sq, threats, critical_sqs, potential_win, children)
 
 
-def threat_space_search_board(board, color):
+def tss_board(board, color):
+    """Threat Space Search for the whole board."""
+
     threats = search_all_board(board, color, ThreatPri.IMMEDIATE)
     potential_win = len(threats) > 0
     children = []
 
     if not potential_win:
-        children = [threat_space_search_next_sq(board, color, x)
+        children = [tss_next_sq(board, color, x)
                     for x in search_all_board_get_next_sqs(board, color,
                                                            ThreatPri.IMMEDIATE)]
         potential_win = any([x["potential_win"] for x in children])
