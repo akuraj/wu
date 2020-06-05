@@ -19,9 +19,6 @@
 #       11) Threats data and other data should be lean to reduce memory usage.
 #       12) We don't actually need critical sqs for NON_IMMEDIATE threats.
 #           Should we keep them as they are currently?
-#       13) Refactor threat_space_search into two fns.
-#           One for a given point, and one for "None"/given state.
-#       14) Refactor threat space search into separate module.
 # TODO: Use Yixin to check for best moves in test positions.
 #       Use it to guide the development effort and debugging.
 # TODO: Check all test positions in paper. Implement regtests based on them.
