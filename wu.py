@@ -39,7 +39,7 @@ print(state)
 
 # TODO: Profile threat space search!
 
-n = 10
+n = 100
 
 for _ in range(n):
     tss_board(state.board, state.turn)
