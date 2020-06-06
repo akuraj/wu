@@ -160,12 +160,11 @@ PATTERNS_I = [x for x in PATTERNS if x.immediate]
 PATTERNS_NI = [x for x in PATTERNS if not x.immediate]
 
 # Check against MDFIT.
-for p in PATTERNS:
-    if p.immediate:
-        assert p.defcon <= MDFIT
+assert MDFIT == max([p.defcon for p in PATTERNS if p.immediate])
 
 
 # *** THREAT PRIORITY ENUM ***
+
 
 @unique
 class ThreatPri(IntEnum):
