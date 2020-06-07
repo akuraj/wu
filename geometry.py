@@ -74,7 +74,7 @@ def index_bounds_incl(side, length, x, y, row_inc, col_inc):
     back = min(row_b, col_b)
     front = min(row_f, col_f)
 
-    return(-min(back, length - 1), min(front, length) - (length - 1))
+    return (-min(back, length - 1), min(front, length) - (length - 1))
 
 
 @njit
