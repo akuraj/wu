@@ -4,12 +4,12 @@ from numba import njit
 
 
 @njit
-def increment_fn(i):
-    """Row increment when moving in direction 'i'."""
+def increment_fn(d):
+    """Row increment when moving in direction 'd'."""
 
-    if i % 4 == 0:
+    if d % 4 == 0:
         return 0
-    elif i % 8 < 4:
+    elif d % 8 < 4:
         return 1
     else:
         return -1
@@ -17,7 +17,7 @@ def increment_fn(i):
 
 @njit
 def increments(d):
-    """Row and Column increments when moving in direction 'i'."""
+    """Row and Column increments when moving in direction 'd'."""
 
     return (increment_fn(d), increment_fn(d + 2))
 
