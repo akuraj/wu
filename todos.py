@@ -43,17 +43,12 @@
 # TODO: Take point as a tuple and not two separate arguments!
 
 # *** Patterns and Threats; Pattern Matching ***
-# TODO: What other pattern search functions do we need?
 # TODO: If two threats have the same exact critical squares,
-#       then they can be handled by the same move(s). No need to dedupe them.
+#       then they can be handled by the same move(s).
+#       No need to dedupe them.
 # TODO: Implement function to calculate intersection of pattern matches.
 
-# *** Threat Space Search (TSS) ***
-# TODO: What do we need here?
-
 # *** Negamax Search ***
-# TODO: Search Threat Space fully (FTSS) in an accurate manner,
-#       instead of being too conservative like TSS?
 # TODO: Implement an evaluation scale.
 # TODO: Use Positional Evaluation for quiet/positions not determined by FTSS.
 
@@ -69,7 +64,6 @@
 # *** Cleanup ***
 # TODO: Remove unused functions (search related etc.).
 # TODO: Remove unnecessary constants.
-# TODO: Code organization: refactor utils to separate libs?
 
 # *** State Represenation ***
 # TODO: Stricter check on win status to make sure no multiple wins for a given player?
