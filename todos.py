@@ -72,6 +72,7 @@
 
 # *** Performance Concerns ***
 # TODO: Remove unnecessary asserts/checks/if. [IMPORTANT].
+# TODO: Check on ahead of time numba compilation (AOT)?
 
 # *** Linting and Conventions ***
 # TODO: Add more documentation; consult pylint code conventions.
