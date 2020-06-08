@@ -38,18 +38,18 @@ print(state)
 
 # TODO: Profile threat space search!
 
-n = 10
+n = 100
 
 for _ in range(n):
     tss_board(state.board, state.turn)
 
-start = time.monotonic()
+# start = time.monotonic()
 
-for _ in range(n):
-    tss_board(state.board, state.turn)
+# for _ in range(n):
+#     tss_board(state.board, state.turn)
 
-end = time.monotonic()
-print("Time taken: ", end - start, " seconds")
+# end = time.monotonic()
+# print("Time taken: ", end - start, " seconds")
 
 # node = tss_board(state.board, state.turn)
 # for child in node["children"]:
