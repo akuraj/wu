@@ -1,7 +1,6 @@
 """Driver module."""
 
 import time
-# from numba import njit
 from state import get_state
 from threat_space_search import tss_board, potential_win_variations, animate_variation
 from board import point_to_algebraic
@@ -39,7 +38,7 @@ print(state)
 
 # TODO: Profile threat space search!
 
-n = 100
+n = 10
 
 for _ in range(n):
     tss_board(state.board, state.turn)

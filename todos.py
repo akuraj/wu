@@ -40,8 +40,6 @@
 # TODO: Remove unnecessary functions.
 
 # *** TODO SOONISH ***
-# TODO: Estimate impact of njit by turning it off to see if it's actually useful.
-# TODO: Is jitting small functions actually helpful?
 # TODO: Take point as a tuple and not two separate arguments!
 
 # *** Patterns and Threats; Pattern Matching ***
@@ -80,8 +78,6 @@
 
 # *** Performance Concerns ***
 # TODO: Remove unnecessary asserts/checks/if. [IMPORTANT].
-# TODO: Check out numba features other than njit to speed up code!
-# TODO: Inline numba jitted functions?
 
 # *** Linting and Conventions ***
 # TODO: Add more documentation; consult pylint code conventions.
