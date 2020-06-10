@@ -3,13 +3,11 @@
 from enum import IntEnum, auto, unique
 from time import sleep
 from functools import reduce
-from consts import STONE, MAX_DEFCON
+from consts import STONE, MAX_DEFCON, ANIMATION_TIMESTEP
 from board import set_sq, clear_sq, board_to_str
 from pattern import (ThreatPri, search_all_board, search_all_point_own,
                      search_all_board_get_next_sqs,
                      search_all_point_own_get_next_sqs)
-
-ANIMATION_TIMESTEP = 2
 
 
 @unique
@@ -153,12 +151,15 @@ def animate_variation(board, color, variation):
 
     for item in variation:
         set_sq(board, color, item[0])
+        print(board_to_str(board))
+        sleep(ANIMATION_TIMESTEP)
 
         for csq in item[1]:
             set_sq(board, color ^ STONE, csq)
 
-        print(board_to_str(board))
-        sleep(ANIMATION_TIMESTEP)
+        if item[1]:
+            print(board_to_str(board))
+            sleep(ANIMATION_TIMESTEP)
 
     for item in variation:
         clear_sq(board, color, item[0])

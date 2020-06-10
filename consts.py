@@ -91,3 +91,5 @@ DEFCON_RANGE = range(MAX_DEFCON + 1)
 
 # Max defcon for immediate threat.
 MDFIT = 2
+
+ANIMATION_TIMESTEP = 2
