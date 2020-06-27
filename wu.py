@@ -51,13 +51,13 @@ for _ in range(n):
 end = time.monotonic()
 print("Time taken: ", end - start, " seconds")
 
-# node = tss_board(state.board, state.turn)
+node = tss_board(state.board, state.turn)
+win_vars = potential_win_variations(node)
+print(len(win_vars))
+
 # for child in node["children"]:
 #     if child["potential_win"]:
 #         print(child["next_sq"])
-
-# win_vars = potential_win_variations(node)
-# print(len(win_vars))
 
 # variation = win_vars[0]
 # animate_variation(state.board, state.turn, variation)
