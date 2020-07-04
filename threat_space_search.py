@@ -9,21 +9,7 @@ from pattern import (ThreatPri, search_all_board, search_all_point_own,
                      search_all_board_get_next_sqs,
                      search_all_point_own_get_next_sqs)
 
-
-@unique
-class SearchStatus(IntEnum):
-    """Enum to represent the status of threat space search."""
-
-    QUIET = auto()
-    UNQUIET = auto()
-    WIN = auto()
-    LOSS = auto()
-
-
 def new_search_node(next_sq, threats, critical_sqs, potential_win, children):
-    # # Only keep potentially winning children.
-    # children = [x for x in children if x["potential_win"]]
-
     node = {"next_sq": next_sq,
             "threats": threats,
             "critical_sqs": critical_sqs,
@@ -91,24 +77,6 @@ def tss_next_sq(board, color, next_sq):
     clear_sq(board, color, next_sq)
 
     return new_search_node(next_sq, threats, critical_sqs, potential_win, children)
-
-
-# # TODO: Change name of fn.
-# def search_status(threats_own, threats_opp):
-#     md_own = reduce(min, [t["defcon"] for t in threats_own], MAX_DEFCON)
-#     md_opp = reduce(min, [t["defcon"] for t in threats_opp], MAX_DEFCON)
-
-#     if md_opp == MAX_DEFCON:
-#         if md_own == MAX_DEFCON:
-#             return (SearchStatus.QUIET, [])
-#         else:
-#             return (SearchStatus.WIN, [])
-#     else:
-
-#     elif md_own != MAX_DEFCON and md_opp == MAX_DEFCON:
-
-
-#     pass
 
 
 def tss_board(board, color):
