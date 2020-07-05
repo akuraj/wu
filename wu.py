@@ -2,7 +2,7 @@
 
 import time
 from state import get_state
-from threat_space_search import tss_board, potential_win_variations, animate_variation
+from threat_space_search import tss_board, win_variations, animate_variation
 from board import point_to_algebraic
 from consts import BLACK
 
@@ -38,7 +38,7 @@ print(state)
 
 # TODO: Profile threat space search!
 
-n = 100
+n = 1000
 
 for _ in range(n):
     tss_board(state.board, state.turn)
@@ -52,11 +52,11 @@ end = time.monotonic()
 print("Time taken: ", end - start, " seconds")
 
 node = tss_board(state.board, state.turn)
-win_vars = potential_win_variations(node)
+win_vars = win_variations(node)
 print(len(win_vars))
 
 # for child in node["children"]:
-#     if child["potential_win"]:
+#     if child["win"]:
 #         print(child["next_sq"])
 
 # variation = win_vars[0]
