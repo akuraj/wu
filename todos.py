@@ -1,5 +1,7 @@
 """A place for general TODOs."""
 
+# NOTE: This project has been shelved for now in favor of the Rust implementation.
+
 # NOTE: IMPORTANT: Check the TODOs in the rust-lang implementation!
 
 # TODO: Print variations and search nodes in algebraic notation.
